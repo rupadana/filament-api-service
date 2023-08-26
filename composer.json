@@ -35,13 +35,6 @@
         }
     },
     "scripts": {
-        "post-autoload-dump": "@composer run prepare",
-        "build": [
-            "@composer run prepare"
-        ],
-        "start": [
-            "@composer run build"
-        ]
     },
     "config": {
         "sort-packages": true
