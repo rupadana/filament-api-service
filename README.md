@@ -53,6 +53,41 @@ class User extends Model {
 }
 ```
 
+
+## Transform API Response
+
+```bash 
+php artisan make:filament-api-transformer Blog
+```
+
+it will be create BlogTransformer in `App\Filament\Resources\BlogResource\Api\Transformers`
+
+next step you need to edit & include it to your API Service
+
+```php
+    class BlogApiService extends FilamentApiService
+    {
+        ...
+        protected static string | null $responseTransformer = BlogTransformer::class;
+        ...
+    }
+```
+
+
+## Group Name & Prefix
+
+You can edit prefix & group route name as you want, default im use model singular label;
+
+```php
+    class BlogApiService extends FilamentApiService
+    {
+        ...
+        protected static string | null $groupRouteName = 'myblog';
+        ...
+    }
+```
+
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
