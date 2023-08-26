@@ -6,6 +6,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
+use Rupadana\FilamentApiService\Transformers\DefaultTransformer;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class FilamentApiService
@@ -18,7 +19,7 @@ class FilamentApiService
 
     protected static string | null $groupRouteName = null;
 
-    protected static string | null $responseTransformer = null;
+    protected static string | null $responseTransformer = DefaultTransformer::class;
 
     /**
      * Key Name for query Get 
@@ -54,9 +55,9 @@ class FilamentApiService
             ->prefix(static::$groupRouteName ?? $slug)
             ->group(function (Router $router) {
                 
+                static::customRoutes($router);
                 $router->get('/', [static::class, 'paginationQuery']);
                 $router->get('/{keyValue}', [static::class, 'getQuery']);
-                static::customRoutes($router);
 
                 
             });
