@@ -31,11 +31,12 @@ BlogApiService::routes();
 
 and then you will got this routes;
 
-| Route | Description |
------------------------
-| '/api/blogs' | This will return LengthAwarePaginator |
-| '/api/blogs/1' | This will return single resource |
-
+----------------------------------------------------------
+| Route          | Description                           |
+|--------------------------------------------------------|
+| '/api/blogs'   | This will return LengthAwarePaginator |
+| '/api/blogs/1' | This will return single resource      |
+----------------------------------------------------------
 
 Im using `"spatie/laravel-query-builder": "^5.3"` to handle query and filtering. u can see `"spatie/laravel-query-builder": "^5.3"` [https://spatie.be/docs/laravel-query-builder/v5/introduction](documentation)
 
