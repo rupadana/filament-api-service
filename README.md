@@ -38,6 +38,16 @@ and then you will got this routes;
 | '/api/blogs/1' | This will return single resource      |
 +--------------------------------------------------------+
 
++---------------------+
+|   Food   |  Count   |
++---------------------+
+|Fish      |15        |
++---------------------+
+|Pizza     |10        |
++---------------------+
+|Steak     |6         |
++---------------------+
+
 Im using `"spatie/laravel-query-builder": "^5.3"` to handle query and filtering. u can see `"spatie/laravel-query-builder": "^5.3"` [https://spatie.be/docs/laravel-query-builder/v5/introduction](documentation)
 
 
