@@ -56,14 +56,23 @@ class FilamentApiService
             ->group(function (Router $router) {
                 
                 static::customRoutes($router);
-                $router->get('/', [static::class, 'paginationQuery']);
-                $router->get('/{keyValue}', [static::class, 'getQuery']);
-
-                
+                static::allRoutes($router);
             });
     }
 
+    /**
+     * @deprecated 1.1.0
+     * Deprecated method, please use allRoutes method
+     *
+     * 
+     * @param Router $router
+     * @return void
+     */
     public static function customRoutes(Router $router) {
+
+    }
+
+    public static function allRoutes(Router $router) {
 
     }
 
@@ -75,28 +84,6 @@ class FilamentApiService
     public static function getQueryModel()
     {
         return static::getModel()::query();
-    }
-
-    /**
-     * Pagination Query
-     * Using spatie-query-builder
-     *
-     * @return AnonymousResourceCollection
-     */
-    public static function paginationQuery(): ?AnonymousResourceCollection
-    {
-        $model = static::getQueryModel();
-
-        $query = QueryBuilder::for($model)
-        ->allowedFields($model::$allowedFields ?? [])
-        ->allowedFilters($model::$allowedFilters ?? [])
-        ->paginate(request()->query('per_page'))
-        ->appends(request()->query());
-
-
-        if (static::$responseTransformer != null) return static::$responseTransformer::collection($query);
-
-        return $query;
     }
 
 

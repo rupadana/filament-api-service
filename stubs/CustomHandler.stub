@@ -1,0 +1,33 @@
+<?php
+namespace {{ handlersNamespace }};
+
+use Illuminate\Http\Request;
+use Rupadana\FilamentApiService\Http\Handlers;
+use {{ resource }};
+
+class {{ handlerClass }} extends Handlers {
+    public static string | null $uri = '/{id}';
+    public static string | null $resource = {{ resourceClass }}::class;
+
+    public static function getMethod()
+    {
+        return Handlers::POST;
+    }
+
+    public static function getModel() {
+        return static::$resource::getModel();
+    }
+
+    public function handler(Request $request, $id)
+    {
+        $model = static::getModel()::find($id);
+
+        if (!$model) return static::sendNotFoundResponse();
+
+        $model->fill($request->all());
+
+        $model->save();
+
+        return static::sendSuccessResponse($model, "Successfully Update Resource");
+    }
+}

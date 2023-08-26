@@ -10,13 +10,13 @@ use Illuminate\Support\Arr;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
-class MakeApiServiceCommand extends Command
+class MakeApiHandlerCommand extends Command
 {
     use CanManipulateFiles;
 
-    protected $description = 'Create a new API Service for supporting filamentphp Resource';
+    protected $description = 'Create a new API Handler for supporting filamentphp Resource';
 
-    protected $signature = 'make:filament-api-service {resource?} {--panel=}';
+    protected $signature = 'make:filament-api-handler {resource?} {handler?} {--panel=}';
 
     public function handle(): int
     {
@@ -35,6 +35,25 @@ class MakeApiServiceCommand extends Command
 
         if (blank($model)) {
             $model = 'Resource';
+        }
+
+        $handler = (string) str(
+            $this->argument('handler') ?? text(
+                label: "What is the Handler name?",
+                placeholder: 'UpdateHandler',
+                required: true
+            )
+        )
+            ->studly()
+            ->beforeLast('Handler')
+            ->trim('/')
+            ->trim('\\')
+            ->trim(' ')
+            ->studly()
+            ->replace('/', '\\');
+
+        if (blank($handler)) {
+            $handler = 'Handler';
         }
 
 
@@ -78,14 +97,9 @@ class MakeApiServiceCommand extends Command
 
         $resource = "{$model}Resource";
         $resourceClass = "{$modelClass}Resource";
-        $apiServiceClass = "{$model}ApiService";
+        $handlerClass = "{$handler}Handler";
         $resourceNamespace = $modelNamespace;
         $namespace .= $resourceNamespace !== '' ? "\\{$resourceNamespace}" : '';
-
-        $updateHandlerClass = "UpdateHandler";
-        $detailHandlerClass = "DetailHandler";
-        $paginationHandlerClass = "PaginationClass";
-        $deleteHandlerClass = "DeleteHandlerClass";
 
         $baseResourcePath =
             (string) str($resource)
@@ -96,47 +110,18 @@ class MakeApiServiceCommand extends Command
 
         $handlersNamespace = "{$namespace}\\{$resourceClass}\\Api\\Handlers";
 
+        $handlerDirectory = "{$baseResourcePath}/Api/Handlers/$handlerClass.php";
 
-        $resourceApiDirectory = "{$baseResourcePath}/Api/$apiServiceClass.php";
-        $updateHandlerDirectory = "{$baseResourcePath}/Api/Handlers/$updateHandlerClass.php";
-        $detailHandlerDirectory = "{$baseResourcePath}/Api/Handlers/$detailHandlerClass.php";
-        $paginationHandlerDirectory = "{$baseResourcePath}/Api/Handlers/$paginationHandlerClass.php";
-        $deleteHandlerDirectory = "{$baseResourcePath}/Api/Handlers/$deleteHandlerClass.php";
-
-        $this->copyStubToApp('ResourceApiService', $resourceApiDirectory, [
-            'namespace' => "{$namespace}\\{$resourceClass}\\Api",
+        $this->copyStubToApp('CustomHandler', $handlerDirectory, [
             'resource' => "{$namespace}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
-            'resourcePageClass' => $resourceApiDirectory,
-            'apiServiceClass' => $apiServiceClass
+            'handlersNamespace' => $handlersNamespace,
+            'handlerClass' => $handlerClass
         ]);
 
-        $this->copyStubToApp('DeleteHandler', $deleteHandlerDirectory, [
-            'resource' => "{$namespace}\\{$resourceClass}",
-            'resourceClass' => $resourceClass,
-            'handlersNamespace' => $handlersNamespace
-        ]);
 
-        $this->copyStubToApp('DetailHandler', $detailHandlerDirectory, [
-            'resource' => "{$namespace}\\{$resourceClass}",
-            'resourceClass' => $resourceClass,
-            'handlersNamespace' => $handlersNamespace
-        ]);
-
-        $this->copyStubToApp('UpdateHandler', $updateHandlerDirectory, [
-            'resource' => "{$namespace}\\{$resourceClass}",
-            'resourceClass' => $resourceClass,
-            'handlersNamespace' => $handlersNamespace
-        ]);
-
-        $this->copyStubToApp('PaginationHandler', $paginationHandlerDirectory, [
-            'resource' => "{$namespace}\\{$resourceClass}",
-            'resourceClass' => $resourceClass,
-            'handlersNamespace' => $handlersNamespace
-        ]);
-
-        $this->components->info("Successfully created API for {$resource}!");
-        $this->components->info("Add \" $apiServiceClass::routes() \" to routes/api.php");
+        $this->components->info("Successfully created API Handler for {$resource}!");
+        $this->components->info("You can register \"Handler\\$handlerClass::route(\$router);\" to allRoutes method on APIService");
 
         return static::SUCCESS;
     }

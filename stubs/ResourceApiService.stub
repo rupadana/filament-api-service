@@ -3,8 +3,18 @@ namespace {{ namespace }};
 
 use Rupadana\FilamentApiService\FilamentApiService;
 use {{ resource }};
+use Illuminate\Routing\Router;
+
 
 class {{ apiServiceClass }} extends FilamentApiService
 {
     protected static string | null $resource = {{ resourceClass }}::class;
+
+    public static function allRoutes(Router $router)
+    {
+        Handlers\UpdateHandler::route($router);
+        Handlers\DeleteHandler::route($router);
+        Handlers\PaginationHandler::route($router);
+        Handlers\DetailHandler::route($router);
+    }
 }
