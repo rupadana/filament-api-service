@@ -3,6 +3,8 @@
 namespace Rupadana\FilamentApiService;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -13,6 +15,10 @@ class FilamentApiService
      * Filament Resource
      */
     protected static string | null $resource = null;
+
+    protected static string | null $groupRouteName = null;
+
+    protected static string | null $responseTransformer = null;
 
     /**
      * Key Name for query Get 
@@ -38,16 +44,26 @@ class FilamentApiService
 
         $slug = static::getResource()::getSlug();
 
+        $name = (string) str(static::$groupRouteName ?? $slug)
+            ->replace('/', '.')
+            ->append('.');
+
         Route::name(
-            (string) str($slug)
-                ->replace('/', '.')
-                ->append('.')
+            $name
         )
-            ->prefix($slug)
-            ->group(function () {
-                Route::get('/', [static::class, 'paginationQuery']);
-                Route::get('/{keyValue}', [static::class, 'getQuery']);
+            ->prefix(static::$groupRouteName ?? $slug)
+            ->group(function (Router $router) {
+                
+                $router->get('/', [static::class, 'paginationQuery']);
+                $router->get('/{keyValue}', [static::class, 'getQuery']);
+                static::customRoutes($router);
+
+                
             });
+    }
+
+    public static function customRoutes(Router $router) {
+
     }
 
     public static function getModel()
@@ -64,17 +80,22 @@ class FilamentApiService
      * Pagination Query
      * Using spatie-query-builder
      *
-     * @return LengthAwarePaginator
+     * @return AnonymousResourceCollection
      */
-    public static function paginationQuery(): ?LengthAwarePaginator
+    public static function paginationQuery(): ?AnonymousResourceCollection
     {
         $model = static::getQueryModel();
 
-        return QueryBuilder::for($model)
-            ->allowedFields($model::$allowedFields ?? [])
-            ->allowedFilters($model::$allowedFilters ?? [])
-            ->paginate(request()->query('per_page'))
-            ->appends(request()->query());
+        $query = QueryBuilder::for($model)
+        ->allowedFields($model::$allowedFields ?? [])
+        ->allowedFilters($model::$allowedFilters ?? [])
+        ->paginate(request()->query('per_page'))
+        ->appends(request()->query());
+
+
+        if (static::$responseTransformer != null) return static::$responseTransformer::collection($query);
+
+        return $query;
     }
 
 
@@ -88,16 +109,30 @@ class FilamentApiService
     {
         $model = static::getQueryModel();
 
+        $query = QueryBuilder::for($model->where(static::getKeyName(), $keyValue))
+        ->first();
+
+        if(!$query) return self::send404Response();
+
+
+        if (static::$responseTransformer != null) $query =  new static::$responseTransformer($query);
+
         return static::sendSuccessResponse(
-            QueryBuilder::for($model->where(static::getKeyName(), $keyValue))
-                ->first()
+            $query
         );
     }
 
     public static function sendSuccessResponse($data)
     {
         return response()->json([
+            'message' => 'OK',
             'data' => $data
         ]);
+    }
+
+    public static function send404Response() {
+        return response()->json([
+            'message' => 'Data not found'
+        ], 404);
     }
 }
