@@ -42,7 +42,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Rupadana\\FilamentApiService\\FilamentApiServiceServiceProvider"
+                "Rupadana\\FilamentApiService\\FilamentApiServiceProvider"
             ],
             "aliases": {
                 "FilamentApiService": "Rupadana\\FilamentApiService\\Facades\\FilamentApiService"
