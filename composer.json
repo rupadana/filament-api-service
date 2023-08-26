@@ -1,0 +1,61 @@
+{
+    "name": "rupadana/filament-api-service",
+    "description": "A simple api service for supporting filamentphp",
+    "keywords": [
+        "rupadana",
+        "laravel",
+        "filament-api-service",
+        "filament"
+    ],
+    "homepage": "https://github.com/rupadana/filament-api-service",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rupadana",
+            "email": "rupadanawayan@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "spatie/laravel-package-tools": "^1.14.0",
+        "illuminate/contracts": "^10.0",
+        "filament/filament": "^3.0-stable",
+        "spatie/laravel-query-builder": "^5.3"
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Rupadana\\FilamentApiService\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": "@composer run prepare",
+        "build": [
+            "@composer run prepare"
+        ],
+        "start": [
+            "@composer run build"
+        ]
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Rupadana\\FilamentApiService\\FilamentApiServiceServiceProvider"
+            ],
+            "aliases": {
+                "FilamentApiService": "Rupadana\\FilamentApiService\\Facades\\FilamentApiService"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

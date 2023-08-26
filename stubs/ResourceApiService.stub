@@ -1,0 +1,10 @@
+<?php
+namespace {{ namespace }};
+
+use Rupadana\FilamentApiService\FilamentApiService;
+use {{ resource }};
+
+class {{ apiServiceClass }} extends FilamentApiService
+{
+    protected static string | null $resource = {{ resourceClass }}::class;
+}
