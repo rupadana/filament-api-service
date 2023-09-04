@@ -4,7 +4,7 @@ namespace {{ handlersNamespace }};
 
 use App\Filament\Resources\SettingResource;
 use {{ resource }};
-use Rupadana\FilamentApiService\Http\Handlers;
+use Rupadana\ApiService\Http\Handlers;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class DetailHandler extends Handlers

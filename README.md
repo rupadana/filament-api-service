@@ -1,7 +1,5 @@
 # A simple api service for supporting filamentphp
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/rupadana/filament-api-service.svg?style=flat-square)](https://packagist.org/packages/rupadana/filament-api-service)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/rupadana/filament-api-service/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/rupadana/filament-api-service/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/rupadana/filament-api-service.svg?style=flat-square)](https://packagist.org/packages/rupadana/filament-api-service)
 
 
@@ -31,8 +29,10 @@ BlogApiService::routes();
 
 and then you will got this routes:
 
-- '/api/blogs'   - This will return LengthAwarePaginator 
-- '/api/blogs/1' - This will return single resource      
+- [GET] '/api/blogs'   - Return LengthAwarePaginator 
+- [GET] '/api/blogs/1' - Return single resource   
+- [PUT] '/api/blogs/1' - Update resource
+- [DELETE] '/api/blogs/1' - Delete resource
 
 
 Im using `"spatie/laravel-query-builder": "^5.3"` to handle query and filtering. u can see `"spatie/laravel-query-builder": "^5.3"` [https://spatie.be/docs/laravel-query-builder/v5/introduction](documentation)
@@ -62,13 +62,18 @@ php artisan make:filament-api-transformer Blog
 
 it will be create BlogTransformer in `App\Filament\Resources\BlogResource\Api\Transformers`
 
-next step you need to edit & include it to your API Service
+next step you need to edit & add it to your Resource
 
 ```php
-    class BlogApiService extends FilamentApiService
+    use App\Filament\Resources\BlogResource\Api\Transformers\BlogTransformer;
+
+    class BlogResource extends Resource
     {
         ...
-        protected static string | null $responseTransformer = BlogTransformer::class;
+        public static function getApiTransformer() 
+        { 
+            return BlogTransformer::class; 
+        }
         ...
     }
 ```
@@ -79,7 +84,7 @@ next step you need to edit & include it to your API Service
 You can edit prefix & group route name as you want, default im use model singular label;
 
 ```php
-    class BlogApiService extends FilamentApiService
+    class BlogApiService extends ApiService
     {
         ...
         protected static string | null $groupRouteName = 'myblog';

@@ -1,7 +1,7 @@
 <?php
-namespace Rupadana\FilamentApiService\Traits;
+namespace Rupadana\ApiService\Traits;
 
-use Rupadana\FilamentApiService\Transformers\DefaultTransformer;
+use Rupadana\ApiService\Transformers\DefaultTransformer;
 trait HasApiTransformer {
 
     public static string | null $transformer = DefaultTransformer::class;

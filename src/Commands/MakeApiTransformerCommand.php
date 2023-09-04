@@ -1,6 +1,6 @@
 <?php
 
-namespace Rupadana\FilamentApiService\Commands;
+namespace Rupadana\ApiService\Commands;
 
 use Filament\Facades\Filament;
 use Filament\Panel;
@@ -102,7 +102,10 @@ class MakeApiTransformerCommand extends Command
         ]);
 
         $this->components->info("Successfully created API Transformer for {$resource}!");
-        $this->components->info("Add protected static string | null \$responseTransformer = $apiTransformerClass::class;");
+        $this->components->info("Add this method to {$namespace}\\{$resourceClass}.php");
+        $this->components->info("public static function getApiTransformer() {
+            return $apiTransformerClass::class;
+        }");
 
         return static::SUCCESS;
     }

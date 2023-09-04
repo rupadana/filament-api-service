@@ -1,6 +1,6 @@
 <?php
 
-namespace Rupadana\FilamentApiService\Traits;
+namespace Rupadana\ApiService\Traits;
 trait HttpResponse {
     public static function sendSuccessResponse($data, $message = "ok") {
         return response()->json([

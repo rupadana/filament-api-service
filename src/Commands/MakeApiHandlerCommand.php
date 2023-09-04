@@ -1,6 +1,6 @@
 <?php
 
-namespace Rupadana\FilamentApiService\Commands;
+namespace Rupadana\ApiService\Commands;
 
 use Filament\Facades\Filament;
 use Filament\Panel;

@@ -1,13 +1,13 @@
 <?php
 
-namespace Rupadana\FilamentApiService\Http;
+namespace Rupadana\ApiService\Http;
 
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Routing\Router;
-use Rupadana\FilamentApiService\Traits\HttpResponse;
-use Rupadana\FilamentApiService\Transformers\DefaultTransformer;
+use Rupadana\ApiService\Traits\HttpResponse;
+use Rupadana\ApiService\Transformers\DefaultTransformer;
 
 class Handlers
 {

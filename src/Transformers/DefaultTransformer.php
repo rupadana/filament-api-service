@@ -1,6 +1,6 @@
 <?php
 
-namespace Rupadana\FilamentApiService\Transformers;
+namespace Rupadana\ApiService\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 

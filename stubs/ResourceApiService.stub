@@ -1,12 +1,12 @@
 <?php
 namespace {{ namespace }};
 
-use Rupadana\FilamentApiService\FilamentApiService;
+use Rupadana\ApiService\ApiService;
 use {{ resource }};
 use Illuminate\Routing\Router;
 
 
-class {{ apiServiceClass }} extends FilamentApiService
+class {{ apiServiceClass }} extends ApiService
 {
     protected static string | null $resource = {{ resourceClass }}::class;
 

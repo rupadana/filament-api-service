@@ -2,7 +2,7 @@
 namespace {{ handlersNamespace }};
 
 use Illuminate\Http\Request;
-use Rupadana\FilamentApiService\Http\Handlers;
+use Rupadana\ApiService\Http\Handlers;
 use Spatie\QueryBuilder\QueryBuilder;
 use {{ resource }};
 
