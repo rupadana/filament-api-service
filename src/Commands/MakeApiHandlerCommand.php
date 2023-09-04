@@ -7,6 +7,7 @@ use Filament\Panel;
 use Filament\Support\Commands\Concerns\CanManipulateFiles;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
+
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
@@ -39,7 +40,7 @@ class MakeApiHandlerCommand extends Command
 
         $handler = (string) str(
             $this->argument('handler') ?? text(
-                label: "What is the Handler name?",
+                label: 'What is the Handler name?',
                 placeholder: 'UpdateHandler',
                 required: true
             )
@@ -56,7 +57,6 @@ class MakeApiHandlerCommand extends Command
             $handler = 'Handler';
         }
 
-
         $modelClass = (string) str($model)->afterLast('\\');
 
         $modelNamespace = str($model)->contains('\\') ?
@@ -70,7 +70,7 @@ class MakeApiHandlerCommand extends Command
             $panel = Filament::getPanel($panel);
         }
 
-        if (!$panel) {
+        if (! $panel) {
             $panels = Filament::getPanels();
 
             /** @var Panel $panel */
@@ -116,9 +116,8 @@ class MakeApiHandlerCommand extends Command
             'resource' => "{$namespace}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
             'handlersNamespace' => $handlersNamespace,
-            'handlerClass' => $handlerClass
+            'handlerClass' => $handlerClass,
         ]);
-
 
         $this->components->info("Successfully created API Handler for {$resource}!");
         $this->components->info("You can register \"Handler\\$handlerClass::route(\$router);\" to allRoutes method on APIService");

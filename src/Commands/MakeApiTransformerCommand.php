@@ -7,6 +7,7 @@ use Filament\Panel;
 use Filament\Support\Commands\Concerns\CanManipulateFiles;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
+
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
@@ -37,7 +38,6 @@ class MakeApiTransformerCommand extends Command
             $model = 'Resource';
         }
 
-
         $modelClass = (string) str($model)->afterLast('\\');
 
         $modelNamespace = str($model)->contains('\\') ?
@@ -51,7 +51,7 @@ class MakeApiTransformerCommand extends Command
             $panel = Filament::getPanel($panel);
         }
 
-        if (!$panel) {
+        if (! $panel) {
             $panels = Filament::getPanels();
 
             /** @var Panel $panel */
@@ -82,14 +82,12 @@ class MakeApiTransformerCommand extends Command
         $resourceNamespace = $modelNamespace;
         $namespace .= $resourceNamespace !== '' ? "\\{$resourceNamespace}" : '';
 
-
         $baseResourcePath =
             (string) str($resource)
                 ->prepend('/')
                 ->prepend($path)
                 ->replace('\\', '/')
                 ->replace('//', '/');
-
 
         $resourceApiTransformerDirectory = "{$baseResourcePath}/Api/Transformers/$apiTransformerClass.php";
 
@@ -98,7 +96,7 @@ class MakeApiTransformerCommand extends Command
             'resource' => "{$namespace}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
             'resourcePageClass' => $resourceApiTransformerDirectory,
-            'apiTransformerClass' => $apiTransformerClass
+            'apiTransformerClass' => $apiTransformerClass,
         ]);
 
         $this->components->info("Successfully created API Transformer for {$resource}!");

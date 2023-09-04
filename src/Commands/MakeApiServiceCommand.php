@@ -7,6 +7,7 @@ use Filament\Panel;
 use Filament\Support\Commands\Concerns\CanManipulateFiles;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
+
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
@@ -37,7 +38,6 @@ class MakeApiServiceCommand extends Command
             $model = 'Resource';
         }
 
-
         $modelClass = (string) str($model)->afterLast('\\');
 
         $modelNamespace = str($model)->contains('\\') ?
@@ -51,7 +51,7 @@ class MakeApiServiceCommand extends Command
             $panel = Filament::getPanel($panel);
         }
 
-        if (!$panel) {
+        if (! $panel) {
             $panels = Filament::getPanels();
 
             /** @var Panel $panel */
@@ -82,10 +82,10 @@ class MakeApiServiceCommand extends Command
         $resourceNamespace = $modelNamespace;
         $namespace .= $resourceNamespace !== '' ? "\\{$resourceNamespace}" : '';
 
-        $updateHandlerClass = "UpdateHandler";
-        $detailHandlerClass = "DetailHandler";
-        $paginationHandlerClass = "PaginationClass";
-        $deleteHandlerClass = "DeleteHandlerClass";
+        $updateHandlerClass = 'UpdateHandler';
+        $detailHandlerClass = 'DetailHandler';
+        $paginationHandlerClass = 'PaginationClass';
+        $deleteHandlerClass = 'DeleteHandlerClass';
 
         $baseResourcePath =
             (string) str($resource)
@@ -95,7 +95,6 @@ class MakeApiServiceCommand extends Command
                 ->replace('//', '/');
 
         $handlersNamespace = "{$namespace}\\{$resourceClass}\\Api\\Handlers";
-
 
         $resourceApiDirectory = "{$baseResourcePath}/Api/$apiServiceClass.php";
         $updateHandlerDirectory = "{$baseResourcePath}/Api/Handlers/$updateHandlerClass.php";
@@ -108,31 +107,31 @@ class MakeApiServiceCommand extends Command
             'resource' => "{$namespace}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
             'resourcePageClass' => $resourceApiDirectory,
-            'apiServiceClass' => $apiServiceClass
+            'apiServiceClass' => $apiServiceClass,
         ]);
 
         $this->copyStubToApp('DeleteHandler', $deleteHandlerDirectory, [
             'resource' => "{$namespace}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
-            'handlersNamespace' => $handlersNamespace
+            'handlersNamespace' => $handlersNamespace,
         ]);
 
         $this->copyStubToApp('DetailHandler', $detailHandlerDirectory, [
             'resource' => "{$namespace}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
-            'handlersNamespace' => $handlersNamespace
+            'handlersNamespace' => $handlersNamespace,
         ]);
 
         $this->copyStubToApp('UpdateHandler', $updateHandlerDirectory, [
             'resource' => "{$namespace}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
-            'handlersNamespace' => $handlersNamespace
+            'handlersNamespace' => $handlersNamespace,
         ]);
 
         $this->copyStubToApp('PaginationHandler', $paginationHandlerDirectory, [
             'resource' => "{$namespace}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
-            'handlersNamespace' => $handlersNamespace
+            'handlersNamespace' => $handlersNamespace,
         ]);
 
         $this->components->info("Successfully created API for {$resource}!");

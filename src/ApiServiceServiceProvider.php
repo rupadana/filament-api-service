@@ -10,14 +10,13 @@ use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Filesystem\Filesystem;
 use Livewire\Features\SupportTesting\Testable;
-use Spatie\LaravelPackageTools\Commands\InstallCommand;
-use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Rupadana\ApiService\Commands\ApiServiceCommand;
-use Rupadana\ApiService\Testing\TestsApiService;
 use Rupadana\ApiService\Commands\MakeApiHandlerCommand;
 use Rupadana\ApiService\Commands\MakeApiServiceCommand;
 use Rupadana\ApiService\Commands\MakeApiTransformerCommand;
+use Rupadana\ApiService\Testing\TestsApiService;
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class ApiServiceServiceProvider extends PackageServiceProvider
 {
@@ -83,7 +82,7 @@ class ApiServiceServiceProvider extends PackageServiceProvider
 
         // Handle Stubs
         if (app()->runningInConsole()) {
-            foreach (app(Filesystem::class)->files(__DIR__ . '/../stubs/') as $file) {
+            foreach (app(Filesystem::class)->files(__DIR__.'/../stubs/') as $file) {
                 $this->publishes([
                     $file->getRealPath() => base_path("stubs/api-service/{$file->getFilename()}"),
                 ], 'api-service-stubs');
@@ -106,8 +105,8 @@ class ApiServiceServiceProvider extends PackageServiceProvider
     {
         return [
             // AlpineComponent::make('api-service', __DIR__ . '/../resources/dist/components/api-service.js'),
-            Css::make('api-service-styles', __DIR__ . '/../resources/dist/api-service.css'),
-            Js::make('api-service-scripts', __DIR__ . '/../resources/dist/api-service.js'),
+            Css::make('api-service-styles', __DIR__.'/../resources/dist/api-service.css'),
+            Js::make('api-service-scripts', __DIR__.'/../resources/dist/api-service.js'),
         ];
     }
 
@@ -119,7 +118,7 @@ class ApiServiceServiceProvider extends PackageServiceProvider
         return [
             MakeApiHandlerCommand::class,
             MakeApiServiceCommand::class,
-            MakeApiTransformerCommand::class
+            MakeApiTransformerCommand::class,
         ];
     }
 

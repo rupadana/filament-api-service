@@ -4,7 +4,6 @@ namespace Rupadana\ApiService\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-
 class DefaultTransformer extends JsonResource
 {
     /**

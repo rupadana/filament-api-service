@@ -4,27 +4,21 @@ namespace Rupadana\ApiService;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
-use Rupadana\ApiService\Transformers\DefaultTransformer;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class ApiService
 {
-
     /**
      * Filament Resource
      */
-    protected static string | null $resource = null;
+    protected static ?string $resource = null;
 
-    protected static string | null $groupRouteName = null;
+    protected static ?string $groupRouteName = null;
 
     /**
-     * Key Name for query Get 
+     * Key Name for query Get
      * This is used in conditions using slugs in the search
-     *
-     * @var string
      */
     protected static string $keyName = 'id';
-
 
     public static function getKeyName()
     {
@@ -53,7 +47,6 @@ class ApiService
                 static::allRoutes($router);
             });
     }
-
 
     public static function allRoutes(Router $router)
     {
