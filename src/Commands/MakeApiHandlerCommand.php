@@ -120,7 +120,7 @@ class MakeApiHandlerCommand extends Command
         ]);
 
         $this->components->info("Successfully created API Handler for {$resource}!");
-        $this->components->info("You can register \"Handler\\$handlerClass::route(\$router);\" to allRoutes method on APIService");
+        $this->components->info("You can register \"Handlers\\$handlerClass::route(\$router);\" to allRoutes method on APIService");
 
         return static::SUCCESS;
     }
