@@ -104,9 +104,7 @@ class ApiServiceServiceProvider extends PackageServiceProvider
     protected function getAssets(): array
     {
         return [
-            // AlpineComponent::make('api-service', __DIR__ . '/../resources/dist/components/api-service.js'),
-            Css::make('api-service-styles', __DIR__.'/../resources/dist/api-service.css'),
-            Js::make('api-service-scripts', __DIR__.'/../resources/dist/api-service.js'),
+            //
         ];
     }
 
