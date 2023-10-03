@@ -2,6 +2,10 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## Add CreateHandler - 2023-10-03
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/v1.0.1...v1.0.2
+
 ## Update bug - 2023-09-09
 
 ### What's Changed
