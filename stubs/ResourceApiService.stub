@@ -12,6 +12,7 @@ class {{ apiServiceClass }} extends ApiService
 
     public static function allRoutes(Router $router)
     {
+        Handlers\CreateHandler::route($router);
         Handlers\UpdateHandler::route($router);
         Handlers\DeleteHandler::route($router);
         Handlers\PaginationHandler::route($router);

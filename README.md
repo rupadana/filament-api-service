@@ -32,8 +32,11 @@ and then you will got this routes:
 - [GET] '/api/blogs'   - Return LengthAwarePaginator 
 - [GET] '/api/blogs/1' - Return single resource   
 - [PUT] '/api/blogs/1' - Update resource
+- [POST] '/api/blogs' - Create resource
 - [DELETE] '/api/blogs/1' - Delete resource
 
+
+On CreateHandler, you need to be create your custom request validation.
 
 Im using `"spatie/laravel-query-builder": "^5.3"` to handle query and filtering. u can see `"spatie/laravel-query-builder": "^5.3"` [https://spatie.be/docs/laravel-query-builder/v5/introduction](documentation)
 
@@ -53,6 +56,19 @@ class User extends Model {
 }
 ```
 
+## Create a Handler
+
+To create a handler you can use this command. By default, i'm using CreateHandler
+
+```bash
+php artisan make:filament-api-handler BlogResource
+``` 
+
+or
+
+```bash
+php artisan make:filament-api-handler Blog
+``` 
 
 ## Transform API Response
 

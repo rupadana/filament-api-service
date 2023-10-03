@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use Rupadana\ApiService\Http\Handlers;
 use {{ resource }};
 
-class {{ handlerClass }} extends Handlers {
+class CreateHandler extends Handlers {
     public static string | null $uri = '/';
     public static string | null $resource = {{ resourceClass }}::class;
 

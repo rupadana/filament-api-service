@@ -41,7 +41,7 @@ class MakeApiHandlerCommand extends Command
         $handler = (string) str(
             $this->argument('handler') ?? text(
                 label: 'What is the Handler name?',
-                placeholder: 'UpdateHandler',
+                placeholder: 'CreateHandler',
                 required: true
             )
         )

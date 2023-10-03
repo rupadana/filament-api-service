@@ -82,10 +82,11 @@ class MakeApiServiceCommand extends Command
         $resourceNamespace = $modelNamespace;
         $namespace .= $resourceNamespace !== '' ? "\\{$resourceNamespace}" : '';
 
+        $createHandlerClass = 'CreateHandler';
         $updateHandlerClass = 'UpdateHandler';
         $detailHandlerClass = 'DetailHandler';
-        $paginationHandlerClass = 'PaginationClass';
-        $deleteHandlerClass = 'DeleteHandlerClass';
+        $paginationHandlerClass = 'PaginationHandler';
+        $deleteHandlerClass = 'DeleteHandler';
 
         $baseResourcePath =
             (string) str($resource)
@@ -97,6 +98,7 @@ class MakeApiServiceCommand extends Command
         $handlersNamespace = "{$namespace}\\{$resourceClass}\\Api\\Handlers";
 
         $resourceApiDirectory = "{$baseResourcePath}/Api/$apiServiceClass.php";
+        $createHandlerDirectory = "{$baseResourcePath}/Api/Handlers/$createHandlerClass.php";
         $updateHandlerDirectory = "{$baseResourcePath}/Api/Handlers/$updateHandlerClass.php";
         $detailHandlerDirectory = "{$baseResourcePath}/Api/Handlers/$detailHandlerClass.php";
         $paginationHandlerDirectory = "{$baseResourcePath}/Api/Handlers/$paginationHandlerClass.php";
@@ -117,6 +119,12 @@ class MakeApiServiceCommand extends Command
         ]);
 
         $this->copyStubToApp('DetailHandler', $detailHandlerDirectory, [
+            'resource' => "{$namespace}\\{$resourceClass}",
+            'resourceClass' => $resourceClass,
+            'handlersNamespace' => $handlersNamespace,
+        ]);
+
+        $this->copyStubToApp('CreateHandler', $createHandlerDirectory, [
             'resource' => "{$namespace}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
             'handlersNamespace' => $handlersNamespace,
