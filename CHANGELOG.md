@@ -2,6 +2,18 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## Add AllowedSorts - 2023-10-07
+
+### What's Changed
+
+- Add: Support for allowed sorts by @paulovnas in https://github.com/rupadana/filament-api-service/pull/6
+
+### New Contributors
+
+- @paulovnas made their first contribution in https://github.com/rupadana/filament-api-service/pull/6
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/v1.0.2...v1.0.3
+
 ## Add CreateHandler - 2023-10-03
 
 **Full Changelog**: https://github.com/rupadana/filament-api-service/compare/v1.0.1...v1.0.2
