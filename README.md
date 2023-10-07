@@ -46,11 +46,16 @@ You can specified `allowedFilters` and `allowedFields` in your model
 Example
 ```php
 class User extends Model {
-    public static array $allowedFilters = [
+    public static array $allowedFields = [
         'name'
     ];
-    
-    public static array $allowedFields = [
+
+    public static array $allowedSorts = [
+        'name',
+        'created_at'
+    ];
+
+    public static array $allowedFilters = [
         'name'
     ];
 }
