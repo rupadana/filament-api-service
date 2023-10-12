@@ -113,6 +113,9 @@ You can edit prefix & group route name as you want, default im use model singula
     }
 ```
 
+## How to secure it?
+
+Basically, when u register the ApiService to the `routes/api.php` you can group it using `sanctum` middleware, Whichis this is default api authentication by Laravel. [Read mode](https://laravel.com/docs/10.x/sanctum) about laravel sanctum 
 
 ## Changelog
 
