@@ -83,6 +83,36 @@ php artisan make:filament-api-transformer Blog
 
 it will be create BlogTransformer in `App\Filament\Resources\BlogResource\Api\Transformers`
 
+
+```php
+<?php
+namespace App\Filament\Resources\BlogResource\Api\Transformers;
+
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class BlogTransformer extends JsonResource
+{
+
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function toArray($request)
+    {
+        return $this->resource->toArray();
+
+        // or
+
+        return [
+            "modified_name" => $this->name . ' so Cool!'  
+        ]
+    }
+}
+```
+
+
 next step you need to edit & add it to your Resource
 
 ```php
@@ -102,7 +132,7 @@ next step you need to edit & add it to your Resource
 
 ## Group Name & Prefix
 
-You can edit prefix & group route name as you want, default im use model singular label;
+You can edit prefix & group route name as you want, default this plugin use model singular label;
 
 ```php
     class BlogApiService extends ApiService
