@@ -35,8 +35,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Rupadana\\ApiService\\": "src/",
-            "Rupadana\\ApiService\\Database\\Factories\\": "database/factories/"
+            "Rupadana\\ApiService\\": "src/"
         }
     },
     "autoload-dev": {

@@ -85,9 +85,6 @@ class ApiServiceServiceProvider extends PackageServiceProvider
                 ], 'api-service-stubs');
             }
         }
-
-        // Testing
-        Testable::mixin(new TestsApiService());
     }
 
     protected function getAssetPackageName(): ?string
