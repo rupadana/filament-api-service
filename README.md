@@ -35,26 +35,26 @@ and then you will got this routes:
 - [POST] '/api/blogs' - Create resource
 - [DELETE] '/api/blogs/1' - Delete resource
 
-
 On CreateHandler, you need to be create your custom request validation.
 
-Im using `"spatie/laravel-query-builder": "^5.3"` to handle query and filtering. u can see `"spatie/laravel-query-builder": "^5.3"` [https://spatie.be/docs/laravel-query-builder/v5/introduction](documentation)
+Im using `"spatie/laravel-query-builder": "^5.3"` to handle query selecting, sorting and filtering. Check out [the spatie/laravel-query-builder documentation](https://spatie.be/docs/laravel-query-builder/v5/introduction) for more information.
 
+You can specified `allowedFilters` and `allowedFields` in your model. For example:
 
-You can specified `allowedFilters` and `allowedFields` in your model
-
-Example
 ```php
 class User extends Model {
+    // Which fields can be selected from the database through the query string
     public static array $allowedFields = [
         'name'
     ];
 
+    // Which fields can be used to sort the results through the query string
     public static array $allowedSorts = [
         'name',
         'created_at'
     ];
 
+    // Which fields can be used to filter the results through the query string
     public static array $allowedFilters = [
         'name'
     ];
@@ -107,7 +107,7 @@ class BlogTransformer extends JsonResource
 
         return [
             "modified_name" => $this->name . ' so Cool!'  
-        ]
+        ];
     }
 }
 ```
