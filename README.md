@@ -147,6 +147,14 @@ You can edit prefix & group route name as you want, default this plugin use mode
 
 Basically, when u register the ApiService to the `routes/api.php` you can group it using `sanctum` middleware, Whichis this is default api authentication by Laravel. [Read more](https://laravel.com/docs/10.x/sanctum) about laravel sanctum 
 
+### Example 
+
+```php
+Route::middleware('auth:sanctum')->group(function() {
+    BlogApiService::routes();
+});
+```
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
