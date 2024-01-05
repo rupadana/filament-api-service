@@ -6,16 +6,19 @@ use Illuminate\Http\Request;
 use Rupadana\ApiService\Http\Handlers;
 use Rupadana\ApiService\Tests\Fixtures\Resources\ProductResource;
 
-class CreateHandler extends Handlers {
-    public static string | null $uri = '/';
-    public static string | null $resource = ProductResource::class;
+class CreateHandler extends Handlers
+{
+    public static ?string $uri = '/';
+
+    public static ?string $resource = ProductResource::class;
 
     public static function getMethod()
     {
         return Handlers::POST;
     }
 
-    public static function getModel() {
+    public static function getModel()
+    {
         return static::$resource::getModel();
     }
 
@@ -27,6 +30,6 @@ class CreateHandler extends Handlers {
 
         $model->save();
 
-        return static::sendSuccessResponse($model, "Successfully Create Resource");
+        return static::sendSuccessResponse($model, 'Successfully Create Resource');
     }
 }

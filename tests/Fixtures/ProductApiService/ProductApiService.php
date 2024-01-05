@@ -2,15 +2,14 @@
 
 namespace Rupadana\ApiService\Tests\Fixtures\ProductApiService;
 
-use Rupadana\ApiService\ApiService;
 use Illuminate\Routing\Router;
-
+use Rupadana\ApiService\ApiService;
 
 class ProductApiService extends ApiService
 {
-    protected static string | null $resource = \Rupadana\ApiService\Tests\Fixtures\Resources\ProductResource::class;
+    protected static ?string $resource = \Rupadana\ApiService\Tests\Fixtures\Resources\ProductResource::class;
 
-    protected static string | null $groupRouteName = 'our-products'; // customize route name
+    protected static ?string $groupRouteName = 'our-products'; // customize route name
 
     public static function allRoutes(Router $router)
     {
