@@ -31,12 +31,12 @@
         "orchestra/testbench": "^8.0",
         "pestphp/pest": "^2.0",
         "pestphp/pest-plugin-arch": "^2.0",
-        "pestphp/pest-plugin-laravel": "^2.0"
+        "pestphp/pest-plugin-laravel": "^2.0",
+        "phpunit/phpunit": "^10.0.17"
     },
     "autoload": {
         "psr-4": {
-            "Rupadana\\ApiService\\": "src/",
-            "Rupadana\\ApiService\\Database\\Factories\\": "database/factories/"
+            "Rupadana\\ApiService\\": "src/"
         }
     },
     "autoload-dev": {
