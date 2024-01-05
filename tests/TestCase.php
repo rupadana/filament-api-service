@@ -70,7 +70,7 @@ class TestCase extends Orchestra
         $this->loadLaravelMigrations();
 
         // Migrations for test fixtures
-        $this->loadMigrationsFrom(realpath(__DIR__ . '/Fixtures/Database/Migrations'));
+        $this->loadMigrationsFrom(realpath(__DIR__.'/Fixtures/Database/Migrations'));
     }
 
     protected function defineRoutes($router)

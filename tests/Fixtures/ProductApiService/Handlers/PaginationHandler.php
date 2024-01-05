@@ -6,9 +6,11 @@ use Rupadana\ApiService\Http\Handlers;
 use Rupadana\ApiService\Tests\Fixtures\Resources\ProductResource;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class PaginationHandler extends Handlers {
-    public static string | null $uri = '/';
-    public static string | null $resource = ProductResource::class;
+class PaginationHandler extends Handlers
+{
+    public static ?string $uri = '/';
+
+    public static ?string $resource = ProductResource::class;
 
     public function handler()
     {
@@ -24,4 +26,3 @@ class PaginationHandler extends Handlers {
         return static::getApiTransformer()::collection($query);
     }
 }
-

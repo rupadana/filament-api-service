@@ -6,7 +6,7 @@ use Rupadana\ApiService\Tests\Fixtures\Models\Product;
 
 it('can make routes for a product resource', function () {
     $routes = collect(app('router')->getRoutes())->map(function (RoutingRoute $route) {
-        return implode('|', $route->methods()) . ' ' . $route->uri();
+        return implode('|', $route->methods()).' '.$route->uri();
     });
 
     // The route name is customized to `our-products` in the `ProductApiService` class
