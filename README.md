@@ -1,6 +1,9 @@
 # A simple api service for supporting filamentphp
 
 [![Total Downloads](https://img.shields.io/packagist/dt/rupadana/filament-api-service.svg?style=flat-square)](https://packagist.org/packages/rupadana/filament-api-service)
+![Fix Code](https://github.com/rupadana/filament-api-service/actions/workflows/fix-php-code-styling.yml/badge.svg?branch=main)
+![Run Test](https://github.com/rupadana/filament-api-service/actions/workflows/run-tests.yml/badge.svg?branch=main)
+
 
 
 ## Installation
