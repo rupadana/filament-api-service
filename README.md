@@ -14,6 +14,17 @@ You can install the package via composer:
 composer require rupadana/filament-api-service
 ```
 
+Register it to your filament Provider
+
+
+```php
+use Rupadana\ApiService\ApiServicePlugin;
+
+$panel->plugins([
+    ApiServicePlugin::make()
+])
+```
+
 ## Usage
 
 ```bash
