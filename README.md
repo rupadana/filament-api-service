@@ -25,6 +25,10 @@ $panel->plugins([
 ])
 ```
 
+## Publish Config
+
+To publish config, run `php artisan api-service:install`.
+
 ## Usage
 
 ```bash
