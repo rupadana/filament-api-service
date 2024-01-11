@@ -20,23 +20,19 @@ composer require rupadana/filament-api-service
 php artisan make:filament-api-service BlogResource
 ```
 
-Add this code to your routes file, example in routes/api.php
+From version 3.0, routes automatically registered. it will grouped as '/api-service/`admin`'. `admin` is panelId.
 
-```php
-...
-use App\Filament\Resources\BlogResource\Api;
-...
 
-BlogApiService::routes();
-```
 
-and then you will got this routes:
+So, You don't need to register the routes manually.
 
-- [GET] '/api/blogs'   - Return LengthAwarePaginator 
-- [GET] '/api/blogs/1' - Return single resource   
-- [PUT] '/api/blogs/1' - Update resource
-- [POST] '/api/blogs' - Create resource
-- [DELETE] '/api/blogs/1' - Delete resource
+The routes will be : 
+
+- [GET] '/api-service/`admin`/blogs'   - Return LengthAwarePaginator 
+- [GET] '/api-service/`admin`/blogs/1' - Return single resource   
+- [PUT] '/api-service/`admin`/blogs/1' - Update resource
+- [POST] '/api-service/`admin`/blogs' - Create resource
+- [DELETE] '/api-service/`admin`/blogs/1' - Delete resource
 
 On CreateHandler, you need to be create your custom request validation.
 
@@ -148,15 +144,11 @@ You can edit prefix & group route name as you want, default this plugin use mode
 
 ## How to secure it?
 
-Basically, when u register the ApiService to the `routes/api.php` you can group it using `sanctum` middleware, Whichis this is default api authentication by Laravel. [Read more](https://laravel.com/docs/10.x/sanctum) about laravel sanctum 
+From version 3.0, it will automatically detect routes and secure it using sanctum.
 
-### Example 
+To Generate Token, you just need create it from admin panel. It will be Token Resource there.
 
-```php
-Route::middleware('auth:sanctum')->group(function() {
-    BlogApiService::routes();
-});
-```
+![Image](https://res.cloudinary.com/rupadana/image/upload/v1704958748/Screenshot_2024-01-11_at_15.37.55_ncpg8n.png)
 
 ## Changelog
 
