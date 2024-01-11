@@ -20,7 +20,6 @@ Route::prefix('api')
                     });
 
             } catch (Exception $e) {
-                dd($e);
             }
         }
     });
