@@ -6,6 +6,8 @@ use Filament\Support\Assets\Asset;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Filesystem\Filesystem;
+use Laravel\Sanctum\Http\Middleware\CheckAbilities;
+use Laravel\Sanctum\Http\Middleware\CheckForAnyAbility;
 use Rupadana\ApiService\Commands\MakeApiHandlerCommand;
 use Rupadana\ApiService\Commands\MakeApiServiceCommand;
 use Rupadana\ApiService\Commands\MakeApiTransformerCommand;
@@ -34,7 +36,8 @@ class ApiServiceServiceProvider extends PackageServiceProvider
                     ->publishMigrations()
                     ->askToRunMigrations()
                     ->askToStarRepoOnGitHub('rupadana/api-service');
-            });
+            })
+            ->hasRoute('api');
 
         $configFileName = $package->shortName();
 
@@ -83,6 +86,11 @@ class ApiServiceServiceProvider extends PackageServiceProvider
                 ], 'api-service-stubs');
             }
         }
+
+
+        $router = app('router');
+        $router->aliasMiddleware('abilities', CheckAbilities::class);
+        $router->aliasMiddleware('ability', CheckForAnyAbility::class);
     }
 
     protected function getAssetPackageName(): ?string

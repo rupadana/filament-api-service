@@ -143,7 +143,7 @@ class MakeApiServiceCommand extends Command
         ]);
 
         $this->components->info("Successfully created API for {$resource}!");
-        $this->components->info("Add \" $apiServiceClass::routes() \" to routes/api.php");
+        $this->components->info("It automatically registered to '/api-service' route group");
 
         return static::SUCCESS;
     }
