@@ -4,7 +4,7 @@
 return [
     'navigation' => [
         'group' => [
-            'token' => 'User'
-        ]
-    ]
+            'token' => 'User',
+        ],
+    ],
 ];
