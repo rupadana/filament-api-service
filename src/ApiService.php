@@ -30,7 +30,7 @@ class ApiService
         return static::$resource;
     }
 
-    public static function routes()
+    public static function registerRoutes()
     {
 
         $slug = static::getResource()::getSlug();
@@ -43,12 +43,17 @@ class ApiService
             $name
         )
             ->prefix(static::$groupRouteName ?? $slug)
-            ->group(function (Router $router) {
-                static::allRoutes($router);
+            ->group(function (Router $route) {
+                static::handlers();
+
+                foreach (static::handlers() as $key => $handler) {
+                    app($handler)->route($route);
+                }
             });
     }
 
-    public static function allRoutes(Router $router)
+    public static function handlers(): array
     {
+        return [];
     }
 }
