@@ -14,10 +14,12 @@ use Filament\Tables\TablesServiceProvider;
 use Filament\Widgets\WidgetsServiceProvider;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\SanctumServiceProvider;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Rupadana\ApiService\ApiServiceServiceProvider;
 use Rupadana\ApiService\Tests\Fixtures\ProductApiService\ProductApiService;
+use Rupadana\ApiService\Tests\Fixtures\Providers\AdminPanelProvider;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 use Spatie\QueryBuilder\QueryBuilderServiceProvider;
 
@@ -46,6 +48,8 @@ class TestCase extends Orchestra
             TablesServiceProvider::class,
             WidgetsServiceProvider::class,
             QueryBuilderServiceProvider::class,
+            AdminPanelProvider::class,
+            SanctumServiceProvider::class,
             ApiServiceServiceProvider::class,
         ];
     }
@@ -75,8 +79,8 @@ class TestCase extends Orchestra
 
     protected function defineRoutes($router)
     {
-        $router->group(['prefix' => 'api'], function () {
-            ProductApiService::routes();
-        });
+        // $router->group(['prefix' => 'api'], function () {
+        //     ProductApiService::routes();
+        // });
     }
 }

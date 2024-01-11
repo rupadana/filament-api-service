@@ -2,25 +2,38 @@
 
 use Illuminate\Routing\Route as RoutingRoute;
 use Rupadana\ApiService\Tests\Fixtures\Database\Seeders\ProductsSeeder;
+use Rupadana\ApiService\Tests\Fixtures\Database\Seeders\UserSeeder;
 use Rupadana\ApiService\Tests\Fixtures\Models\Product;
+use Rupadana\ApiService\Tests\Fixtures\Models\User;
 
 it('can make routes for a product resource', function () {
     $routes = collect(app('router')->getRoutes())->map(function (RoutingRoute $route) {
-        return implode('|', $route->methods()).' '.$route->uri();
+        return implode('|', $route->methods()) . ' ' . $route->uri();
     });
 
+
+
+
     // The route name is customized to `our-products` in the `ProductApiService` class
-    expect($routes)->toContain('POST api/our-products');
-    expect($routes)->toContain('PUT api/our-products/{id}');
-    expect($routes)->toContain('DELETE api/our-products/{id}');
-    expect($routes)->toContain('GET|HEAD api/our-products');
-    expect($routes)->toContain('GET|HEAD api/our-products/{id}');
+    expect($routes)->toContain('POST api-service/admin/our-products');
+    expect($routes)->toContain('PUT api-service/admin/our-products/{id}');
+    expect($routes)->toContain('DELETE api-service/admin/our-products/{id}');
+    expect($routes)->toContain('GET|HEAD api-service/admin/our-products');
+    expect($routes)->toContain('GET|HEAD api-service/admin/our-products/{id}');
 });
+
+
 
 it('can return a list of products with allowed attributes', function () {
     $this->seed(ProductsSeeder::class);
+    $this->seed(UserSeeder::class);
 
-    $response = $this->get('/api/our-products')
+    $user = User::find(1);
+    $token = $user->createToken('testing')->plainTextToken;
+
+    $response = $this->get('/api-service/admin/our-products', [
+        'Authorization' => 'Bearer ' . $token
+    ])
         ->assertStatus(200);
 
     $products = Product::all()->map(function ($product) {
@@ -43,8 +56,14 @@ it('can return a list of products with allowed attributes', function () {
 
 it('can return a list of products with selected fields', function () {
     $this->seed(ProductsSeeder::class);
+    $this->seed(UserSeeder::class);
 
-    $response = $this->get('/api/our-products?fields[products]=name,price')
+    $user = User::find(1);
+    $token = $user->createToken('testing')->plainTextToken;
+
+    $response = $this->get('/api-service/admin/our-products?fields[products]=name,price', [
+        'Authorization' => 'Bearer ' . $token
+    ])
         ->assertStatus(200);
 
     $response->assertJsonFragment([
@@ -55,8 +74,14 @@ it('can return a list of products with selected fields', function () {
 
 it('throws when selecting a field that is not allowed', function () {
     $this->seed(ProductsSeeder::class);
+    $this->seed(UserSeeder::class);
 
-    $this->get('/api/our-products?fields[products]=name,slug,price')
+    $user = User::find(1);
+    $token = $user->createToken('testing')->plainTextToken;
+
+    $this->get('/api-service/admin/our-products?fields[products]=name,slug,price', [
+        'Authorization' => 'Bearer ' . $token
+    ])
         ->assertStatus(400)
         ->assertJsonFragment([
             'message' => 'Requested field(s) `products.slug` are not allowed.',
@@ -65,8 +90,14 @@ it('throws when selecting a field that is not allowed', function () {
 
 it('can return a list of products with selected sorts', function () {
     $this->seed(ProductsSeeder::class);
+    $this->seed(UserSeeder::class);
 
-    $response = $this->get('/api/our-products?sort=-price')
+    $user = User::find(1);
+    $token = $user->createToken('testing')->plainTextToken;
+
+    $response = $this->get('/api-service/admin/our-products?sort=-price', [
+        'Authorization' => 'Bearer ' . $token
+    ])
         ->assertStatus(200);
 
     $data = Product::all()
@@ -87,8 +118,14 @@ it('can return a list of products with selected sorts', function () {
 
 it('throws when sorting by a field that is not allowed', function () {
     $this->seed(ProductsSeeder::class);
+    $this->seed(UserSeeder::class);
 
-    $this->get('/api/our-products?sort=-slug')
+    $user = User::find(1);
+    $token = $user->createToken('testing')->plainTextToken;
+
+    $this->get('/api-service/admin/our-products?sort=-slug', [
+        'Authorization' => 'Bearer ' . $token
+    ])
         ->assertStatus(400)
         ->assertJsonFragment([
             'message' => 'Requested sort(s) `products.slug` are not allowed.',
@@ -97,8 +134,14 @@ it('throws when sorting by a field that is not allowed', function () {
 
 it('can return a list of products with selected filters', function () {
     $this->seed(ProductsSeeder::class);
+    $this->seed(UserSeeder::class);
 
-    $response = $this->get('/api/our-products?filter[name]=T-Shirt&filter[price]=500')
+    $user = User::find(1);
+    $token = $user->createToken('testing')->plainTextToken;
+
+    $response = $this->get('/api-service/admin/our-products?filter[name]=T-Shirt&filter[price]=500', [
+        'Authorization' => 'Bearer ' . $token
+    ])
         ->assertStatus(200);
 
     $response->assertJsonFragment([
@@ -109,8 +152,14 @@ it('can return a list of products with selected filters', function () {
 
 it('throws when filtering by a field that is not allowed', function () {
     $this->seed(ProductsSeeder::class);
+    $this->seed(UserSeeder::class);
 
-    $this->get('/api/our-products?filter[name]=T-Shirt&filter[slug]=t-shirt')
+    $user = User::find(1);
+    $token = $user->createToken('testing')->plainTextToken;
+
+    $this->get('/api-service/admin/our-products?filter[name]=T-Shirt&filter[slug]=t-shirt', [
+        'Authorization' => 'Bearer ' . $token
+    ])
         ->assertStatus(400)
         ->assertJsonFragment([
             'message' => 'Requested filter(s) `products.slug` are not allowed.',
@@ -119,8 +168,14 @@ it('throws when filtering by a field that is not allowed', function () {
 
 it('can return a list of products with a custom transformer', function () {
     $this->seed(ProductsSeeder::class);
+    $this->seed(UserSeeder::class);
 
-    $response = $this->get('/api/our-products')
+    $user = User::find(1);
+    $token = $user->createToken('testing')->plainTextToken;
+
+    $response = $this->get('/api-service/admin/our-products', [
+        'Authorization' => 'Bearer ' . $token
+    ])
         ->assertStatus(200);
 
     $product = Product::first();

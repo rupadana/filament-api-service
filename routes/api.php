@@ -3,6 +3,7 @@
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Route;
 
+
 Route::prefix('api-service')
     ->name('api-service.')
     ->middleware('auth:sanctum')
@@ -20,7 +21,7 @@ Route::prefix('api-service')
                     });
 
             } catch (Exception $e) {
-                // dd($e);
+                dd($e);
             }
         }
     });
