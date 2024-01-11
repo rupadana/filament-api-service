@@ -2,6 +2,21 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.0.0 - 2024-01-11
+
+### What's Changed
+
+* Bump stefanzweifel/git-auto-commit-action from 4 to 5 by @dependabot in https://github.com/rupadana/filament-api-service/pull/7
+* Bump aglipanci/laravel-pint-action from 2.3.0 to 2.3.1 by @dependabot in https://github.com/rupadana/filament-api-service/pull/9
+* Add test suite by @luttje in https://github.com/rupadana/filament-api-service/pull/10
+* Auto register routes by @rupadana in https://github.com/rupadana/filament-api-service/pull/14
+
+### New Contributors
+
+* @luttje made their first contribution in https://github.com/rupadana/filament-api-service/pull/10
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/v1.0.3...3.0.0
+
 ## Add AllowedSorts - 2023-10-07
 
 ### What's Changed
