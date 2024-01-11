@@ -33,9 +33,7 @@ class ApiServiceServiceProvider extends PackageServiceProvider
             ->hasInstallCommand(function (InstallCommand $command) {
                 $command
                     ->publishConfigFile()
-                    ->publishMigrations()
-                    ->askToRunMigrations()
-                    ->askToStarRepoOnGitHub('rupadana/api-service');
+                    ->askToStarRepoOnGitHub('rupadana/filament-api-service');
             })
             ->hasRoute('api');
 

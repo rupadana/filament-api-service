@@ -116,6 +116,6 @@ class TokenResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return 'User';
+        return config('api-service.navigation.group.token');
     }
 }
