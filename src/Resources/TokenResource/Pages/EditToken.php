@@ -2,9 +2,9 @@
 
 namespace Rupadana\ApiService\Resources\TokenResource\Pages;
 
-use Rupadana\ApiService\Resources\TokenResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Rupadana\ApiService\Resources\TokenResource;
 
 class EditToken extends EditRecord
 {

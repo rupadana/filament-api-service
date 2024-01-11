@@ -2,15 +2,12 @@
 
 namespace Rupadana\ApiService\Resources\TokenResource\Pages;
 
-
-use Rupadana\ApiService\Resources\TokenResource;
 use App\Models\User;
-use Filament\Actions;
-use Filament\Facades\Filament;
 use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
+use Rupadana\ApiService\Resources\TokenResource;
 
 class CreateToken extends CreateRecord
 {
@@ -29,10 +26,11 @@ class CreateToken extends CreateRecord
             ->persistent()
             ->actions([
                 Action::make('close')
-                    ->close()
+                    ->close(),
             ])
             ->success()
             ->send();
+
         return $user;
     }
 

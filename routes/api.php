@@ -13,7 +13,7 @@ Route::prefix('api-service')
             try {
 
                 Route::prefix($panel->getId())
-                    ->name($panel->getId() . '.')
+                    ->name($panel->getId().'.')
                     ->group(function () use ($panel) {
                         $apiServicePlugin = $panel->getPlugin('api-service');
                         $apiServicePlugin->route($panel);

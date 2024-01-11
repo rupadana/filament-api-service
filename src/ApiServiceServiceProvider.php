@@ -87,7 +87,6 @@ class ApiServiceServiceProvider extends PackageServiceProvider
             }
         }
 
-
         $router = app('router');
         $router->aliasMiddleware('abilities', CheckAbilities::class);
         $router->aliasMiddleware('ability', CheckForAnyAbility::class);
