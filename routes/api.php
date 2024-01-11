@@ -3,7 +3,6 @@
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Route;
 
-
 Route::prefix('api-service')
     ->name('api-service.')
     ->middleware('auth:sanctum')

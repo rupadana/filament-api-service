@@ -5,7 +5,6 @@ namespace Rupadana\ApiService\Tests\Fixtures\Providers;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -36,7 +35,7 @@ class AdminPanelProvider extends PanelProvider
                 ApiServicePlugin::make(),
             ])
             ->resources([
-                ProductResource::class
+                ProductResource::class,
             ])
             ->widgets([
                 Widgets\AccountWidget::class,
