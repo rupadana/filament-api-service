@@ -2,7 +2,6 @@
 
 namespace Rupadana\ApiService\Tests\Fixtures\Resources\ProductResource\Api;
 
-use Illuminate\Routing\Router;
 use Rupadana\ApiService\ApiService;
 
 class ProductApiService extends ApiService
@@ -19,7 +18,7 @@ class ProductApiService extends ApiService
             Handlers\UpdateHandler::class,
             Handlers\DeleteHandler::class,
             Handlers\PaginationHandler::class,
-            Handlers\DetailHandler::class
+            Handlers\DetailHandler::class,
         ];
     }
 }

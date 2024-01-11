@@ -63,8 +63,8 @@ class ApiServicePlugin implements Plugin
             try {
                 $resourceName = str($resource)->beforeLast('Resource')->explode('\\')->last();
 
-                $apiServiceClass = $resource . '\\Api\\' . $resourceName . 'ApiService';
-                
+                $apiServiceClass = $resource.'\\Api\\'.$resourceName.'ApiService';
+
                 app($apiServiceClass)->registerRoutes();
             } catch (Exception $e) {
             }
