@@ -3,8 +3,8 @@
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('api-service')
-    ->name('api-service.')
+Route::prefix('api')
+    ->name('api.')
     ->middleware('auth:sanctum')
     ->group(function () {
         $panels = Filament::getPanels();
