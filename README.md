@@ -20,7 +20,7 @@ composer require rupadana/filament-api-service
 php artisan make:filament-api-service BlogResource
 ```
 
-From version 3.0, routes automatically registered. it will grouped as '/api-service/`admin`'. `admin` is panelId.
+From version 3.0, routes automatically registered. it will grouped as '/api/`admin`'. `admin` is panelId.
 
 
 
@@ -28,11 +28,11 @@ So, You don't need to register the routes manually.
 
 The routes will be : 
 
-- [GET] '/api-service/`admin`/blogs'   - Return LengthAwarePaginator 
-- [GET] '/api-service/`admin`/blogs/1' - Return single resource   
-- [PUT] '/api-service/`admin`/blogs/1' - Update resource
-- [POST] '/api-service/`admin`/blogs' - Create resource
-- [DELETE] '/api-service/`admin`/blogs/1' - Delete resource
+- [GET] '/api/`admin`/blogs'   - Return LengthAwarePaginator 
+- [GET] '/api/`admin`/blogs/1' - Return single resource   
+- [PUT] '/api/`admin`/blogs/1' - Update resource
+- [POST] '/api/`admin`/blogs' - Create resource
+- [DELETE] '/api/`admin`/blogs/1' - Delete resource
 
 On CreateHandler, you need to be create your custom request validation.
 
