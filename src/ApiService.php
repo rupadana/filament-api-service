@@ -52,7 +52,7 @@ class ApiService
             });
     }
 
-    public static function handlers() : array
+    public static function handlers(): array
     {
         return [];
     }

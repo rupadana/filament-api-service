@@ -2,8 +2,6 @@
 
 namespace Rupadana\ApiService\Resources;
 
-
-use Rupadana\ApiService\Resources\TokenResource\Pages;
 use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Actions\Action;
@@ -19,6 +17,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Rupadana\ApiService\ApiServicePlugin;
 use Rupadana\ApiService\Models\Token;
+use Rupadana\ApiService\Resources\TokenResource\Pages;
 
 class TokenResource extends Resource
 {
@@ -37,12 +36,12 @@ class TokenResource extends Resource
                         Select::make('tokenable_id')
                             ->options(User::all()->pluck('name', 'id'))
                             ->label('User')
-                            ->required()
+                            ->required(),
                     ]),
 
                 Section::make('Abilities')
                     ->description('Select abilities of the token')
-                    ->schema(static::getAbilitiesSchema())
+                    ->schema(static::getAbilitiesSchema()),
             ]);
     }
 
@@ -64,13 +63,12 @@ class TokenResource extends Resource
                 ->schema([
                     CheckboxList::make('ability')
                         ->options($extractedAbilities)
-                        ->selectAllAction(fn (Action $action) => $action->label("Select all"))
-                        ->deselectAllAction(fn (Action $action) => $action->label("Unselect All"))
+                        ->selectAllAction(fn (Action $action) => $action->label('Select all'))
+                        ->deselectAllAction(fn (Action $action) => $action->label('Unselect All'))
                         ->bulkToggleable(),
                 ])
                 ->collapsible();
         }
-
 
         return $schema;
     }
@@ -86,13 +84,13 @@ class TokenResource extends Resource
                     ->badge()
                     ->words(1),
                 TextColumn::make('created_at')
-                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                DeleteAction::make()
+                DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -112,10 +110,9 @@ class TokenResource extends Resource
     {
         return [
             'index' => Pages\ListTokens::route('/'),
-            'create' => Pages\CreateToken::route('/create')
+            'create' => Pages\CreateToken::route('/create'),
         ];
     }
-
 
     public static function getNavigationGroup(): ?string
     {

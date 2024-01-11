@@ -40,9 +40,8 @@ class Handlers
         $router
             ->$method(static::$uri, [static::class, 'handler'])
             ->name(static::getKebabClassName())
-            ->middleware(static::getMiddlewareAliasName() . ':' . static::stringifyAbility());
+            ->middleware(static::getMiddlewareAliasName().':'.static::stringifyAbility());
     }
-
 
     protected static function getMiddlewareAliasName()
     {
@@ -54,14 +53,15 @@ class Handlers
         return str(str(static::class)->beforeLast('Handler')->explode('\\')->last())->kebab();
     }
 
-    public static function stringifyAbility() {
+    public static function stringifyAbility()
+    {
         return implode(',', static::getAbility());
     }
 
     public static function getAbility(): array
     {
         return [
-            str(str(static::getModel())->explode('\\')->last())->kebab() . ':' . static::getKebabClassName(),
+            str(str(static::getModel())->explode('\\')->last())->kebab().':'.static::getKebabClassName(),
         ];
     }
 
@@ -72,7 +72,7 @@ class Handlers
 
     public static function getApiTransformer(): ?string
     {
-        if (!method_exists(static::$resource, 'getApiTransformer')) {
+        if (! method_exists(static::$resource, 'getApiTransformer')) {
             return DefaultTransformer::class;
         }
 

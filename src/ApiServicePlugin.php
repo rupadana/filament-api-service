@@ -6,15 +6,10 @@ use Exception;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Filament\Support\Commands\Concerns\CanManipulateFiles;
-use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Routing\Router;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
 use Rupadana\ApiService\Resources\TokenResource;
 
 class ApiServicePlugin implements Plugin
 {
-
     use CanManipulateFiles;
 
     public function getId(): string
@@ -25,7 +20,7 @@ class ApiServicePlugin implements Plugin
     public function register(Panel $panel): void
     {
         $panel->resources([
-            TokenResource::class
+            TokenResource::class,
         ]);
     }
 
@@ -43,7 +38,7 @@ class ApiServicePlugin implements Plugin
 
                 $resourceName = str($resource)->beforeLast('Resource')->explode('\\')->last();
 
-                $apiServiceClass = $resource . '\\Api\\' . $resourceName . 'ApiService';
+                $apiServiceClass = $resource.'\\Api\\'.$resourceName.'ApiService';
 
                 $handlers = app($apiServiceClass)->handlers();
 
@@ -68,7 +63,7 @@ class ApiServicePlugin implements Plugin
             try {
                 $resourceName = str($resource)->beforeLast('Resource')->explode('\\')->last();
 
-                $apiServiceClass = $resource . '\\Api\\' . $resourceName . 'ApiService';
+                $apiServiceClass = $resource.'\\Api\\'.$resourceName.'ApiService';
 
                 app($apiServiceClass)->registerRoutes();
             } catch (Exception $e) {
