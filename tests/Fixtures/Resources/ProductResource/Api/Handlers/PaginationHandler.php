@@ -1,6 +1,6 @@
 <?php
 
-namespace Rupadana\ApiService\Tests\Fixtures\ProductApiService\Handlers;
+namespace Rupadana\ApiService\Tests\Fixtures\Resources\ProductResource\Api\Handlers;
 
 use Rupadana\ApiService\Http\Handlers;
 use Rupadana\ApiService\Tests\Fixtures\Resources\ProductResource;

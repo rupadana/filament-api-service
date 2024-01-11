@@ -1,6 +1,6 @@
 <?php
 
-namespace Rupadana\ApiService\Tests\Fixtures\ProductApiService\Handlers;
+namespace Rupadana\ApiService\Tests\Fixtures\Resources\ProductResource\Api\Handlers;
 
 use Illuminate\Http\Request;
 use Rupadana\ApiService\Http\Handlers;
