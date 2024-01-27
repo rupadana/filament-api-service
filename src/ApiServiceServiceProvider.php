@@ -6,11 +6,11 @@ use Filament\Support\Assets\Asset;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Filesystem\Filesystem;
-use Laravel\Sanctum\Http\Middleware\CheckAbilities;
-use Laravel\Sanctum\Http\Middleware\CheckForAnyAbility;
+use Livewire\Features\SupportTesting\Testable;
 use Rupadana\ApiService\Commands\MakeApiHandlerCommand;
 use Rupadana\ApiService\Commands\MakeApiServiceCommand;
 use Rupadana\ApiService\Commands\MakeApiTransformerCommand;
+use Rupadana\ApiService\Testing\TestsApiService;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -33,9 +33,10 @@ class ApiServiceServiceProvider extends PackageServiceProvider
             ->hasInstallCommand(function (InstallCommand $command) {
                 $command
                     ->publishConfigFile()
-                    ->askToStarRepoOnGitHub('rupadana/filament-api-service');
-            })
-            ->hasRoute('api');
+                    ->publishMigrations()
+                    ->askToRunMigrations()
+                    ->askToStarRepoOnGitHub('rupadana/api-service');
+            });
 
         $configFileName = $package->shortName();
 
@@ -78,16 +79,19 @@ class ApiServiceServiceProvider extends PackageServiceProvider
 
         // Handle Stubs
         if (app()->runningInConsole()) {
-            foreach (app(Filesystem::class)->files(__DIR__.'/../stubs/') as $file) {
-                $this->publishes([
-                    $file->getRealPath() => base_path("stubs/api-service/{$file->getFilename()}"),
-                ], 'api-service-stubs');
-            }
+            // foreach (app(Filesystem::class)->files(__DIR__.'/../stubs/') as $file) {
+            //     $this->publishes([
+            //         $file->getRealPath() => base_path("stubs/api-service/{$file->getFilename()}"),
+            //     ], 'api-service-stubs');
+            // }
+
+            $this->publishes([
+                __DIR__ . '/Resources' => app_path('/Filament/Resources')
+            ], 'api-service-resource');
         }
 
-        $router = app('router');
-        $router->aliasMiddleware('abilities', CheckAbilities::class);
-        $router->aliasMiddleware('ability', CheckForAnyAbility::class);
+        // Testing
+        // Testable::mixin(new TestsApiService());
     }
 
     protected function getAssetPackageName(): ?string
