@@ -5,7 +5,6 @@ namespace Rupadana\ApiService;
 use Filament\Support\Assets\Asset;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
-use Illuminate\Filesystem\Filesystem;
 use Laravel\Sanctum\Http\Middleware\CheckAbilities;
 use Laravel\Sanctum\Http\Middleware\CheckForAnyAbility;
 use Rupadana\ApiService\Commands\MakeApiHandlerCommand;
@@ -79,7 +78,7 @@ class ApiServiceServiceProvider extends PackageServiceProvider
         // Handle Stubs
         if (app()->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/Resources' => app_path('/Filament/Resources')
+                __DIR__.'/Resources' => app_path('/Filament/Resources'),
             ], 'api-service-resource');
         }
 
