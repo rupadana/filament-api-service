@@ -78,11 +78,9 @@ class ApiServiceServiceProvider extends PackageServiceProvider
 
         // Handle Stubs
         if (app()->runningInConsole()) {
-            foreach (app(Filesystem::class)->files(__DIR__.'/../stubs/') as $file) {
-                $this->publishes([
-                    $file->getRealPath() => base_path("stubs/api-service/{$file->getFilename()}"),
-                ], 'api-service-stubs');
-            }
+            $this->publishes([
+                __DIR__ . '/Resources' => app_path('/Filament/Resources')
+            ], 'api-service-resource');
         }
 
         $router = app('router');
