@@ -86,7 +86,7 @@ class ApiServiceServiceProvider extends PackageServiceProvider
             // }
 
             $this->publishes([
-                __DIR__ . '/Resources' => app_path('/Filament/Resources')
+                __DIR__.'/Resources' => app_path('/Filament/Resources'),
             ], 'api-service-resource');
         }
 
