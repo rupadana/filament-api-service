@@ -2,6 +2,10 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.0.6 - 2024-01-29
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.0.5...3.0.6
+
 ## 3.0.5 - 2024-01-29
 
 **Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.0.2...3.0.5
