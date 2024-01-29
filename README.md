@@ -47,13 +47,9 @@ The routes will be :
 On CreateHandler, you need to be create your custom request validation.
 
 
-## Publish Token Resource
+## Token Resource
 
-```bash
-php artisan vendor:publish --tag=api-service-resource
-```
-
-and you can modify it and show for spesific users by your own Authorization system
+By default, Token resource only show on `super_admin` role. you can modify it by publishing config and change `api-service.can_access.role`
 
 ## Filtering & Allowed Field
 
