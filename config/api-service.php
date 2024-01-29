@@ -9,7 +9,7 @@ return [
     ],
     'can_access' => [
         'role' => [
-            'super_admin'
-        ]
-    ]
+            'super_admin',
+        ],
+    ],
 ];
