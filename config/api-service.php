@@ -7,4 +7,9 @@ return [
             'token' => 'User',
         ],
     ],
+    'can_access' => [
+        'role' => [
+            'super_admin'
+        ]
+    ]
 ];

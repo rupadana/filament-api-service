@@ -118,4 +118,9 @@ class TokenResource extends Resource
     {
         return config('api-service.navigation.group.token');
     }
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()->hasRole(config('api-service.can_access.role', []));
+    }
 }

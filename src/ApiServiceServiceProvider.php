@@ -75,13 +75,6 @@ class ApiServiceServiceProvider extends PackageServiceProvider
         // Icon Registration
         FilamentIcon::register($this->getIcons());
 
-        // Handle Stubs
-        if (app()->runningInConsole()) {
-            $this->publishes([
-                __DIR__.'/Resources' => app_path('/Filament/Resources'),
-            ], 'api-service-resource');
-        }
-
         $router = app('router');
         $router->aliasMiddleware('abilities', CheckAbilities::class);
         $router->aliasMiddleware('ability', CheckForAnyAbility::class);
