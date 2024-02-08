@@ -2,6 +2,14 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.0.7 - 2024-02-08
+
+### What's Changed
+
+* adding configuration to enable/disable policy by @rupadana in https://github.com/rupadana/filament-api-service/pull/19
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.0.6...3.0.7
+
 ## 3.0.6 - 2024-01-29
 
 **Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.0.5...3.0.6
