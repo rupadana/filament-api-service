@@ -166,6 +166,16 @@ To Generate Token, you just need create it from admin panel. It will be Token Re
 
 ![Image](https://res.cloudinary.com/rupadana/image/upload/v1704958748/Screenshot_2024-01-11_at_15.37.55_ncpg8n.png)
 
+By default, Token Resource is protected by TokenPolicy. You can disable it by publishing the config and change this line.
+
+```php
+'models' => [
+        'token' => [
+            'enable_policy' => false // default: true
+        ]
+    ],
+```
+
 ## TODO
 
 - [ ] Test Plugin for Tenancy purpose
