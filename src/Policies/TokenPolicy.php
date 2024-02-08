@@ -23,7 +23,7 @@ class TokenPolicy
         if (! $this->isPolicyEnabled()) {
             return true;
         }
-
+  
         return $user->can('view_any_token');
     }
 
@@ -47,7 +47,7 @@ class TokenPolicy
         if (! $this->isPolicyEnabled()) {
             return true;
         }
-
+      
         return $user->can('create_token');
     }
 
@@ -68,6 +68,7 @@ class TokenPolicy
      */
     public function delete(User $user, Token $token): bool
     {
+
         if (! $this->isPolicyEnabled()) {
             return true;
         }
