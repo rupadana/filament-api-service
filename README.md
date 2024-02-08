@@ -32,7 +32,6 @@ php artisan make:filament-api-service BlogResource
 
 From version 3.0, routes automatically registered. it will grouped as '/api/`admin`'. `admin` is panelId.
 
-
 So, You don't need to register the routes manually.
 
 The routes will be : 
@@ -48,12 +47,21 @@ On CreateHandler, you need to be create your custom request validation.
 
 ## Token Resource
 
-By default, Token resource only show on `super_admin` role. you can modify it by publishing config and change `api-service.can_access.role`
+By default, Token resource only show on `super_admin` role. you can modify give permission to other permission too. 
+
+Token Resource is protected by TokenPolicy. You can disable it by publishing the config and change this line.
+
+```php
+'models' => [
+        'token' => [
+            'enable_policy' => false // default: true
+        ]
+    ],
+```
 
 ## Filtering & Allowed Field
 
 We used `"spatie/laravel-query-builder": "^5.3"` to handle query selecting, sorting and filtering. Check out [the spatie/laravel-query-builder documentation](https://spatie.be/docs/laravel-query-builder/v5/introduction) for more information.
-
 You can specified `allowedFilters` and `allowedFields` in your model. For example:
 
 ```php
@@ -169,6 +177,7 @@ To Generate Token, you just need create it from admin panel. It will be Token Re
 ## TODO
 
 - [ ] Test Plugin for Tenancy purpose
+- [ ] Each user can manage their own token only
 
 ## Changelog
 

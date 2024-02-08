@@ -7,9 +7,9 @@ return [
             'token' => 'User',
         ],
     ],
-    'can_access' => [
-        'role' => [
-            'super_admin',
+    'models' => [
+        'token' => [
+            'enable_policy' => true,
         ],
     ],
 ];
