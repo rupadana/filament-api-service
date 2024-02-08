@@ -10,7 +10,7 @@ class TokenPolicy
 {
     use HandlesAuthorization;
 
-    public function isPolicyEnabled() : bool 
+    public function isPolicyEnabled(): bool
     {
         return config('api-service.models.token.enable_policy', true);
     }
@@ -20,7 +20,7 @@ class TokenPolicy
      */
     public function viewAny(User $user): bool
     {
-        if(!$this->isPolicyEnabled()) {
+        if (! $this->isPolicyEnabled()) {
             return true;
         }
 
@@ -32,7 +32,7 @@ class TokenPolicy
      */
     public function view(User $user, Token $token): bool
     {
-        if (!$this->isPolicyEnabled()) {
+        if (! $this->isPolicyEnabled()) {
             return true;
         }
 
@@ -44,7 +44,7 @@ class TokenPolicy
      */
     public function create(User $user): bool
     {
-        if (!$this->isPolicyEnabled()) {
+        if (! $this->isPolicyEnabled()) {
             return true;
         }
 
@@ -56,7 +56,7 @@ class TokenPolicy
      */
     public function update(User $user, Token $token): bool
     {
-        if (!$this->isPolicyEnabled()) {
+        if (! $this->isPolicyEnabled()) {
             return true;
         }
 
@@ -68,7 +68,7 @@ class TokenPolicy
      */
     public function delete(User $user, Token $token): bool
     {
-        if (!$this->isPolicyEnabled()) {
+        if (! $this->isPolicyEnabled()) {
             return true;
         }
 
@@ -80,7 +80,7 @@ class TokenPolicy
      */
     public function deleteAny(User $user): bool
     {
-        if (!$this->isPolicyEnabled()) {
+        if (! $this->isPolicyEnabled()) {
             return true;
         }
 
@@ -92,7 +92,7 @@ class TokenPolicy
      */
     public function forceDelete(User $user, Token $token): bool
     {
-        if (!$this->isPolicyEnabled()) {
+        if (! $this->isPolicyEnabled()) {
             return true;
         }
 
@@ -104,7 +104,7 @@ class TokenPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        if (!$this->isPolicyEnabled()) {
+        if (! $this->isPolicyEnabled()) {
             return true;
         }
 
@@ -116,7 +116,7 @@ class TokenPolicy
      */
     public function restore(User $user, Token $token): bool
     {
-        if (!$this->isPolicyEnabled()) {
+        if (! $this->isPolicyEnabled()) {
             return true;
         }
 
@@ -128,7 +128,7 @@ class TokenPolicy
      */
     public function restoreAny(User $user): bool
     {
-        if (!$this->isPolicyEnabled()) {
+        if (! $this->isPolicyEnabled()) {
             return true;
         }
 
@@ -140,7 +140,7 @@ class TokenPolicy
      */
     public function replicate(User $user, Token $token): bool
     {
-        if (!$this->isPolicyEnabled()) {
+        if (! $this->isPolicyEnabled()) {
             return true;
         }
 
@@ -152,7 +152,7 @@ class TokenPolicy
      */
     public function reorder(User $user): bool
     {
-        if (!$this->isPolicyEnabled()) {
+        if (! $this->isPolicyEnabled()) {
             return true;
         }
 
