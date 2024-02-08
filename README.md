@@ -166,6 +166,10 @@ To Generate Token, you just need create it from admin panel. It will be Token Re
 
 ![Image](https://res.cloudinary.com/rupadana/image/upload/v1704958748/Screenshot_2024-01-11_at_15.37.55_ncpg8n.png)
 
+## TODO
+
+- [ ] Test Plugin for Tenancy purpose
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
