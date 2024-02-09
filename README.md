@@ -174,6 +174,16 @@ To Generate Token, you just need create it from admin panel. It will be Token Re
 
 ![Image](https://res.cloudinary.com/rupadana/image/upload/v1704958748/Screenshot_2024-01-11_at_15.37.55_ncpg8n.png)
 
+## Public API
+
+Set API to public by overriding this property on your API Handler. Assume we have a `PaginationHandler`
+
+```php
+class PaginationHandler extends Handlers {
+    public static bool $public = true;
+}
+```
+
 ## TODO
 
 - [ ] Test Plugin for Tenancy purpose
