@@ -45,18 +45,20 @@ class Handlers
             ->middleware(static::getRouteMiddleware());
     }
 
-    public static function isPublic() : bool
+    public static function isPublic(): bool
     {
         return static::$public;
     }
 
-    public static function getRouteMiddleware() : array
+    public static function getRouteMiddleware(): array
     {
-        if(static::isPublic()) return [];
+        if (static::isPublic()) {
+            return [];
+        }
 
         return [
             'auth:sanctum',
-            static::getMiddlewareAliasName() . ':' . static::stringifyAbility()
+            static::getMiddlewareAliasName().':'.static::stringifyAbility(),
         ];
     }
 
