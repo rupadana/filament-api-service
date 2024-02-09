@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('api')
     ->name('api.')
-    ->middleware('auth:sanctum')
     ->group(function () {
         $panels = Filament::getPanels();
 
