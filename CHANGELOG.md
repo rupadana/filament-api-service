@@ -2,6 +2,14 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.0.8 - 2024-02-09
+
+### What's Changed
+
+* Public api by @rupadana in https://github.com/rupadana/filament-api-service/pull/20
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.0.7...3.0.8
+
 ## 3.0.7 - 2024-02-08
 
 ### What's Changed
