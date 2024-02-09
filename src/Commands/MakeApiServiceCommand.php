@@ -143,7 +143,7 @@ class MakeApiServiceCommand extends Command
         ]);
 
         $this->components->info("Successfully created API for {$resource}!");
-        $this->components->info("It automatically registered to '/api-service' route group");
+        $this->components->info("It automatically registered to '/api' route group");
 
         return static::SUCCESS;
     }

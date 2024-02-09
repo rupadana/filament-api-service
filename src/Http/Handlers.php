@@ -18,6 +18,8 @@ class Handlers
 
     protected static string $keyName = 'id';
 
+    protected static bool $public = false;
+
     const POST = 'post';
 
     const GET = 'get';
@@ -40,7 +42,24 @@ class Handlers
         $router
             ->$method(static::$uri, [static::class, 'handler'])
             ->name(static::getKebabClassName())
-            ->middleware(static::getMiddlewareAliasName().':'.static::stringifyAbility());
+            ->middleware(static::getRouteMiddleware());
+    }
+
+    public static function isPublic(): bool
+    {
+        return static::$public;
+    }
+
+    public static function getRouteMiddleware(): array
+    {
+        if (static::isPublic()) {
+            return [];
+        }
+
+        return [
+            'auth:sanctum',
+            static::getMiddlewareAliasName().':'.static::stringifyAbility(),
+        ];
     }
 
     protected static function getMiddlewareAliasName()
