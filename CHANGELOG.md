@@ -2,6 +2,14 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.0.9 - 2024-03-02
+
+### What's Changed
+
+* feat: Allow non-admin users to generate API key to access their records by @rupadana in https://github.com/rupadana/filament-api-service/pull/22
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.0.8...3.0.9
+
 ## 3.0.8 - 2024-02-09
 
 ### What's Changed
