@@ -14,6 +14,7 @@ class Handlers
     public static ?string $resource = null;
     protected static string $keyName = 'id';
     protected static bool $public = false;
+  
     const POST = 'post';
     const GET = 'get';
     const DELETE = 'delete';
@@ -48,7 +49,7 @@ class Handlers
 
         return [
             'auth:sanctum',
-            static::getMiddlewareAliasName() . ':' . static::stringifyAbility(),
+            static::getMiddlewareAliasName() . ':' . static::stringifyAbility()
         ];
     }
 
