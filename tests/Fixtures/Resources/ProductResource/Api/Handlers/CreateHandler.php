@@ -9,7 +9,6 @@ use Rupadana\ApiService\Tests\Fixtures\Resources\ProductResource;
 class CreateHandler extends Handlers
 {
     public static ?string $uri = '/';
-
     public static ?string $resource = ProductResource::class;
 
     public static function getMethod()

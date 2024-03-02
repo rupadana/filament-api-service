@@ -9,7 +9,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 class DetailHandler extends Handlers
 {
     public static ?string $uri = '/{id}';
-
     public static ?string $resource = ProductResource::class;
 
     public function handler($id)

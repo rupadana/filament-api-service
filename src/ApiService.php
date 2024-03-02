@@ -11,7 +11,6 @@ class ApiService
      * Filament Resource
      */
     protected static ?string $resource = null;
-
     protected static ?string $groupRouteName = null;
 
     /**

@@ -13,15 +13,10 @@ use Rupadana\ApiService\Tests\Fixtures\Resources\ProductResource\Api\ProductTran
 class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
-
     protected static bool $isDiscovered = false;
-
     protected static ?string $navigationIcon = 'heroicon-o-archive-box';
-
     protected static ?string $navigationLabel = 'Product';
-
     protected static ?string $modelLabel = 'Product';
-
     protected static ?string $pluralModelLabel = 'Products';
 
     public static function getApiTransformer()

@@ -8,7 +8,7 @@ use Rupadana\ApiService\Tests\Fixtures\Models\User;
 
 it('can make routes for a product resource', function () {
     $routes = collect(app('router')->getRoutes())->map(function (RoutingRoute $route) {
-        return implode('|', $route->methods()).' '.$route->uri();
+        return implode('|', $route->methods()) . ' ' . $route->uri();
     });
 
     // The route name is customized to `our-products` in the `ProductApiService` class
@@ -27,7 +27,7 @@ it('can return a list of products with allowed attributes', function () {
     $token = $user->createToken('testing')->plainTextToken;
 
     $response = $this->get('/api/admin/our-products', [
-        'Authorization' => 'Bearer '.$token,
+        'Authorization' => 'Bearer ' . $token,
     ])
         ->assertStatus(200);
 
@@ -57,7 +57,7 @@ it('can return a list of products with selected fields', function () {
     $token = $user->createToken('testing')->plainTextToken;
 
     $response = $this->get('/api/admin/our-products?fields[products]=name,price', [
-        'Authorization' => 'Bearer '.$token,
+        'Authorization' => 'Bearer ' . $token,
     ])
         ->assertStatus(200);
 
@@ -75,7 +75,7 @@ it('throws when selecting a field that is not allowed', function () {
     $token = $user->createToken('testing')->plainTextToken;
 
     $this->get('/api/admin/our-products?fields[products]=name,slug,price', [
-        'Authorization' => 'Bearer '.$token,
+        'Authorization' => 'Bearer ' . $token,
     ])
         ->assertStatus(400)
         ->assertJsonFragment([
@@ -91,7 +91,7 @@ it('can return a list of products with selected sorts', function () {
     $token = $user->createToken('testing')->plainTextToken;
 
     $response = $this->get('/api/admin/our-products?sort=-price', [
-        'Authorization' => 'Bearer '.$token,
+        'Authorization' => 'Bearer ' . $token,
     ])
         ->assertStatus(200);
 
@@ -119,7 +119,7 @@ it('throws when sorting by a field that is not allowed', function () {
     $token = $user->createToken('testing')->plainTextToken;
 
     $this->get('/api/admin/our-products?sort=-slug', [
-        'Authorization' => 'Bearer '.$token,
+        'Authorization' => 'Bearer ' . $token,
     ])
         ->assertStatus(400)
         ->assertJsonFragment([
@@ -135,7 +135,7 @@ it('can return a list of products with selected filters', function () {
     $token = $user->createToken('testing')->plainTextToken;
 
     $response = $this->get('/api/admin/our-products?filter[name]=T-Shirt&filter[price]=500', [
-        'Authorization' => 'Bearer '.$token,
+        'Authorization' => 'Bearer ' . $token,
     ])
         ->assertStatus(200);
 
@@ -153,7 +153,7 @@ it('throws when filtering by a field that is not allowed', function () {
     $token = $user->createToken('testing')->plainTextToken;
 
     $this->get('/api/admin/our-products?filter[name]=T-Shirt&filter[slug]=t-shirt', [
-        'Authorization' => 'Bearer '.$token,
+        'Authorization' => 'Bearer ' . $token,
     ])
         ->assertStatus(400)
         ->assertJsonFragment([
@@ -169,7 +169,7 @@ it('can return a list of products with a custom transformer', function () {
     $token = $user->createToken('testing')->plainTextToken;
 
     $response = $this->get('/api/admin/our-products', [
-        'Authorization' => 'Bearer '.$token,
+        'Authorization' => 'Bearer ' . $token,
     ])
         ->assertStatus(200);
 

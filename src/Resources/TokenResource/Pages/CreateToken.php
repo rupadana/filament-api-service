@@ -12,26 +12,32 @@ use Rupadana\ApiService\Resources\TokenResource;
 class CreateToken extends CreateRecord
 {
     protected static string $resource = TokenResource::class;
+    protected $newToken;
 
     protected function handleRecordCreation(array $data): Model
     {
+        if (! isset($data['tokenable_id'])) {
+            $data['tokenable_id'] = auth()->user()->id;
+        }
 
         $user = User::find($data['tokenable_id']);
 
-        $newToken = $user->createToken($data['name'], $data['ability']);
+        $this->newToken = $user->createToken($data['name'], $data['ability']);
 
-        Notification::make()
+        return $user;
+    }
+
+    protected function getCreatedNotification(): ?Notification
+    {
+        return Notification::make()
             ->title('Token created, save it!')
-            ->body($newToken->plainTextToken)
+            ->body($this->newToken->plainTextToken)
             ->persistent()
             ->actions([
                 Action::make('close')
                     ->close(),
             ])
-            ->success()
-            ->send();
-
-        return $user;
+            ->success();
     }
 
     protected function sendCreatedNotificationAndRedirect(bool $shouldCreateAnotherInsteadOfRedirecting = true): void

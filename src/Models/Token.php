@@ -8,6 +8,5 @@ use Laravel\Sanctum\PersonalAccessToken;
 class Token extends PersonalAccessToken
 {
     use HasFactory;
-
     protected $table = 'personal_access_tokens';
 }

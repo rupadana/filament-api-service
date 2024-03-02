@@ -14,9 +14,7 @@ use function Laravel\Prompts\text;
 class MakeApiHandlerCommand extends Command
 {
     use CanManipulateFiles;
-
     protected $description = 'Create a new API Handler for supporting filamentphp Resource';
-
     protected $signature = 'make:filament-api-handler {resource?} {handler?} {--panel=}';
 
     public function handle(): int
