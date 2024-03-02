@@ -13,21 +13,17 @@ class Product extends Model
         'price',
         'created_at',
     ];
-
     public static array $allowedSorts = [
         'name',
         'price',
         'created_at',
     ];
-
     public static array $allowedFilters = [
         'name',
         'price',
         'created_at',
     ];
-
     protected $guarded = [];
-
     protected $hidden = [
         'slug',
     ];

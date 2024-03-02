@@ -9,25 +9,15 @@ use Rupadana\ApiService\Transformers\DefaultTransformer;
 class Handlers
 {
     use HttpResponse;
-
     public static ?string $uri = '/';
-
     public static string $method = 'get';
-
     public static ?string $resource = null;
-
     protected static string $keyName = 'id';
-
     protected static bool $public = false;
-
     const POST = 'post';
-
     const GET = 'get';
-
     const DELETE = 'delete';
-
     const PATCH = 'patch';
-
     const PUT = 'put';
 
     public static function getMethod()
@@ -40,7 +30,7 @@ class Handlers
         $method = static::getMethod();
 
         $router
-            ->$method(static::$uri, [static::class, 'handler'])
+            ->{$method}(static::$uri, [static::class, 'handler'])
             ->name(static::getKebabClassName())
             ->middleware(static::getRouteMiddleware());
     }
@@ -58,7 +48,7 @@ class Handlers
 
         return [
             'auth:sanctum',
-            static::getMiddlewareAliasName().':'.static::stringifyAbility(),
+            static::getMiddlewareAliasName() . ':' . static::stringifyAbility(),
         ];
     }
 
@@ -80,7 +70,7 @@ class Handlers
     public static function getAbility(): array
     {
         return [
-            str(str(static::getModel())->explode('\\')->last())->kebab().':'.static::getKebabClassName(),
+            str(str(static::getModel())->explode('\\')->last())->kebab() . ':' . static::getKebabClassName(),
         ];
     }
 

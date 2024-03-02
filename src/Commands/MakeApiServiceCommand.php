@@ -14,9 +14,7 @@ use function Laravel\Prompts\text;
 class MakeApiServiceCommand extends Command
 {
     use CanManipulateFiles;
-
     protected $description = 'Create a new API Service for supporting filamentphp Resource';
-
     protected $signature = 'make:filament-api-service {resource?} {--panel=}';
 
     public function handle(): int

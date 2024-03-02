@@ -9,7 +9,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 class PaginationHandler extends Handlers
 {
     public static ?string $uri = '/';
-
     public static ?string $resource = ProductResource::class;
 
     public function handler()

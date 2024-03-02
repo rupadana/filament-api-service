@@ -1,0 +1,84 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "no_unused_imports": true,
+        "ordered_imports": true,
+        "phpdoc_align": true,
+        "phpdoc_order": true,
+        "single_line_comment_style": true,
+        "single_quote": true,
+        "combine_consecutive_issets": true,
+        "array_syntax": true,
+        "blank_line_after_namespace": true,
+        "blank_line_after_opening_tag": true,
+        "attribute_empty_parentheses": true,
+        "blank_line_before_statement": true,
+        "braces_position": true,
+        "blank_lines_before_namespace": {
+            "min_line_breaks": 1
+        },
+        "cast_spaces": {
+            "space": "single"
+        },
+        "class_attributes_separation": {
+            "elements": {
+                "const": "only_if_meta",
+                "property": "only_if_meta"
+            }
+        },
+        "class_definition": {
+            "single_line": true
+        },
+        "class_reference_name_casing": true,
+        "clean_namespace": true,
+        "concat_space": {
+            "spacing": "one"
+        },
+        "constant_case": true,
+        "control_structure_braces": true,
+        "control_structure_continuation_position": true,
+        "elseif": true,
+        "empty_loop_body": true,
+        "empty_loop_condition": true,
+        "encoding": true,
+        "explicit_indirect_variable": true,
+        "full_opening_tag": true,
+        "function_declaration": true,
+        "general_phpdoc_annotation_remove": {
+            "annotations": [
+                "author",
+                "package",
+                "subpackage"
+            ],
+            "case_sensitive": false
+        },
+        "global_namespace_import": true,
+        "heredoc_indentation": true,
+        "increment_style": {
+            "style": "post"
+        },
+        "indentation_type": true,
+        "lambda_not_used_import": true,
+        "linebreak_after_opening_tag": true,
+        "lowercase_cast": true,
+        "lowercase_keywords": true,
+        "lowercase_static_reference": true,
+        "magic_constant_casing": true,
+        "magic_method_casing": true,
+        "method_chaining_indentation": true,
+        "multiline_comment_opening_closing": true,
+        "multiline_whitespace_before_semicolons": true,
+        "native_type_declaration_casing": true,
+        "no_blank_lines_after_class_opening": true,
+        "no_blank_lines_after_phpdoc": true,
+        "no_break_comment": true,
+        "no_empty_comment": true,
+        "no_empty_statement": true,
+        "no_multiline_whitespace_around_double_arrow": true,
+        "no_multiple_statements_per_line": true,
+        "no_short_bool_cast": true,
+        "no_singleline_whitespace_before_semicolons": true,
+        "no_space_around_double_colon": true,
+        "no_trailing_whitespace": true
+    }
+}
