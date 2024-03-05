@@ -6,9 +6,9 @@ use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Builder;
 
 
-trait HasTenantApiScope
+trait HasApiTenantScope
 {
-    public static function bootHasTenantApiScope()
+    public static function bootHasApiTenantScope()
     {
 
         if (request()->routeIs('api.*')) {
