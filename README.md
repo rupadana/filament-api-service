@@ -192,8 +192,7 @@ You can edit prefix & group route name as you want, default this plugin use mode
 ```
 
 ## Tenant Aware
-
-If you want to make api routes tenant aware. you can set 'is_tenant_aware' to `true` in your published api-service.php.
+When you want to enable Tenancy on this package you can enable this by setting the config `tenancy.enabled` to `true`. This makes sure that your api responses only retreive the data which that user has access to. So if a user has access to 2 tenants then enabling this feature will return only the data of those 2 tenants.
 
 You then also need to set the correct tenant relationship name in the api-service.php with the configkey: `tenant_ownership_relationship_name`.
 
@@ -209,7 +208,13 @@ class Blog extends Model
 }
 ```
 
-Now your API endpoints will have URI prefix of `{tenant}` in the API routes like this:
+If you want to make api routes tenant aware. you can set `tenancy.is_tenant_aware` to `true` in your published api-service.php. This way this package will register extra API routes which will return only the specific tenant data in the API response.
+
+
+
+Now your API endpoints will have URI prefix of `{tenant}` in the API routes when `tenancy.is_tenant_aware` is `true`. 
+
+It will look like this:
 
 ```
   POST      api/admin/{tenant}/blog

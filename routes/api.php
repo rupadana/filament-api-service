@@ -17,14 +17,20 @@ Route::prefix('api')
                 $tenantRoutePrefix = $panel->getTenantRoutePrefix();
                 $tenantSlugAttribute = $panel->getTenantSlugAttribute();
 
-                if ($hasTenancy && config('api-service.tenancy.is_tenant_aware')) {
+                if (
+                    $hasTenancy &&
+                    ApiService::isTenancyEnabled() &&
+                    ApiService::tenancyAwareness()
+                ) {
                     Route::prefix($panelRoutePrefix . '/' . (($tenantRoutePrefix) ? "{$tenantRoutePrefix}/" : '') . '{tenant' . (($tenantSlugAttribute) ? ":{$tenantSlugAttribute}" : '') . '}')
                         ->name($panelRoutePrefix . '.')
                         ->group(function () use ($panel) {
                             $apiServicePlugin = $panel->getPlugin('api-service');
                             $apiServicePlugin->route($panel);
                         });
-                } else {
+                }
+
+                if (!ApiService::tenancyAwareness()) {
                     Route::prefix($panelRoutePrefix)
                         ->name($panelRoutePrefix . '.')
                         ->group(function () use ($panel) {
