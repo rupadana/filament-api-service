@@ -191,6 +191,22 @@ You can edit prefix & group route name as you want, default this plugin use mode
     }
 ```
 
+## Tenant Aware
+
+If you want to make api routes tenant aware. you can set 'is_tenant_aware' to `true` in your published api-service.php.
+
+You then also need to set the correct tenant relationship name in the api-service.php with the configkey: `tenant_ownership_relationship_name`.
+
+Lastly make sure you add the `HasApiTenantScope` trait to all of your models which are used by all your Api Resources:
+
+```php
+class Blog extends Model
+{
+    use HasFactory;
+    use HasTenantApiScope; // <-- add this line
+}
+```
+
 ## How to secure it?
 
 Since version 3.0, it will automatically detect routes and secure it using sanctum.
