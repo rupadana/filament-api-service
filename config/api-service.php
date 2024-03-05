@@ -12,4 +12,8 @@ return [
             'enable_policy' => true,
         ],
     ],
+    'tenancy' => [
+        'is_tenant_aware' => false,
+        'tenant_ownership_relationship_name' => 'team',
+    ]
 ];
