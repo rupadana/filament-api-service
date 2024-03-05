@@ -200,10 +200,12 @@ You then also need to set the correct tenant relationship name in the api-servic
 Lastly make sure you add the `HasApiTenantScope` trait to all of your models which are used by all your Api Resources:
 
 ```php
+use Rupadana\ApiService\Traits\HasApiTenantScope; // <-- add this line
+
 class Blog extends Model
 {
     use HasFactory;
-    use HasTenantApiScope; // <-- add this line
+    use HasApiTenantScope; // <-- add this line
 }
 ```
 
