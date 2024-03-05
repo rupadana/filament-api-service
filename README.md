@@ -182,6 +182,16 @@ class Blog extends Model
 }
 ```
 
+Now your API endpoints will have URI prefix of `{tenant}` in the API routes like this:
+
+```
+  POST      api/admin/{tenant}/blog
+  GET|HEAD  api/admin/{tenant}/blog
+  PUT       api/admin/{tenant}/blog/{id}
+  DELETE    api/admin/{tenant}/blog/{id}
+  GET|HEAD  api/admin/{tenant}/blog/{id}
+```
+
 ## How to secure it?
 
 From version 3.0, it will automatically detect routes and secure it using sanctum.
