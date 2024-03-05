@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Rupadana\ApiService\ApiService;
 
-trait HasTenantApiScope
+trait HasApiTenantScope
 {
 
     protected static function getOwnerRelationshipName()
