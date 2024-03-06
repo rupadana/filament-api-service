@@ -11,8 +11,8 @@ return [
         'token' => [
             'group' => 'User',
             'sort' => -1,
-            'icon' => 'heroicon-o-key'
-        ]
+            'icon' => 'heroicon-o-key',
+        ],
     ],
     'models' => [
         'token' => [
