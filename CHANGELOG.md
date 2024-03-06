@@ -2,6 +2,15 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.0.10 - 2024-03-06
+
+### What's Changed
+
+* update Readme.md by @rupadana in https://github.com/rupadana/filament-api-service/pull/25
+* feat: add navigation sort & icon by @rupadana in https://github.com/rupadana/filament-api-service/pull/26
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.0.9...3.0.10
+
 ## 3.0.9 - 2024-03-02
 
 ### What's Changed
