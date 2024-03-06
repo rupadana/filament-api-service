@@ -10,7 +10,7 @@ Route::prefix('api')
 
         foreach ($panels as $key => $panel) {
             try {
-                if (config('api-service.route.wrap_with_panel_id')) {
+                if (config('api-service.route.wrap_with_panel_id', true)) {
                     Route::prefix($panel->getId())
                         ->name($panel->getId() . '.')
                         ->group(function () use ($panel) {
