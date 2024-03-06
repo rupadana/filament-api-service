@@ -24,6 +24,12 @@ $panel->plugins([
 ])
 ```
 
+### Publish config
+
+```bash
+php artisan vendor:publish --tag=api-service-config
+```
+
 ## Usage
 
 ```bash
