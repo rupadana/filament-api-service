@@ -30,6 +30,27 @@ $panel->plugins([
 php artisan vendor:publish --tag=api-service-config
 ```
 
+```php
+
+return [
+    'navigation' => [
+        'token' => [
+            'group' => 'User',
+            'sort' => -1,
+            'icon' => 'heroicon-o-key'
+        ]
+    ],
+    'models' => [
+        'token' => [
+            'enable_policy' => true,
+        ],
+    ],
+    'route' => [
+        'wrap_with_panel_id' => true,
+    ],
+];
+```
+
 ## Usage
 
 ```bash
