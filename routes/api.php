@@ -10,14 +10,17 @@ Route::prefix('api')
 
         foreach ($panels as $key => $panel) {
             try {
-
-                Route::prefix($panel->getId())
-                    ->name($panel->getId() . '.')
-                    ->group(function () use ($panel) {
-                        $apiServicePlugin = $panel->getPlugin('api-service');
-                        $apiServicePlugin->route($panel);
-                    });
-
+                if (config('api-service.route.wrap_with_panel_id')) {
+                    Route::prefix($panel->getId())
+                        ->name($panel->getId() . '.')
+                        ->group(function () use ($panel) {
+                            $panel->getPlugin('api-service')
+                                ->route($panel);
+                        });
+                } else {
+                    $panel->getPlugin('api-service')
+                        ->route($panel);
+                }
             } catch (Exception $e) {
             }
         }

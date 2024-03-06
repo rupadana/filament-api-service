@@ -12,4 +12,7 @@ return [
             'enable_policy' => true,
         ],
     ],
+    'route' => [
+        'wrap_with_panel_id' => true,
+    ],
 ];
