@@ -155,9 +155,7 @@ class BlogTransformer extends JsonResource
 
         // or
 
-        return [
-            "modified_name" => $this->name . ' so Cool!'  
-        ];
+        return md5(json_encode($this->resource->toArray()));
     }
 }
 ```
