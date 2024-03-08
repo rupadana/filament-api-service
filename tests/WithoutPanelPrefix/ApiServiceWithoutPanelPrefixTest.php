@@ -12,11 +12,11 @@ it('can make routes for a product resource', function () {
     });
 
     // The route name is customized to `our-products` in the `ProductApiService` class
-    expect($routes)->toContain('POST api/admin/our-products');
-    expect($routes)->toContain('PUT api/admin/our-products/{id}');
-    expect($routes)->toContain('DELETE api/admin/our-products/{id}');
-    expect($routes)->toContain('GET|HEAD api/admin/our-products');
-    expect($routes)->toContain('GET|HEAD api/admin/our-products/{id}');
+    expect($routes)->toContain('POST api/our-products');
+    expect($routes)->toContain('PUT api/our-products/{id}');
+    expect($routes)->toContain('DELETE api/our-products/{id}');
+    expect($routes)->toContain('GET|HEAD api/our-products');
+    expect($routes)->toContain('GET|HEAD api/our-products/{id}');
 });
 
 it('can return a list of products with allowed attributes', function () {
@@ -26,7 +26,7 @@ it('can return a list of products with allowed attributes', function () {
     $user = User::find(1);
     $token = $user->createToken('testing')->plainTextToken;
 
-    $response = $this->get('/api/admin/our-products', [
+    $response = $this->get('/api/our-products', [
         'Authorization' => 'Bearer ' . $token,
     ])
         ->assertStatus(200);
@@ -56,7 +56,7 @@ it('can return a list of products with selected fields', function () {
     $user = User::find(1);
     $token = $user->createToken('testing')->plainTextToken;
 
-    $response = $this->get('/api/admin/our-products?fields[products]=name,price', [
+    $response = $this->get('/api/our-products?fields[products]=name,price', [
         'Authorization' => 'Bearer ' . $token,
     ])
         ->assertStatus(200);
@@ -74,7 +74,7 @@ it('throws when selecting a field that is not allowed', function () {
     $user = User::find(1);
     $token = $user->createToken('testing')->plainTextToken;
 
-    $this->get('/api/admin/our-products?fields[products]=name,slug,price', [
+    $this->get('/api/our-products?fields[products]=name,slug,price', [
         'Authorization' => 'Bearer ' . $token,
     ])
         ->assertStatus(400)
@@ -90,7 +90,7 @@ it('can return a list of products with selected sorts', function () {
     $user = User::find(1);
     $token = $user->createToken('testing')->plainTextToken;
 
-    $response = $this->get('/api/admin/our-products?sort=-price', [
+    $response = $this->get('/api/our-products?sort=-price', [
         'Authorization' => 'Bearer ' . $token,
     ])
         ->assertStatus(200);
@@ -118,7 +118,7 @@ it('throws when sorting by a field that is not allowed', function () {
     $user = User::find(1);
     $token = $user->createToken('testing')->plainTextToken;
 
-    $this->get('/api/admin/our-products?sort=-slug', [
+    $this->get('/api/our-products?sort=-slug', [
         'Authorization' => 'Bearer ' . $token,
     ])
         ->assertStatus(400)
@@ -134,7 +134,7 @@ it('can return a list of products with selected filters', function () {
     $user = User::find(1);
     $token = $user->createToken('testing')->plainTextToken;
 
-    $response = $this->get('/api/admin/our-products?filter[name]=T-Shirt&filter[price]=500', [
+    $response = $this->get('/api/our-products?filter[name]=T-Shirt&filter[price]=500', [
         'Authorization' => 'Bearer ' . $token,
     ])
         ->assertStatus(200);
@@ -152,7 +152,7 @@ it('throws when filtering by a field that is not allowed', function () {
     $user = User::find(1);
     $token = $user->createToken('testing')->plainTextToken;
 
-    $this->get('/api/admin/our-products?filter[name]=T-Shirt&filter[slug]=t-shirt', [
+    $this->get('/api/our-products?filter[name]=T-Shirt&filter[slug]=t-shirt', [
         'Authorization' => 'Bearer ' . $token,
     ])
         ->assertStatus(400)
@@ -168,7 +168,7 @@ it('can return a list of products with a custom transformer', function () {
     $user = User::find(1);
     $token = $user->createToken('testing')->plainTextToken;
 
-    $response = $this->get('/api/admin/our-products', [
+    $response = $this->get('/api/our-products', [
         'Authorization' => 'Bearer ' . $token,
     ])
         ->assertStatus(200);
