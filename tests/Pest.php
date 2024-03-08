@@ -1,5 +1,7 @@
 <?php
 
-use Rupadana\ApiService\Tests\TestCase;
+use Rupadana\ApiService\Tests\WithoutPanelPrefix\TestCase as WithoutPanelPrefixTestCase;
+use Rupadana\ApiService\Tests\WithPanelPrefix\TestCase as WithPanelPrefixTestCase;
 
-uses(TestCase::class)->in(__DIR__);
+uses(WithPanelPrefixTestCase::class)->in(__DIR__ . '/WithPanelPrefix');
+uses(WithoutPanelPrefixTestCase::class)->in(__DIR__ . '/WithoutPanelPrefix');

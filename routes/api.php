@@ -2,6 +2,7 @@
 
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Route;
+use Rupadana\ApiService\ApiService;
 
 Route::prefix('api')
     ->name('api.')
@@ -10,17 +11,13 @@ Route::prefix('api')
 
         foreach ($panels as $key => $panel) {
             try {
-                if (config('api-service.route.wrap_with_panel_id', true)) {
-                    Route::prefix($panel->getId())
-                        ->name($panel->getId() . '.')
-                        ->group(function () use ($panel) {
-                            $panel->getPlugin('api-service')
-                                ->route($panel);
-                        });
-                } else {
-                    $panel->getPlugin('api-service')
-                        ->route($panel);
-                }
+                $panelPrefix = ApiService::isRoutePrefixedByPanel() ? $panel->getId() : '';
+                Route::name($panelPrefix)
+                    ->prefix($panelPrefix)
+                    ->group(function () use ($panel) {
+                        $panel->getPlugin('api-service')
+                            ->route($panel);
+                    });
             } catch (Exception $e) {
             }
         }

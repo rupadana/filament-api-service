@@ -46,7 +46,7 @@ return [
         ],
     ],
     'route' => [
-        'wrap_with_panel_id' => true,
+        'panel_prefix' => true,
     ],
 ];
 ```
@@ -57,7 +57,7 @@ return [
 php artisan make:filament-api-service BlogResource
 ```
 
-From version 3.0, routes automatically registered. it will grouped as '/api/`admin`'. `admin` is panelId.
+Since version 3.0, routes automatically registered. it will grouped as '/api/`admin`'. `admin` is panelId. to disable panelId prefix, please set `route.panel_prefix` to `false`
 
 So, You don't need to register the routes manually.
 
@@ -193,7 +193,7 @@ You can edit prefix & group route name as you want, default this plugin use mode
 
 ## How to secure it?
 
-From version 3.0, it will automatically detect routes and secure it using sanctum.
+Since version 3.0, it will automatically detect routes and secure it using sanctum.
 
 To Generate Token, you just need create it from admin panel. It will be Token Resource there.
 

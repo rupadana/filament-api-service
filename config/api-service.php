@@ -20,6 +20,6 @@ return [
         ],
     ],
     'route' => [
-        'wrap_with_panel_id' => true,
+        'panel_prefix' => true,
     ],
 ];
