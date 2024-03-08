@@ -4,37 +4,45 @@ namespace Rupadana\ApiService\Traits;
 
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Builder;
-use Str;
+use Illuminate\Support\Str;
+use Rupadana\ApiService\ApiService;
 
 trait HasApiTenantScope
 {
-    public static function bootHasApiTenantScope()
+    protected static function getOwnerRelationshipName()
     {
+        return config('api-service.tenancy.owner_relationship_name');
+    }
 
-        if (request()->routeIs('api.*')) {
-            if (
-                Filament::hasTenancy() &&
-                config('api-service.tenancy.enabled') &&
-                config('api-service.tenancy.is_tenant_aware')
-            ) {
-                static::addGlobalScope(config('api-service.tenancy.tenant_ownership_relationship_name'), function (Builder $query) {
-                    if (auth()->check()) {
-                        $query->where(config('api-service.tenancy.tenant_ownership_relationship_name') . '_id', request()->tenant);
-                    }
-                });
-            }
+    protected static function getOwnerRelationshipId()
+    {
+        return static::getOwnerRelationshipName() . '_id';
+    }
 
-            if (
-                Filament::hasTenancy() &&
-                config('api-service.tenancy.enabled') &&
-                ! config('api-service.tenancy.is_tenant_aware')
-            ) {
-                static::addGlobalScope(config('api-service.tenancy.tenant_ownership_relationship_name'), function (Builder $query) {
-                    if (auth()->check()) {
-                        $query->whereBelongsTo(request()->user()->{Str::plural(config('api-service.tenancy.tenant_ownership_relationship_name'))});
-                    }
-                });
-            }
+    public static function bootHasTenantApiScope()
+    {
+        if (
+            Filament::hasTenancy() &&
+            ApiService::isTenancyEnabled() &&
+            ApiService::tenancyAwareness()
+        ) {
+            static::addGlobalScope(static::getOwnerRelationshipName(), function (Builder $query) {
+                if (auth()->check()) {
+                    $query->where(static::getOwnerRelationshipId(), request()->tenant);
+                }
+            });
+        }
+
+        if (
+            Filament::hasTenancy() &&
+            ApiService::isTenancyEnabled() &&
+            ! ApiService::tenancyAwareness()
+        ) {
+            static::addGlobalScope(static::getOwnerRelationshipName(), function (Builder $query) {
+                if (auth()->check()) {
+                    $query->whereBelongsTo(request()->user()->{Str::plural(static::getOwnerRelationshipName())});
+                }
+            });
         }
     }
 }

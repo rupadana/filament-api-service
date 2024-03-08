@@ -4,9 +4,12 @@ namespace Rupadana\ApiService;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
+use Rupadana\ApiService\Concerns\HasTenancy;
 
 class ApiService
 {
+    use HasTenancy;
+
     /**
      * Filament Resource
      */
