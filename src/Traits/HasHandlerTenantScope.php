@@ -61,7 +61,7 @@ trait HasHandlerTenantScope
                 $tenant = $tenantModel::where(Filament::getCurrentPanel()->getTenantSlugAttribute() ?? $tenantModel->getKeyName(), $tenantId)->first()
             ) {
                 if (auth()->check()) {
-                    // $query = $query->where(static::getOwnerRelationshipId(), request()->tenant);
+
                     $query =  match (true) {
                         $tenantOwnershipRelationship instanceof MorphTo => $query->whereMorphedTo(
                             $tenantOwnershipRelationshipName,
@@ -86,7 +86,7 @@ trait HasHandlerTenantScope
             ) {
 
                 if (auth()->check()) {
-                    // return $query->whereBelongsTo(request()->user()->{Str::plural($tenantOwnershipRelationshipName)});
+
                     $query =  match (true) {
                         $tenantOwnershipRelationship instanceof MorphTo => $query
                             ->where($tenantModel->getRelationWithoutConstraints($tenantOwnershipRelationshipName)->getMorphType(), $tenantModel->getMorphClass())
