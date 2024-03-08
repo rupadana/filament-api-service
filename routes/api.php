@@ -9,10 +9,10 @@ Route::prefix('api')
     ->name('api.')
     ->group(function () {
 
-        if (!ApiService::isTenancyEnabled() && ApiService::tenancyAwareness()) {
-            throw new InvalidTenancyConfiguration("Tenancy awereness is enabled. But, Tenancy is disabled.");
+        if (! ApiService::isTenancyEnabled() && ApiService::tenancyAwareness()) {
+            throw new InvalidTenancyConfiguration('Tenancy awereness is enabled. But, Tenancy is disabled.');
         }
-    
+
         $panels = Filament::getPanels();
 
         foreach ($panels as $key => $panel) {
@@ -36,7 +36,7 @@ Route::prefix('api')
                         });
                 }
 
-                if (!ApiService::tenancyAwareness()) {
+                if (! ApiService::tenancyAwareness()) {
                     Route::prefix($panelRoutePrefix)
                         ->name($panelRoutePrefix . '.')
                         ->group(function () use ($panel) {
