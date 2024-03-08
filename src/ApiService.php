@@ -55,4 +55,9 @@ class ApiService
     {
         return [];
     }
+
+    public static function isRoutePrefixedByPanel(): bool
+    {
+        return config('api-service.route.panel_prefix', true);
+    }
 }

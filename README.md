@@ -24,13 +24,40 @@ $panel->plugins([
 ])
 ```
 
+### Publish config
+
+```bash
+php artisan vendor:publish --tag=api-service-config
+```
+
+```php
+
+return [
+    'navigation' => [
+        'token' => [
+            'group' => 'User',
+            'sort' => -1,
+            'icon' => 'heroicon-o-key'
+        ]
+    ],
+    'models' => [
+        'token' => [
+            'enable_policy' => true,
+        ],
+    ],
+    'route' => [
+        'panel_prefix' => true,
+    ],
+];
+```
+
 ## Usage
 
 ```bash
 php artisan make:filament-api-service BlogResource
 ```
 
-From version 3.0, routes automatically registered. it will grouped as '/api/`admin`'. `admin` is panelId.
+Since version 3.0, routes automatically registered. it will grouped as '/api/`admin`'. `admin` is panelId. to disable panelId prefix, please set `route.panel_prefix` to `false`
 
 So, You don't need to register the routes manually.
 
@@ -128,9 +155,7 @@ class BlogTransformer extends JsonResource
 
         // or
 
-        return [
-            "modified_name" => $this->name . ' so Cool!'  
-        ];
+        return md5(json_encode($this->resource->toArray()));
     }
 }
 ```
@@ -201,7 +226,7 @@ It will look like this:
 
 ## How to secure it?
 
-From version 3.0, it will automatically detect routes and secure it using sanctum.
+Since version 3.0, it will automatically detect routes and secure it using sanctum.
 
 To Generate Token, you just need create it from admin panel. It will be Token Resource there.
 

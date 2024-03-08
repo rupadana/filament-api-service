@@ -2,6 +2,7 @@
 
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Route;
+use Rupadana\ApiService\ApiService;
 
 Route::prefix('api')
     ->name('api.')

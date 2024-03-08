@@ -23,7 +23,7 @@ use Rupadana\ApiService\Resources\TokenResource\Pages;
 class TokenResource extends Resource
 {
     protected static ?string $model = Token::class;
-    protected static ?string $navigationIcon = 'heroicon-o-key';
+    // protected static ?string $navigationIcon = 'heroicon-o-key';
 
     public static function form(Form $form): Form
     {
@@ -130,6 +130,16 @@ class TokenResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return config('api-service.navigation.group.token');
+        return config('api-service.navigation.token.group') ?? config('api-service.navigation.group.token');
+    }
+
+    public static function getNavigationSort(): ?int
+    {
+        return config('api-service.navigation.token.sort', -1);
+    }
+
+    public static function getNavigationIcon(): ?string
+    {
+        return config('api-service.navigation.token.icon', 'heroicon-o-key');
     }
 }
