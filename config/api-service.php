@@ -23,7 +23,7 @@ return [
         'panel_prefix' => true,
     ],
     'tenancy' => [
-        'enabled'   => false,
+        'enabled' => false,
         'awereness' => false,
         'owner_relationship_name' => 'team',
     ],
