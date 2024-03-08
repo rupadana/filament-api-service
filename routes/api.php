@@ -2,7 +2,6 @@
 
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Route;
-use Rupadana\ApiService\ApiService;
 
 Route::prefix('api')
     ->name('api.')
@@ -29,7 +28,7 @@ Route::prefix('api')
                             $apiServicePlugin->route($panel);
                         });
                 }
-                if (!config('api-service.tenancy.is_tenant_aware')) {
+                if (! config('api-service.tenancy.is_tenant_aware')) {
                     Route::prefix($panelId)
                         ->name($panelId . '.')
                         ->group(function () use ($panel) {

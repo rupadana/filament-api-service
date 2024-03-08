@@ -4,7 +4,7 @@ namespace Rupadana\ApiService\Traits;
 
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Builder;
-
+use Str;
 
 trait HasApiTenantScope
 {
@@ -27,11 +27,11 @@ trait HasApiTenantScope
             if (
                 Filament::hasTenancy() &&
                 config('api-service.tenancy.enabled') &&
-                !config('api-service.tenancy.is_tenant_aware')
+                ! config('api-service.tenancy.is_tenant_aware')
             ) {
                 static::addGlobalScope(config('api-service.tenancy.tenant_ownership_relationship_name'), function (Builder $query) {
                     if (auth()->check()) {
-                        $query->whereBelongsTo(request()->user()->{\Str::plural(config('api-service.tenancy.tenant_ownership_relationship_name'))});
+                        $query->whereBelongsTo(request()->user()->{Str::plural(config('api-service.tenancy.tenant_ownership_relationship_name'))});
                     }
                 });
             }
