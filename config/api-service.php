@@ -22,4 +22,10 @@ return [
     'route' => [
         'panel_prefix' => true,
     ],
+    'tenancy' => [
+        'enabled'   => false,
+        'is_tenant_aware' => false,
+        'tenant_ownership_relationship_name' => 'team',
+    ]
+    
 ];
