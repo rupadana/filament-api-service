@@ -10,7 +10,6 @@ use Laravel\Sanctum\Http\Middleware\CheckForAnyAbility;
 use Rupadana\ApiService\Commands\MakeApiHandlerCommand;
 use Rupadana\ApiService\Commands\MakeApiServiceCommand;
 use Rupadana\ApiService\Commands\MakeApiTransformerCommand;
-use Rupadana\ApiService\Exceptions\InvalidTenancyConfiguration;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
