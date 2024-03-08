@@ -9,7 +9,7 @@ Route::prefix('api')
     ->name('api.')
     ->group(function () {
 
-        if (! ApiService::isTenancyEnabled() && ApiService::tenancyAwareness()) {
+        if (!ApiService::isTenancyEnabled() && ApiService::tenancyAwareness()) {
             throw new InvalidTenancyConfiguration('Tenancy awereness is enabled. But, Tenancy is disabled.');
         }
 
@@ -35,10 +35,9 @@ Route::prefix('api')
                             $apiServicePlugin->route($panel);
                         });
                 }
-
-                if (! ApiService::tenancyAwareness()) {
-                    Route::prefix($panelRoutePrefix)
-                        ->name($panelRoutePrefix . '.')
+                if (!ApiService::tenancyAwareness()) {
+                    Route::prefix($panelId)
+                        ->name($panelId . '.')
                         ->group(function () use ($panel) {
                             $apiServicePlugin = $panel->getPlugin('api-service');
                             $apiServicePlugin->route($panel);

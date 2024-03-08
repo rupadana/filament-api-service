@@ -2,13 +2,18 @@
 
 namespace Rupadana\ApiService\Http;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Routing\Router;
+use Rupadana\ApiService\Traits\HasHandlerTenantScope;
 use Rupadana\ApiService\Traits\HttpResponse;
 use Rupadana\ApiService\Transformers\DefaultTransformer;
 
 class Handlers
 {
     use HttpResponse;
+    use HasHandlerTenantScope;
+
     public static ?string $uri = '/';
     public static string $method = 'get';
     public static ?string $resource = null;
@@ -91,5 +96,20 @@ class Handlers
     public static function getKeyName(): ?string
     {
         return static::$keyName;
+    }
+
+    public static function getTenantOwnershipRelationship(Model $record): Relation
+    {
+        return static::$resource::getTenantOwnershipRelationship($record);
+    }
+
+    public static function getTenantOwnershipRelationshipName(): ?string
+    {
+        return static::$resource::getTenantOwnershipRelationshipName();
+    }
+
+    public static function isScopedToTenant(): bool
+    {
+        return static::$resource::isScopedToTenant();
     }
 }

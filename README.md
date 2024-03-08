@@ -16,7 +16,6 @@ composer require rupadana/filament-api-service
 
 Register it to your filament Provider
 
-
 ```php
 use Rupadana\ApiService\ApiServicePlugin;
 
@@ -52,7 +51,6 @@ return [
     'tenancy' => [
         'enabled' => false,
         'awareness' => false,
-        'tenant_ownership_relationship_name' => 'team',
     ]
 ];
 ```
@@ -67,20 +65,19 @@ Since version 3.0, routes automatically registered. it will grouped as '/api/`ad
 
 So, You don't need to register the routes manually.
 
-The routes will be : 
+The routes will be :
 
-- [GET] '/api/`admin`/blogs'   - Return LengthAwarePaginator 
-- [GET] '/api/`admin`/blogs/1' - Return single resource   
+- [GET] '/api/`admin`/blogs'   - Return LengthAwarePaginator
+- [GET] '/api/`admin`/blogs/1' - Return single resource
 - [PUT] '/api/`admin`/blogs/1' - Update resource
 - [POST] '/api/`admin`/blogs' - Create resource
 - [DELETE] '/api/`admin`/blogs/1' - Delete resource
 
 On CreateHandler, you need to be create your custom request validation.
 
-
 ### Token Resource
 
-By default, Token resource only show on `super_admin` role. you can modify give permission to other permission too. 
+By default, Token resource only show on `super_admin` role. you can modify give permission to other permission too.
 
 Token Resource is protected by TokenPolicy. You can disable it by publishing the config and change this line.
 
@@ -123,22 +120,21 @@ To create a handler you can use this command. By default, i'm using CreateHandle
 
 ```bash
 php artisan make:filament-api-handler BlogResource
-``` 
+```
 
 or
 
 ```bash
 php artisan make:filament-api-handler Blog
-``` 
+```
 
 ### Transform API Response
 
-```bash 
+```bash
 php artisan make:filament-api-transformer Blog
 ```
 
 it will be create BlogTransformer in `App\Filament\Resources\BlogResource\Api\Transformers`
-
 
 ```php
 <?php
@@ -166,7 +162,6 @@ class BlogTransformer extends JsonResource
 }
 ```
 
-
 next step you need to edit & add it to your Resource
 
 ```php
@@ -175,14 +170,13 @@ next step you need to edit & add it to your Resource
     class BlogResource extends Resource
     {
         ...
-        public static function getApiTransformer() 
-        { 
-            return BlogTransformer::class; 
+        public static function getApiTransformer()
+        {
+            return BlogTransformer::class;
         }
         ...
     }
 ```
-
 
 ### Group Name & Prefix
 
@@ -199,31 +193,17 @@ You can edit prefix & group route name as you want, default this plugin use mode
 
 ### Tenancy
 
-When you want to enable Tenancy on this package you can enable this by setting the config `tenancy.enabled` to `true`. This makes sure that your api responses only retreive the data which that user has access to. So if a user has access to 2 tenants then enabling this feature will return only the data of those 2 tenants.
+When you want to enable Tenancy on this package you can enable this by setting the config `tenancy.enabled` to `true`. This makes sure that your api responses only retreive the data which that user has access to. So if you have configured 5 tenants and an user has access to 2 tenants. Then, enabling this feature will return only the data of those 2 tenants.
 
-You then also need to set the correct tenant relationship name in the `api-service.php` with the configkey: `owner_relationship_name`.
+If you have enabled tenancy on this package but on a specific Resource you have defined `protected static bool $isScopedToTenant = false;`, then the API will honour this for that specific resource and will return all records.
 
-Lastly make sure you add the `HasApiTenantScope` trait to all of your models which are used by all your Api Resources:
+If you want to make api routes tenant aware. you can set `tenancy.awareness` to `true` in your published api-service.php. This way this package will register extra API routes which will return only the specific tenant data in the API response.
 
-```php
-use Rupadana\ApiService\Traits\HasApiTenantScope; // <-- add this line
-
-class Blog extends Model
-{
-    use HasFactory;
-    use HasApiTenantScope; // <-- add this line
-}
-```
-
-If you want to make api routes tenant aware. you can set `tenancy.awareness` to `true` in your published `api-service.php`. This way this package will register extra API routes which will return only the specific tenant data in the API response.
-
-
-
-Now your API endpoints will have URI prefix of `{tenant}` in the API routes when `tenancy.awareness` is `true`. 
+Now your API endpoints will have URI prefix of `{tenant}` in the API routes when `tenancy.awareness` is `true`.
 
 It will look like this:
 
-```
+```bash
   POST      api/admin/{tenant}/blog
   GET|HEAD  api/admin/{tenant}/blog
   PUT       api/admin/{tenant}/blog/{id}
@@ -254,4 +234,5 @@ class PaginationHandler extends Handlers {
 The MIT License (MIT).
 
 ## Supported By
+
 <img src="https://res.cloudinary.com/rupadana/image/upload/v1707040287/phpstorm_xjblau.png" width="50px" height="50px"></img>

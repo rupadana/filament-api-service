@@ -25,7 +25,7 @@ class DetailHandler extends Handlers
         if (!$query) return static::sendNotFoundResponse();
 
         $transformer = static::getApiTransformer();
-        
+
         return new $transformer($query);
     }
 }
