@@ -9,6 +9,7 @@ use Rupadana\ApiService\Concerns\HasTenancy;
 class ApiService
 {
     use HasTenancy;
+
     /**
      * Filament Resource
      */

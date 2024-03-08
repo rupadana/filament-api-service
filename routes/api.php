@@ -30,7 +30,7 @@ Route::prefix('api')
                         });
                 }
 
-                if (!ApiService::tenancyAwareness()) {
+                if (! ApiService::tenancyAwareness()) {
                     Route::prefix($panelRoutePrefix)
                         ->name($panelRoutePrefix . '.')
                         ->group(function () use ($panel) {

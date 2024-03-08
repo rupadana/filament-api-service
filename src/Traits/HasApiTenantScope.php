@@ -9,7 +9,6 @@ use Rupadana\ApiService\ApiService;
 
 trait HasApiTenantScope
 {
-
     protected static function getOwnerRelationshipName()
     {
         return config('api-service.tenancy.owner_relationship_name');
@@ -37,7 +36,7 @@ trait HasApiTenantScope
         if (
             Filament::hasTenancy() &&
             ApiService::isTenancyEnabled() &&
-            !ApiService::tenancyAwareness()
+            ! ApiService::tenancyAwareness()
         ) {
             static::addGlobalScope(static::getOwnerRelationshipName(), function (Builder $query) {
                 if (auth()->check()) {
