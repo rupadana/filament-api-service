@@ -18,7 +18,6 @@ use Laravel\Sanctum\SanctumServiceProvider;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Rupadana\ApiService\ApiServiceServiceProvider;
-use Rupadana\ApiService\Tests\Fixtures\ProductApiService\ProductApiService;
 use Rupadana\ApiService\Tests\Fixtures\Providers\AdminPanelProvider;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 use Spatie\QueryBuilder\QueryBuilderServiceProvider;
@@ -26,7 +25,7 @@ use Spatie\QueryBuilder\QueryBuilderServiceProvider;
 class TestCase extends Orchestra
 {
     use RefreshDatabase;
-    
+
     protected function getPackageProviders($app)
     {
         return [

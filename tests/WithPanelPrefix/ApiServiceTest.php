@@ -179,4 +179,3 @@ it('can return a list of products with a custom transformer', function () {
         'hash' => md5($product['name']),
     ]);
 });
-
