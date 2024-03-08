@@ -3,10 +3,16 @@
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Route;
 use Rupadana\ApiService\ApiService;
+use Rupadana\ApiService\Exceptions\InvalidTenancyConfiguration;
 
 Route::prefix('api')
     ->name('api.')
     ->group(function () {
+
+        if (!ApiService::isTenancyEnabled() && ApiService::tenancyAwareness()) {
+            throw new InvalidTenancyConfiguration('Tenancy awereness is enabled. But, Tenancy is disabled.');
+        }
+
         $panels = Filament::getPanels();
 
         foreach ($panels as $key => $panel) {
@@ -19,8 +25,8 @@ Route::prefix('api')
 
                 if (
                     $hasTenancy &&
-                    config('api-service.tenancy.enabled') &&
-                    config('api-service.tenancy.is_tenant_aware')
+                    ApiService::isTenancyEnabled() &&
+                    ApiService::tenancyAwareness()
                 ) {
                     Route::prefix($panelId . '/' . (($tenantRoutePrefix) ? "{$tenantRoutePrefix}/" : '') . '{tenant' . (($tenantSlugAttribute) ? ":{$tenantSlugAttribute}" : '') . '}')
                         ->name($panelId . '.')
@@ -29,7 +35,7 @@ Route::prefix('api')
                             $apiServicePlugin->route($panel);
                         });
                 }
-                if (!config('api-service.tenancy.is_tenant_aware')) {
+                if (!ApiService::tenancyAwareness()) {
                     Route::prefix($panelId)
                         ->name($panelId . '.')
                         ->group(function () use ($panel) {
