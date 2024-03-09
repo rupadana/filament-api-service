@@ -13,33 +13,50 @@ Route::prefix('api')
             throw new InvalidTenancyConfiguration('Tenancy awereness is enabled. But, Tenancy is disabled.');
         }
 
-        $panels = Filament::getPanels();
-
-        foreach ($panels as $key => $panel) {
+        foreach (Filament::getPanels() as $key => $panel) {
             try {
-
-                $panelRoutePrefix = ApiService::isRoutePrefixedByPanel() ? $panel->getId() : '';
+                $apiServicePlugin = $panel->getPlugin('api-service');
+                $panelId = $panel->getId();
                 $hasTenancy = $panel->hasTenancy();
                 $tenantRoutePrefix = $panel->getTenantRoutePrefix();
+                $tenantDomain = $panel->getTenantDomain();
                 $tenantSlugAttribute = $panel->getTenantSlugAttribute();
+                $panelPrefix = ApiService::isRoutePrefixedByPanel() ? $panelId : '';
+
+                $routeGroup = Route::name($panelPrefix . '.');
 
                 if (
                     $hasTenancy &&
                     ApiService::isTenancyEnabled() &&
                     ApiService::tenancyAwareness()
                 ) {
-                    Route::prefix($panelRoutePrefix . '/' . (($tenantRoutePrefix) ? "{$tenantRoutePrefix}/" : '') . '{tenant' . (($tenantSlugAttribute) ? ":{$tenantSlugAttribute}" : '') . '}')
-                        ->name($panelRoutePrefix . '.')
-                        ->group(function () use ($panel) {
-                            $apiServicePlugin = $panel->getPlugin('api-service');
+                    $domains = $panel->getDomains();
+                    foreach ((empty($domains) ? [null] : $domains) as $domain) {
+                        if (filled($tenantDomain)) {
+                            $routeGroup->domain($tenantDomain);
+                        } else {
+                            $routeGroup->prefix(
+                                $panelPrefix . '/' .
+                                    (
+                                        filled($tenantRoutePrefix) ?
+                                        "{$tenantRoutePrefix}/" :
+                                        ''
+                                    ) . '{tenant' . (
+                                        filled($tenantSlugAttribute) ?
+                                        ":{$tenantSlugAttribute}" :
+                                        ''
+                                    ) . '}',
+                            );
+                        }
+                        $routeGroup->group(function () use ($panel, $apiServicePlugin) {
                             $apiServicePlugin->route($panel);
                         });
+                    }
                 }
                 if (!ApiService::tenancyAwareness()) {
-                    Route::prefix($panelId)
-                        ->name($panelId . '.')
-                        ->group(function () use ($panel) {
-                            $apiServicePlugin = $panel->getPlugin('api-service');
+                    $routeGroup
+                        ->prefix($panelPrefix . '/')
+                        ->group(function () use ($panel, $apiServicePlugin) {
                             $apiServicePlugin->route($panel);
                         });
                 }
