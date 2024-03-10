@@ -31,7 +31,7 @@ trait HasHandlerTenantScope
     {
         $relationshipName = static::getTenantOwnershipRelationshipName();
 
-        if (!$record->isRelation($relationshipName)) {
+        if (! $record->isRelation($relationshipName)) {
 
             $resourceClass = static::class;
             $recordClass = $record::class;
@@ -60,7 +60,7 @@ trait HasHandlerTenantScope
             ) {
                 if (auth()->check()) {
 
-                    $query =  match (true) {
+                    $query = match (true) {
                         $tenantOwnershipRelationship instanceof MorphTo => $query->whereMorphedTo(
                             $tenantOwnershipRelationshipName,
                             $tenant,
@@ -79,13 +79,13 @@ trait HasHandlerTenantScope
 
             if (
                 ApiService::isTenancyEnabled() &&
-                !ApiService::tenancyAwareness() &&
+                ! ApiService::tenancyAwareness() &&
                 static::isScopedToTenant()
             ) {
 
                 if (auth()->check()) {
 
-                    $query =  match (true) {
+                    $query = match (true) {
 
                         $tenantOwnershipRelationship instanceof MorphTo => $query
                             ->where($tenantModel->getRelationWithoutConstraints($tenantOwnershipRelationshipName)->getMorphType(), $tenantModel->getMorphClass())
