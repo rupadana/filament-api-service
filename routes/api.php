@@ -6,7 +6,7 @@ use Rupadana\ApiService\ApiService;
 use Rupadana\ApiService\Exceptions\InvalidTenancyConfiguration;
 
 Route::prefix('api')
-    ->name('api')
+    ->name('api.')
     ->group(function () {
         if (ApiService::tenancyAwareness() && (! ApiService::isRoutePrefixedByPanel() || ! ApiService::isTenancyEnabled())) {
             throw new InvalidTenancyConfiguration("Tenancy awareness is enabled!. Please set 'api-service.route.panel_prefix=true' and 'api-service.tenancy.enabled=true'");
@@ -21,6 +21,7 @@ Route::prefix('api')
                 $tenantRoutePrefix = $panel->getTenantRoutePrefix();
                 $tenantSlugAttribute = $panel->getTenantSlugAttribute();
                 $panelRoutePrefix = ApiService::isRoutePrefixedByPanel() ? '{panel}' : '';
+                $panelNamePrefix = $panelRoutePrefix ? $panel->getId() . '.' : '';
 
                 if (
                     $hasTenancy &&
@@ -28,7 +29,7 @@ Route::prefix('api')
                     ApiService::tenancyAwareness()
                 ) {
                     Route::prefix($panelRoutePrefix . '/' . (($tenantRoutePrefix) ? "{$tenantRoutePrefix}/" : '') . '{tenant' . (($tenantSlugAttribute) ? ":{$tenantSlugAttribute}" : '') . '}')
-                        ->name($panelRoutePrefix . '.')
+                        ->name($panelNamePrefix)
                         ->group(function () use ($panel) {
                             $apiServicePlugin = $panel->getPlugin('api-service');
                             $apiServicePlugin->route($panel);
@@ -37,7 +38,7 @@ Route::prefix('api')
 
                 if (! ApiService::tenancyAwareness()) {
                     Route::prefix($panelRoutePrefix)
-                        ->name($panelRoutePrefix . '.')
+                        ->name($panelNamePrefix)
                         ->group(function () use ($panel) {
                             $apiServicePlugin = $panel->getPlugin('api-service');
                             $apiServicePlugin->route($panel);
