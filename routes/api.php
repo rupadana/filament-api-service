@@ -8,7 +8,7 @@ use Rupadana\ApiService\Exceptions\InvalidTenancyConfiguration;
 Route::prefix('api')
     ->name('api.')
     ->group(function () {
-        if (!ApiService::isTenancyEnabled() && ApiService::tenancyAwareness()) {
+        if (! ApiService::isTenancyEnabled() && ApiService::tenancyAwareness()) {
             throw new InvalidTenancyConfiguration('Tenancy awereness is enabled. But, Tenancy is disabled.');
         }
 
@@ -52,7 +52,7 @@ Route::prefix('api')
                         });
                     }
                 }
-                if (!ApiService::tenancyAwareness()) {
+                if (! ApiService::tenancyAwareness()) {
                     $routeGroup
                         ->prefix($panelPrefix . '/')
                         ->group(function () use ($panel, $apiServicePlugin) {

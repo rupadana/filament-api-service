@@ -4,7 +4,6 @@ namespace Rupadana\ApiService\Traits;
 
 use Exception;
 use Filament\Facades\Filament;
-
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,9 +15,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 trait HasHandlerTenantScope
 {
-
     protected static ?string $tenantOwnershipRelationshipName = null;
-
 
     protected static function getTenantOwnershipRelationshipName(): string
     {
@@ -34,7 +31,7 @@ trait HasHandlerTenantScope
     {
         $relationshipName = static::getTenantOwnershipRelationshipName();
 
-        if (!$record->isRelation($relationshipName)) {
+        if (! $record->isRelation($relationshipName)) {
             $resourceClass = static::class;
             $recordClass = $record::class;
 
@@ -62,7 +59,7 @@ trait HasHandlerTenantScope
             ) {
                 if (auth()->check()) {
 
-                    $query =  match (true) {
+                    $query = match (true) {
                         $tenantOwnershipRelationship instanceof MorphTo => $query->whereMorphedTo(
                             $tenantOwnershipRelationshipName,
                             $tenant,
@@ -81,13 +78,13 @@ trait HasHandlerTenantScope
 
             if (
                 ApiService::isTenancyEnabled() &&
-                !ApiService::tenancyAwareness() &&
+                ! ApiService::tenancyAwareness() &&
                 static::isScopedToTenant()
             ) {
 
                 if (auth()->check()) {
 
-                    $query =  match (true) {
+                    $query = match (true) {
                         $tenantOwnershipRelationship instanceof MorphTo => $query
                             ->where($tenantModel->getRelationWithoutConstraints($tenantOwnershipRelationshipName)->getMorphType(), $tenantModel->getMorphClass())
                             ->whereIn($tenantModel->getRelationWithoutConstraints($tenantOwnershipRelationshipName)->getForeignKeyName(), request()->user()->{Str::plural($tenantOwnershipRelationshipName)}->pluck($tenantModel->getKeyName())->toArray()),
