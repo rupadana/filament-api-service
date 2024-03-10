@@ -21,7 +21,7 @@ Route::prefix('api')
                 $tenantSlugAttribute = $panel->getTenantSlugAttribute();
                 $panelPrefix = ApiService::isRoutePrefixedByPanel() ? $panelId : '';
 
-                $routeGroup = Route::name($panelPrefix . '.');
+                $routeGroup = Route::name($panelPrefix ? $panelPrefix   . '.' : '');
 
                 if (
                     $hasTenancy &&

@@ -211,6 +211,8 @@ It will look like this:
   GET|HEAD  api/admin/{tenant}/blog/{id}
 ```
 
+Overriding tenancy ownership relationship name by adding this property to the Handlers `protected static ?string $tenantOwnershipRelationshipName = null;`
+
 ### How to secure it?
 
 Since version 3.0, it will automatically detect routes and secure it using sanctum.

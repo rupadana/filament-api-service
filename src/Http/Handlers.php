@@ -12,8 +12,8 @@ use Rupadana\ApiService\Transformers\DefaultTransformer;
 class Handlers
 {
     use HasHandlerTenantScope;
-    use HasHandlerTenantScope;
     use HttpResponse;
+    
     public static ?string $uri = '/';
     public static string $method = 'get';
     public static ?string $resource = null;
