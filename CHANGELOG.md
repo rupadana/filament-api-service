@@ -2,6 +2,14 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.1.1 - 2024-03-10
+
+### What's Changed
+
+* fix: adding panel name by @rupadana in https://github.com/rupadana/filament-api-service/pull/34
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.1.0...3.1.1
+
 ## 3.1.0 - 2024-03-10
 
 ### What's Changed
