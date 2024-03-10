@@ -2,9 +2,12 @@
 
 namespace Rupadana\ApiService\Http;
 
+use Filament\Facades\Filament;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Routing\Router;
+use Rupadana\ApiService\ApiService;
 use Rupadana\ApiService\Traits\HasHandlerTenantScope;
 use Rupadana\ApiService\Traits\HttpResponse;
 use Rupadana\ApiService\Transformers\DefaultTransformer;
@@ -13,6 +16,7 @@ class Handlers
 {
     use HasHandlerTenantScope;
     use HttpResponse;
+    protected Panel $panel;
     public static ?string $uri = '/';
     public static string $method = 'get';
     public static ?string $resource = null;
@@ -23,6 +27,14 @@ class Handlers
     const DELETE = 'delete';
     const PATCH = 'patch';
     const PUT = 'put';
+
+    public function __construct()
+    {
+        if (request()->routeIs('api.*') && ApiService::isRoutePrefixedByPanel()) {
+            $this->panel(Filament::getPanel(request()->route()->parameter('panel')));
+            Filament::setCurrentPanel($this->getPanel());
+        }
+    }
 
     public static function getMethod()
     {
@@ -110,5 +122,28 @@ class Handlers
     public static function isScopedToTenant(): bool
     {
         return static::$resource::isScopedToTenant();
+    }
+
+    public function panel(Panel $panel)
+    {
+        $this->panel = $panel;
+
+        return $this;
+    }
+
+    public function getPanel(): Panel
+    {
+        return $this->panel;
+    }
+
+    protected static function getEloquentQuery()
+    {
+        $query = app(static::getModel())->query();
+
+        if (static::isScopedToTenant() && ApiService::tenancyAwareness() && Filament::getCurrentPanel()) {
+            $query = static::modifyTenantQuery($query);
+        }
+
+        return $query;
     }
 }

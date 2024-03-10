@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Str;
 use Rupadana\ApiService\ApiService;
-use Spatie\QueryBuilder\QueryBuilder;
 
 trait HasHandlerTenantScope
 {
@@ -42,11 +41,12 @@ trait HasHandlerTenantScope
         return $record->{$relationshipName}();
     }
 
-    protected static function scopeEloquentQueryToTenant(QueryBuilder $query, ?Model $tenant): QueryBuilder
+    protected static function modifyTenantQuery(Builder $query, ?Model $tenant = null): Builder
     {
-        if (request()->routeIs('api.*') && Filament::hasTenancy()) {
 
+        if (request()->routeIs('api.*') && Filament::hasTenancy()) {
             $tenantId ??= request()->route()->parameter('tenant');
+
             $tenantOwnershipRelationship = static::getTenantOwnershipRelationship($query->getModel());
             $tenantOwnershipRelationshipName = static::getTenantOwnershipRelationshipName();
             $tenantModel = app(Filament::getTenantModel());

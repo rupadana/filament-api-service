@@ -18,8 +18,10 @@ class DeleteHandler extends Handlers {
         return static::$resource::getModel();
     }
 
-    public function handler(Request $request, $id)
+    public function handler(Request $request)
     {
+        $id = $request->route('id');
+
         $model = static::getModel()::find($id);
 
         if (!$model) return static::sendNotFoundResponse();
