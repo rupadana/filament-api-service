@@ -11,6 +11,6 @@ trait HasTenancy
 
     public static function tenancyAwareness(): bool
     {
-        return config('api-service.tenancy.awereness', false);
+        return config('api-service.tenancy.awareness', false);
     }
 }

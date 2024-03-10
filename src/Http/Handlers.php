@@ -13,6 +13,8 @@ class Handlers
 {
     use HasHandlerTenantScope;
     use HttpResponse;
+    use HasHandlerTenantScope;
+
     public static ?string $uri = '/';
     public static string $method = 'get';
     public static ?string $resource = null;

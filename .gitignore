@@ -1,6 +1,6 @@
 .DS_Store
 .idea
-.phpunit*
+.phpunit.*
 .vscode
 build
 composer.lock
