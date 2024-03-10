@@ -15,11 +15,12 @@ Route::prefix('api')
             try {
                 $apiServicePlugin = $panel->getPlugin('api-service');
                 $panelId = $panel->getId();
+                $panelPath = $panel->getPath();
                 $hasTenancy = $panel->hasTenancy();
                 $tenantRoutePrefix = $panel->getTenantRoutePrefix();
                 $tenantDomain = $panel->getTenantDomain();
                 $tenantSlugAttribute = $panel->getTenantSlugAttribute();
-                $panelPrefix = ApiService::isRoutePrefixedByPanel() ? $panelId : '';
+                $panelPrefix = ApiService::isRoutePrefixedByPanel() ? $panelPath ?? $panelId : '';
 
                 $routeGroup = Route::name($panelPrefix . '.');
 
