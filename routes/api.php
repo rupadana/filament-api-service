@@ -6,7 +6,7 @@ use Rupadana\ApiService\ApiService;
 use Rupadana\ApiService\Exceptions\InvalidTenancyConfiguration;
 
 Route::prefix('api')
-    ->name('api.')
+    ->name('api')
     ->group(function () {
         if (ApiService::tenancyAwareness() && (! ApiService::isRoutePrefixedByPanel() || ! ApiService::isTenancyEnabled())) {
             throw new InvalidTenancyConfiguration("Tenancy awareness is enabled!. Please set 'api-service.route.panel_prefix=true' and 'api-service.tenancy.enabled=true'");
@@ -16,11 +16,14 @@ Route::prefix('api')
 
         foreach ($panels as $key => $panel) {
             try {
-
-                $panelRoutePrefix = ApiService::isRoutePrefixedByPanel() ? '{panel}' : '';
+                $apiServicePlugin = $panel->getPlugin('api-service');
+                $panelId = $panel->getId();
+                $panelPath = $panel->getPath();
+                
                 $hasTenancy = $panel->hasTenancy();
                 $tenantRoutePrefix = $panel->getTenantRoutePrefix();
                 $tenantSlugAttribute = $panel->getTenantSlugAttribute();
+                $panelRoutePrefix = ApiService::isRoutePrefixedByPanel() ? $panelPath ?? $panelId : '';
 
                 if (
                     $hasTenancy &&
