@@ -11,6 +11,7 @@ use Rupadana\ApiService\Transformers\DefaultTransformer;
 
 class Handlers
 {
+    use HasHandlerTenantScope;
     use HttpResponse;
     use HasHandlerTenantScope;
 

@@ -26,5 +26,4 @@ return [
         'enabled'   => false,
         'awareness' => false,
     ]
-    
 ];

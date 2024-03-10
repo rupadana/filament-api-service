@@ -24,7 +24,7 @@ $panel->plugins([
 ])
 ```
 
-## Config
+### Config
 
 ```bash
 php artisan vendor:publish --tag=api-service-config
@@ -211,7 +211,7 @@ It will look like this:
   GET|HEAD  api/admin/{tenant}/blog/{id}
 ```
 
-## How to secure it?
+### How to secure it?
 
 Since version 3.0, it will automatically detect routes and secure it using sanctum.
 

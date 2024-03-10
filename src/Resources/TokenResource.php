@@ -28,7 +28,6 @@ class TokenResource extends Resource
 
     protected static bool $isScopedToTenant = false;
 
-
     public static function form(Form $form): Form
     {
         return $form
