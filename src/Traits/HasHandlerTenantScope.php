@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Str;
 use Rupadana\ApiService\ApiService;
-use Spatie\QueryBuilder\QueryBuilder;
 
 trait HasHandlerTenantScope
 {
@@ -31,7 +30,7 @@ trait HasHandlerTenantScope
     {
         $relationshipName = static::getTenantOwnershipRelationshipName();
 
-        if (!$record->isRelation($relationshipName)) {
+        if (! $record->isRelation($relationshipName)) {
 
             $resourceClass = static::class;
             $recordClass = $record::class;
@@ -42,11 +41,12 @@ trait HasHandlerTenantScope
         return $record->{$relationshipName}();
     }
 
-    protected static function scopeEloquentQueryToTenant(QueryBuilder $query, ?Model $tenant): QueryBuilder
+    protected static function modifyTenantQuery(Builder $query, ?Model $tenant = null): Builder
     {
-        if (request()->routeIs('api.*') && Filament::hasTenancy()) {
 
+        if (request()->routeIs('api.*') && Filament::hasTenancy()) {
             $tenantId ??= request()->route()->parameter('tenant');
+
             $tenantOwnershipRelationship = static::getTenantOwnershipRelationship($query->getModel());
             $tenantOwnershipRelationshipName = static::getTenantOwnershipRelationshipName();
             $tenantModel = app(Filament::getTenantModel());
@@ -60,7 +60,7 @@ trait HasHandlerTenantScope
             ) {
                 if (auth()->check()) {
 
-                    $query =  match (true) {
+                    $query = match (true) {
                         $tenantOwnershipRelationship instanceof MorphTo => $query->whereMorphedTo(
                             $tenantOwnershipRelationshipName,
                             $tenant,
@@ -79,13 +79,13 @@ trait HasHandlerTenantScope
 
             if (
                 ApiService::isTenancyEnabled() &&
-                !ApiService::tenancyAwareness() &&
+                ! ApiService::tenancyAwareness() &&
                 static::isScopedToTenant()
             ) {
 
                 if (auth()->check()) {
 
-                    $query =  match (true) {
+                    $query = match (true) {
 
                         $tenantOwnershipRelationship instanceof MorphTo => $query
                             ->where($tenantModel->getRelationWithoutConstraints($tenantOwnershipRelationshipName)->getMorphType(), $tenantModel->getMorphClass())
