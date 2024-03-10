@@ -2,6 +2,24 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.1.0 - 2024-03-10
+
+### What's Changed
+
+* Update README.md by @rupadana in https://github.com/rupadana/filament-api-service/pull/27
+* change: adding test for panel_prefix config by @rupadana in https://github.com/rupadana/filament-api-service/pull/28
+* added tenant aware api feature by @eelco2k in https://github.com/rupadana/filament-api-service/pull/23
+* fix: adding an InvalidTenancyConfiguration by @rupadana in https://github.com/rupadana/filament-api-service/pull/30
+* Feature tenant aware Refactored by @eelco2k in https://github.com/rupadana/filament-api-service/pull/32
+* Panel Prefix first by Path otherwise byId else empty by @eelco2k in https://github.com/rupadana/filament-api-service/pull/33
+* feat: Tenancy Support by @rupadana in https://github.com/rupadana/filament-api-service/pull/31
+
+### New Contributors
+
+* @eelco2k made their first contribution in https://github.com/rupadana/filament-api-service/pull/23
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.0.10...3.1.0
+
 ## 3.0.10 - 2024-03-06
 
 ### What's Changed
