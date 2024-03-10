@@ -22,4 +22,8 @@ return [
     'route' => [
         'panel_prefix' => true,
     ],
+    'tenancy' => [
+        'enabled' => false,
+        'awareness' => false,
+    ],
 ];

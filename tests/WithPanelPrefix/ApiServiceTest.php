@@ -12,11 +12,11 @@ it('can make routes for a product resource', function () {
     });
 
     // The route name is customized to `our-products` in the `ProductApiService` class
-    expect($routes)->toContain('POST api/admin/our-products');
-    expect($routes)->toContain('PUT api/admin/our-products/{id}');
-    expect($routes)->toContain('DELETE api/admin/our-products/{id}');
-    expect($routes)->toContain('GET|HEAD api/admin/our-products');
-    expect($routes)->toContain('GET|HEAD api/admin/our-products/{id}');
+    expect($routes)->toContain('POST api/{panel}/our-products');
+    expect($routes)->toContain('PUT api/{panel}/our-products/{id}');
+    expect($routes)->toContain('DELETE api/{panel}/our-products/{id}');
+    expect($routes)->toContain('GET|HEAD api/{panel}/our-products');
+    expect($routes)->toContain('GET|HEAD api/{panel}/our-products/{id}');
 });
 
 it('can return a list of products with allowed attributes', function () {

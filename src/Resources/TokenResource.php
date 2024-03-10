@@ -23,7 +23,10 @@ use Rupadana\ApiService\Resources\TokenResource\Pages;
 class TokenResource extends Resource
 {
     protected static ?string $model = Token::class;
+
     // protected static ?string $navigationIcon = 'heroicon-o-key';
+
+    protected static bool $isScopedToTenant = false;
 
     public static function form(Form $form): Form
     {

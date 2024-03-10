@@ -13,9 +13,11 @@ class DetailHandler extends Handlers
     public static string | null $resource = {{ resourceClass }}::class;
 
 
-    public function handler($id)
+    public function handler(Request $request)
     {
-        $model = static::getModel()::query();
+        $id = $request->route('id');
+        
+        $model = static::getEloquentQuery();
 
         $query = QueryBuilder::for(
             $model->where(static::getKeyName(), $id)
@@ -25,7 +27,7 @@ class DetailHandler extends Handlers
         if (!$query) return static::sendNotFoundResponse();
 
         $transformer = static::getApiTransformer();
-        
+
         return new $transformer($query);
     }
 }

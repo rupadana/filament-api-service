@@ -89,9 +89,7 @@ class ApiServiceServiceProvider extends PackageServiceProvider
      */
     protected function getAssets(): array
     {
-        return [
-
-        ];
+        return [];
     }
 
     /**
