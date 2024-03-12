@@ -5,13 +5,11 @@ namespace Rupadana\ApiService;
 use Filament\Panel;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
-use Rupadana\ApiService\Concerns\HasMiddlewares;
 use Rupadana\ApiService\Concerns\HasTenancy;
 
 class ApiService
 {
     use HasTenancy;
-    use HasMiddlewares;
 
     /**
      * Filament Resource
@@ -44,7 +42,7 @@ class ApiService
             ->replace('/', '.')
             ->append('.');
 
-        $resourceRouteMiddlewares = ApiService::useResourceMiddlewares() ? static::getResource()::getRouteMiddleware($panel) : [];
+        $resourceRouteMiddlewares = static::useResourceMiddlewares() ? static::getResource()::getRouteMiddleware($panel) : [];
 
         Route::name($name)
             ->middleware($resourceRouteMiddlewares)
@@ -66,5 +64,10 @@ class ApiService
     public static function isRoutePrefixedByPanel(): bool
     {
         return config('api-service.route.panel_prefix', true);
+    }
+
+    public static function useResourceMiddlewares(): bool
+    {
+        return config('api-service.route.use_resource_middlewares', false);
     }
 }

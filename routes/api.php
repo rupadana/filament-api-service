@@ -22,10 +22,10 @@ Route::prefix('api')
                 $tenantSlugAttribute = $panel->getTenantSlugAttribute();
                 $panelPrefix = ApiService::isRoutePrefixedByPanel() ? $panelPath ?? $panelId : '';
 
-                $handlerMiddlewares = ApiService::getHandlerMiddlewares();
+                $middlewares = $apiServicePlugin->getMiddlewares();
 
                 $routeGroup = Route::name($panelPrefix . '.')
-                    ->middleware($handlerMiddlewares);
+                    ->middleware($middlewares);
 
                 if (
                     $hasTenancy &&

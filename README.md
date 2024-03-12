@@ -195,7 +195,7 @@ You can edit prefix & group route name as you want, default this plugin use mode
 
 ### Middlewares
 
-You can add or override middlewares at two specific places. Via the config and/or via the Resources $routeMiddleware.
+You can add or override middlewares at two specific places. Via the Filament Panel Provider and/or via the Resources $routeMiddleware.
 
 If you set `route.use_resource_middlewares` to true, the package will register the middlewares for that specific resource as defined in:
 
@@ -210,7 +210,18 @@ class BlogResource extends Resource
 
 Then your API resource endpoint will go through these middlewares first.
 
-Another method of adding/overriding middlewares is via the config: `route.middlewares` you can add your middlewares as an array. These middelwares will be globally added to the API routes.
+Another method of adding/overriding middlewares is via the initialization of the plugin in your Panel Provider by adding the `middleware()` method like so:
+
+```php
+use Rupadana\ApiService\ApiServicePlugin;
+
+$panel->plugins([
+    ApiServicePlugin::make()
+        ->middleware([
+        // ... add your middlewares
+        ])
+])
+```
 
 ### Tenancy
 
