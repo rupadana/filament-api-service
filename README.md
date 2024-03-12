@@ -203,7 +203,7 @@ If you set `route.use_resource_middlewares` to true, the package will register t
 class BlogResource extends Resource
     {
         ...
-        protected static string | array $routeMiddleware = []; <-- your specific resource middlewares
+        protected static string | array $routeMiddleware = []; // <-- your specific resource middlewares
         ...
     }
 ```
