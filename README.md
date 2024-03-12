@@ -48,7 +48,6 @@ return [
     'route' => [
         'panel_prefix' => true,
         'use_resource_middlewares' => false,
-        'middlewares' => [],
     ],
     'tenancy' => [
         'enabled' => false,
