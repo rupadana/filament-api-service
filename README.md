@@ -47,6 +47,8 @@ return [
     ],
     'route' => [
         'panel_prefix' => true,
+        'use_resource_middlewares' => false,
+        'middlewares' => [],
     ],
     'tenancy' => [
         'enabled' => false,
@@ -190,6 +192,25 @@ You can edit prefix & group route name as you want, default this plugin use mode
         ...
     }
 ```
+
+### Middlewares
+
+You can add or override middlewares at two specific places. Via the config and/or via the Resources $routeMiddleware.
+
+If you set `route.use_resource_middlewares` to true, the package will register the middlewares for that specific resource as defined in:
+
+```php
+class BlogResource extends Resource
+    {
+        ...
+        protected static string | array $routeMiddleware = []; <-- your specific resource middlewares
+        ...
+    }
+```
+
+Then your API resource endpoint will go through these middlewares first.
+
+Another method of adding/overriding middlewares is via the config: `route.middlewares` you can add your middlewares as an array. These middelwares will be globally added to the API routes.
 
 ### Tenancy
 
