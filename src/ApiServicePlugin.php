@@ -65,7 +65,7 @@ class ApiServicePlugin implements Plugin
 
                 $apiServiceClass = $resource . '\\Api\\' . $resourceName . 'ApiService';
 
-                app($apiServiceClass)->registerRoutes();
+                app($apiServiceClass)->registerRoutes($panel);
             } catch (Exception $e) {
             }
         }

@@ -22,7 +22,10 @@ Route::prefix('api')
                 $tenantSlugAttribute = $panel->getTenantSlugAttribute();
                 $panelPrefix = ApiService::isRoutePrefixedByPanel() ? $panelPath ?? $panelId : '';
 
-                $routeGroup = Route::name($panelPrefix . '.');
+                $handlerMiddlewares = ApiService::getHandlerMiddlewares();
+
+                $routeGroup = Route::name($panelPrefix . '.')
+                    ->middleware($handlerMiddlewares);
 
                 if (
                     $hasTenancy &&
@@ -52,7 +55,7 @@ Route::prefix('api')
                         });
                     }
                 }
-                if (! ApiService::tenancyAwareness()) {
+                if (!ApiService::tenancyAwareness()) {
                     $routeGroup
                         ->prefix($panelPrefix . '/')
                         ->group(function () use ($panel, $apiServicePlugin) {

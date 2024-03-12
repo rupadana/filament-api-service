@@ -2,13 +2,16 @@
 
 namespace Rupadana\ApiService;
 
+use Filament\Panel;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
+use Rupadana\ApiService\Concerns\HasMiddlewares;
 use Rupadana\ApiService\Concerns\HasTenancy;
 
 class ApiService
 {
     use HasTenancy;
+    use HasMiddlewares;
 
     /**
      * Filament Resource
@@ -32,7 +35,7 @@ class ApiService
         return static::$resource;
     }
 
-    public static function registerRoutes()
+    public static function registerRoutes(Panel $panel)
     {
 
         $slug = static::getResource()::getSlug();
@@ -41,9 +44,10 @@ class ApiService
             ->replace('/', '.')
             ->append('.');
 
-        Route::name(
-            $name
-        )
+        $resourceRouteMiddlewares = ApiService::useResourceMiddlewares() ? static::getResource()::getRouteMiddleware($panel) : [];
+
+        Route::name($name)
+            ->middleware($resourceRouteMiddlewares)
             ->prefix(static::$groupRouteName ?? $slug)
             ->group(function (Router $route) {
                 static::handlers();
