@@ -1,5 +1,7 @@
 <?php
 
+use Rupadana\ApiService\Policies\TokenPolicy;
+
 // config for Rupadana/ApiService
 return [
     'navigation' => [
@@ -10,6 +12,7 @@ return [
     'models' => [
         'token' => [
             'enable_policy' => true,
+            'policy_class' => TokenPolicy::class
         ],
     ],
 ];

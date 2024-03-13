@@ -9,7 +9,7 @@ use Rupadana\ApiService\Policies\TokenPolicy;
 class AuthServiceProvider extends ServiceProvider
 {
     protected $policies = [
-        Token::class => TokenPolicy::class,
+        Token::class => config('api-serivce.models.token.policy_class', TokenPolicy::class),
     ];
 
     /**
