@@ -90,7 +90,7 @@ class ApiServicePlugin implements Plugin
     }
 
     /**
-     * @param  array<string>  $middleware
+     * @param array<string> $middleware
      */
     public function middleware(array $middleware): static
     {
@@ -98,6 +98,7 @@ class ApiServicePlugin implements Plugin
             ...$this->middleware,
             ...$middleware,
         ];
+
         return $this;
     }
 
