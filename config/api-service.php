@@ -24,7 +24,7 @@ return [
         'use_resource_middlewares' => false,
     ],
     'tenancy' => [
-        'enabled'   => false,
+        'enabled' => false,
         'awareness' => false,
-    ]
+    ],
 ];

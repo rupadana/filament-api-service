@@ -6,59 +6,46 @@ use Rupadana\ApiService\ApiService;
 use Rupadana\ApiService\Exceptions\InvalidTenancyConfiguration;
 
 Route::prefix('api')
-    ->name('api')
+    ->name('api.')
     ->group(function () {
-        if (!ApiService::isTenancyEnabled() && ApiService::tenancyAwareness()) {
-            throw new InvalidTenancyConfiguration('Tenancy awereness is enabled. But, Tenancy is disabled.');
+        if (ApiService::tenancyAwareness() && (! ApiService::isRoutePrefixedByPanel() || ! ApiService::isTenancyEnabled())) {
+            throw new InvalidTenancyConfiguration("Tenancy awareness is enabled!. Please set 'api-service.route.panel_prefix=true' and 'api-service.tenancy.enabled=true'");
         }
-        foreach (Filament::getPanels() as $key => $panel) {
+
+        $panels = Filament::getPanels();
+
+        foreach ($panels as $key => $panel) {
             try {
-                $apiServicePlugin = $panel->getPlugin('api-service');
-                $panelId = $panel->getId();
-                $panelPath = $panel->getPath();
+
                 $hasTenancy = $panel->hasTenancy();
                 $tenantRoutePrefix = $panel->getTenantRoutePrefix();
-                $tenantDomain = $panel->getTenantDomain();
                 $tenantSlugAttribute = $panel->getTenantSlugAttribute();
-                $panelPrefix = ApiService::isRoutePrefixedByPanel() ? $panelPath ?? $panelId : '';
 
                 $middlewares = $apiServicePlugin->getMiddlewares();
-
-                $routeGroup = Route::name($panelPrefix . '.')
-                    ->middleware($middlewares);
+                $panelRoutePrefix = ApiService::isRoutePrefixedByPanel() ? '{panel}' : '';
+                $panelNamePrefix = $panelRoutePrefix ? $panel->getId() . '.' : '';
 
                 if (
                     $hasTenancy &&
                     ApiService::isTenancyEnabled() &&
                     ApiService::tenancyAwareness()
                 ) {
-                    $domains = $panel->getDomains();
-                    foreach ((empty($domains) ? [null] : $domains) as $domain) {
-                        if (filled($tenantDomain)) {
-                            $routeGroup->domain($tenantDomain);
-                        } else {
-                            $routeGroup->prefix(
-                                $panelPrefix . '/' .
-                                    (
-                                        filled($tenantRoutePrefix) ?
-                                        "{$tenantRoutePrefix}/" :
-                                        ''
-                                    ) . '{tenant' . (
-                                        filled($tenantSlugAttribute) ?
-                                        ":{$tenantSlugAttribute}" :
-                                        ''
-                                    ) . '}',
-                            );
-                        }
-                        $routeGroup->group(function () use ($panel, $apiServicePlugin) {
+                    Route::prefix($panelRoutePrefix . '/' . (($tenantRoutePrefix) ? "{$tenantRoutePrefix}/" : '') . '{tenant' . (($tenantSlugAttribute) ? ":{$tenantSlugAttribute}" : '') . '}')
+                        ->name($panelNamePrefix)
+                        ->middleware($middlewares)
+                        ->group(function () use ($panel) {
+                            $apiServicePlugin = $panel->getPlugin('api-service');
                             $apiServicePlugin->route($panel);
                         });
-                    }
                 }
-                if (!ApiService::tenancyAwareness()) {
-                    $routeGroup
-                        ->prefix($panelPrefix . '/')
-                        ->group(function () use ($panel, $apiServicePlugin) {
+
+
+                if (! ApiService::tenancyAwareness()) {
+                    Route::prefix($panelRoutePrefix)
+                        ->name($panelNamePrefix)
+                        ->middleware($middlewares)
+                        ->group(function () use ($panel) {
+                            $apiServicePlugin = $panel->getPlugin('api-service');
                             $apiServicePlugin->route($panel);
                         });
                 }
