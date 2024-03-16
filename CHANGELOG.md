@@ -2,6 +2,17 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.1.3 - 2024-03-16
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.1.2...3.1.3
+
+### What's Changed
+
+* allow for setting middlewares via config and via Filament Resources by @eelco2k in https://github.com/rupadana/filament-api-service/pull/35
+* feat: Middleware API on ApiServicePlugin class by @rupadana in https://github.com/rupadana/filament-api-service/pull/39
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.1.2...3.1.3
+
 ## 3.1.2 - 2024-03-10
 
 **Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.1.1...3.1.2
