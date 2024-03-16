@@ -20,6 +20,8 @@ Route::prefix('api')
                 $hasTenancy = $panel->hasTenancy();
                 $tenantRoutePrefix = $panel->getTenantRoutePrefix();
                 $tenantSlugAttribute = $panel->getTenantSlugAttribute();
+                $apiServicePlugin = $panel->getPlugin('api-service');
+                $middlewares = $apiServicePlugin->getMiddlewares();
                 $panelRoutePrefix = ApiService::isRoutePrefixedByPanel() ? '{panel}' : '';
                 $panelNamePrefix = $panelRoutePrefix ? $panel->getId() . '.' : '';
 
@@ -30,8 +32,8 @@ Route::prefix('api')
                 ) {
                     Route::prefix($panelRoutePrefix . '/' . (($tenantRoutePrefix) ? "{$tenantRoutePrefix}/" : '') . '{tenant' . (($tenantSlugAttribute) ? ":{$tenantSlugAttribute}" : '') . '}')
                         ->name($panelNamePrefix)
-                        ->group(function () use ($panel) {
-                            $apiServicePlugin = $panel->getPlugin('api-service');
+                        ->middleware($middlewares)
+                        ->group(function () use ($panel, $apiServicePlugin) {
                             $apiServicePlugin->route($panel);
                         });
                 }
@@ -39,6 +41,7 @@ Route::prefix('api')
                 if (! ApiService::tenancyAwareness()) {
                     Route::prefix($panelRoutePrefix)
                         ->name($panelNamePrefix)
+                        ->middleware($middlewares)
                         ->group(function () use ($panel) {
                             $apiServicePlugin = $panel->getPlugin('api-service');
                             $apiServicePlugin->route($panel);
