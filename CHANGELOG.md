@@ -2,6 +2,14 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.1.4 - 2024-03-17
+
+### What's Changed
+
+* Fix: missing Request on DetailHandler Stubs by @rupadana in https://github.com/rupadana/filament-api-service/pull/40
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.1.3...3.1.4
+
 ## 3.1.3 - 2024-03-16
 
 **Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.1.2...3.1.3
