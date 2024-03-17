@@ -6,6 +6,7 @@ use App\Filament\Resources\SettingResource;
 use {{ resource }};
 use Rupadana\ApiService\Http\Handlers;
 use Spatie\QueryBuilder\QueryBuilder;
+use Illuminate\Http\Request;
 
 class DetailHandler extends Handlers
 {
