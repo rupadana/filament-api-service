@@ -65,6 +65,6 @@ class TestCase extends Orchestra
 
     protected function defineDatabaseMigrations(): void
     {
-        $this->loadMigrationsFrom(realpath(__DIR__.'/Fixtures/Database/Migrations'));
+        $this->loadMigrationsFrom(realpath(__DIR__.'/../Fixtures/Database/Migrations'));
     }
 }
