@@ -1,0 +1,14 @@
+name: "Discord : Release Notification"
+on:
+  release:
+    types: [released]
+
+jobs:
+  message:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Discord Webhook Action
+      uses: tsickert/discord-webhook@v5.3.0
+      with:
+        webhook-url: ${{ secrets.WEBHOOK_URL }}
+        content: "# Released Version ${{ github.event.release.name }} \n\n\n${{ github.event.release.body }}"

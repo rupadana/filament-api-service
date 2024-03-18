@@ -36,7 +36,7 @@ class TokenPolicy
             return true;
         }
 
-        return $user->can('view_token');
+        return $user->can('view_token') && $token->tokenable_id === $user->id;
     }
 
     /**
@@ -60,7 +60,7 @@ class TokenPolicy
             return true;
         }
 
-        return $user->can('update_token');
+        return $user->can('update_token') && $token->tokenable_id === $user->id;
     }
 
     /**
@@ -73,7 +73,7 @@ class TokenPolicy
             return true;
         }
 
-        return $user->can('delete_token');
+        return $user->can('delete_token') && $token->tokenable_id === $user->id;
     }
 
     /**
@@ -97,7 +97,7 @@ class TokenPolicy
             return true;
         }
 
-        return $user->can('force_delete_token');
+        return $user->can('force_delete_token') && $token->tokenable_id === $user->id;
     }
 
     /**
@@ -121,7 +121,7 @@ class TokenPolicy
             return true;
         }
 
-        return $user->can('restore_token');
+        return $user->can('restore_token') && $token->tokenable_id === $user->id;
     }
 
     /**
@@ -145,7 +145,7 @@ class TokenPolicy
             return true;
         }
 
-        return $user->can('replicate_token');
+        return $user->can('replicate_token') && $token->tokenable_id === $user->id;
     }
 
     /**

@@ -17,7 +17,6 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 class ApiServiceServiceProvider extends PackageServiceProvider
 {
     public static string $name = 'api-service';
-
     public static string $viewNamespace = 'api-service';
 
     public function configurePackage(Package $package): void
@@ -90,9 +89,7 @@ class ApiServiceServiceProvider extends PackageServiceProvider
      */
     protected function getAssets(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     /**

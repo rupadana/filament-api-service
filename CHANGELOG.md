@@ -2,6 +2,72 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.1.4 - 2024-03-17
+
+### What's Changed
+
+* Fix: missing Request on DetailHandler Stubs by @rupadana in https://github.com/rupadana/filament-api-service/pull/40
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.1.3...3.1.4
+
+## 3.1.3 - 2024-03-16
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.1.2...3.1.3
+
+### What's Changed
+
+* allow for setting middlewares via config and via Filament Resources by @eelco2k in https://github.com/rupadana/filament-api-service/pull/35
+* feat: Middleware API on ApiServicePlugin class by @rupadana in https://github.com/rupadana/filament-api-service/pull/39
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.1.2...3.1.3
+
+## 3.1.2 - 2024-03-10
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.1.1...3.1.2
+
+## 3.1.1 - 2024-03-10
+
+### What's Changed
+
+* fix: adding panel name by @rupadana in https://github.com/rupadana/filament-api-service/pull/34
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.1.0...3.1.1
+
+## 3.1.0 - 2024-03-10
+
+### What's Changed
+
+* Update README.md by @rupadana in https://github.com/rupadana/filament-api-service/pull/27
+* change: adding test for panel_prefix config by @rupadana in https://github.com/rupadana/filament-api-service/pull/28
+* added tenant aware api feature by @eelco2k in https://github.com/rupadana/filament-api-service/pull/23
+* fix: adding an InvalidTenancyConfiguration by @rupadana in https://github.com/rupadana/filament-api-service/pull/30
+* Feature tenant aware Refactored by @eelco2k in https://github.com/rupadana/filament-api-service/pull/32
+* Panel Prefix first by Path otherwise byId else empty by @eelco2k in https://github.com/rupadana/filament-api-service/pull/33
+* feat: Tenancy Support by @rupadana in https://github.com/rupadana/filament-api-service/pull/31
+
+### New Contributors
+
+* @eelco2k made their first contribution in https://github.com/rupadana/filament-api-service/pull/23
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.0.10...3.1.0
+
+## 3.0.10 - 2024-03-06
+
+### What's Changed
+
+* update Readme.md by @rupadana in https://github.com/rupadana/filament-api-service/pull/25
+* feat: add navigation sort & icon by @rupadana in https://github.com/rupadana/filament-api-service/pull/26
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.0.9...3.0.10
+
+## 3.0.9 - 2024-03-02
+
+### What's Changed
+
+* feat: Allow non-admin users to generate API key to access their records by @rupadana in https://github.com/rupadana/filament-api-service/pull/22
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.0.8...3.0.9
+
 ## 3.0.8 - 2024-02-09
 
 ### What's Changed

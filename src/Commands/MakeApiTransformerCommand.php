@@ -14,9 +14,7 @@ use function Laravel\Prompts\text;
 class MakeApiTransformerCommand extends Command
 {
     use CanManipulateFiles;
-
     protected $description = 'Create a Transformer for your API response';
-
     protected $signature = 'make:filament-api-transformer {resource?} {--panel=}';
 
     public function handle(): int

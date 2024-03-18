@@ -15,6 +15,7 @@ use Filament\Tables;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Rupadana\ApiService\ApiServicePlugin;
 use Rupadana\ApiService\Models\Token;
 use Rupadana\ApiService\Resources\TokenResource\Pages;
@@ -23,7 +24,9 @@ class TokenResource extends Resource
 {
     protected static ?string $model = Token::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-key';
+    // protected static ?string $navigationIcon = 'heroicon-o-key';
+
+    protected static bool $isScopedToTenant = false;
 
     public static function form(Form $form): Form
     {
@@ -36,6 +39,11 @@ class TokenResource extends Resource
                         Select::make('tokenable_id')
                             ->options(User::all()->pluck('name', 'id'))
                             ->label('User')
+                            ->hidden(function () {
+                                $user = auth()->user();
+
+                                return ! $user->hasRole('super_admin');
+                            })
                             ->required(),
                     ]),
 
@@ -87,7 +95,7 @@ class TokenResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+
             ])
             ->actions([
                 DeleteAction::make(),
@@ -96,13 +104,22 @@ class TokenResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->modifyQueryUsing(function (Builder $query) {
+                $authenticatedUser = auth()->user();
+
+                if (method_exists($authenticatedUser, 'hasRole') && $authenticatedUser->hasRole('super_admin')) {
+                    return $query;
+                }
+
+                return $query->where('tokenable_id', $authenticatedUser->id);
+            });
     }
 
     public static function getRelations(): array
     {
         return [
-            //
+
         ];
     }
 
@@ -116,6 +133,16 @@ class TokenResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return config('api-service.navigation.group.token');
+        return config('api-service.navigation.token.group') ?? config('api-service.navigation.group.token');
+    }
+
+    public static function getNavigationSort(): ?int
+    {
+        return config('api-service.navigation.token.sort', -1);
+    }
+
+    public static function getNavigationIcon(): ?string
+    {
+        return config('api-service.navigation.token.icon', 'heroicon-o-key');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rupadana\ApiService\Tests;
+namespace Rupadana\ApiService\Tests\WithoutPanelPrefix;
 
 use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use BladeUI\Icons\BladeIconsServiceProvider;
@@ -60,18 +60,15 @@ class TestCase extends Orchestra
             $config->set('app.env', env('APP_ENV', 'testing'));
             $config->set('app.debug', env('APP_DEBUG', true));
             $config->set('app.key', 'base64:Hupx3yAySikrM2/edkZQNQHslgDWYfiBfCuSThJ5SK8=');
+            $config->set('api-service.route.panel_prefix', false);
         });
     }
 
-    protected function defineDatabaseMigrations(): void
+    protected function defineDatabaseMigrations()
     {
-        $this->loadMigrationsFrom(realpath(__DIR__.'/Fixtures/Database/Migrations'));
-    }
+        $this->loadLaravelMigrations();
 
-    protected function defineRoutes($router)
-    {
-        // $router->group(['prefix' => 'api'], function () {
-        //     ProductApiService::routes();
-        // });
+        // Migrations for test fixtures
+        $this->loadMigrationsFrom(realpath(__DIR__ . '/../Fixtures/Database/Migrations'));
     }
 }

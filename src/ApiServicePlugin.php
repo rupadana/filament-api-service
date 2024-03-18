@@ -12,6 +12,11 @@ class ApiServicePlugin implements Plugin
 {
     use CanManipulateFiles;
 
+    /**
+     * @var array<string>
+     */
+    protected array $middleware = [];
+
     public function getId(): string
     {
         return 'api-service';
@@ -38,7 +43,7 @@ class ApiServicePlugin implements Plugin
 
                 $resourceName = str($resource)->beforeLast('Resource')->explode('\\')->last();
 
-                $apiServiceClass = $resource.'\\Api\\'.$resourceName.'ApiService';
+                $apiServiceClass = $resource . '\\Api\\' . $resourceName . 'ApiService';
 
                 $handlers = app($apiServiceClass)->handlers();
 
@@ -63,9 +68,9 @@ class ApiServicePlugin implements Plugin
             try {
                 $resourceName = str($resource)->beforeLast('Resource')->explode('\\')->last();
 
-                $apiServiceClass = $resource.'\\Api\\'.$resourceName.'ApiService';
+                $apiServiceClass = $resource . '\\Api\\' . $resourceName . 'ApiService';
 
-                app($apiServiceClass)->registerRoutes();
+                app($apiServiceClass)->registerRoutes($panel);
             } catch (Exception $e) {
             }
         }
@@ -82,5 +87,23 @@ class ApiServicePlugin implements Plugin
         $plugin = filament(app(static::class)->getId());
 
         return $plugin;
+    }
+
+    /**
+     * @param array<string> $middleware
+     */
+    public function middleware(array $middleware): static
+    {
+        $this->middleware = [
+            ...$this->middleware,
+            ...$middleware,
+        ];
+
+        return $this;
+    }
+
+    public function getMiddlewares(): array
+    {
+        return $this->middleware;
     }
 }
