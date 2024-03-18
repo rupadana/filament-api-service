@@ -63,11 +63,8 @@ class TestCase extends Orchestra
         });
     }
 
-    protected function defineDatabaseMigrations()
+    protected function defineDatabaseMigrations(): void
     {
-        $this->loadLaravelMigrations();
-
-        // Migrations for test fixtures
         $this->loadMigrationsFrom(realpath(__DIR__ . '/../Fixtures/Database/Migrations'));
     }
 }
