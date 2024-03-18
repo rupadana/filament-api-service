@@ -67,15 +67,12 @@ class TestCase extends Orchestra
     protected function defineDatabaseMigrations(): void
     {
         // Migrations for test fixtures
-        if (version_compare(Application::VERSION, '11', '<')) {
-            config()->set('database.default', 'testing');
-
+        if (version_compare(Application::VERSION, '11', '>=')) {
+            $this->loadMigrationsFrom(realpath(__DIR__.'/Fixtures/Database/Migrations'));
+        } else {
             (include __DIR__ . '/Fixtures/Database/Migrations/2014_10_12_000000_create_users_table.php')->up();
             (include __DIR__ . '/Fixtures/Database/Migrations/2019_12_14_000001_create_personal_access_tokens_table.php')->up();
             (include __DIR__ . '/Fixtures/Database/Migrations/01_create_products_table.php')->up();
-
-        } else {
-            $this->loadMigrationsFrom(realpath(__DIR__.'/Fixtures/Database/Migrations'));
         }
     }
 
