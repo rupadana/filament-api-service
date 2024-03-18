@@ -18,19 +18,14 @@ use Laravel\Sanctum\SanctumServiceProvider;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Rupadana\ApiService\ApiServiceServiceProvider;
-use Rupadana\ApiService\Tests\Fixtures\ProductApiService\ProductApiService;
 use Rupadana\ApiService\Tests\Fixtures\Providers\AdminPanelProvider;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 use Spatie\QueryBuilder\QueryBuilderServiceProvider;
+use Illuminate\Foundation\Application;
 
 class TestCase extends Orchestra
 {
     use RefreshDatabase;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
 
     protected function getPackageProviders($app)
     {
@@ -69,12 +64,19 @@ class TestCase extends Orchestra
         });
     }
 
-    protected function defineDatabaseMigrations()
+    protected function defineDatabaseMigrations(): void
     {
-        $this->loadLaravelMigrations();
-
         // Migrations for test fixtures
-        $this->loadMigrationsFrom(realpath(__DIR__.'/Fixtures/Database/Migrations'));
+        if (version_compare(Application::VERSION, '11', '<')) {
+            config()->set('database.default', 'testing');
+
+            (include __DIR__ . '/Fixtures/Database/Migrations/2014_10_12_000000_create_users_table.php')->up();
+            (include __DIR__ . '/Fixtures/Database/Migrations/2019_12_14_000001_create_personal_access_tokens_table.php')->up();
+            (include __DIR__ . '/Fixtures/Database/Migrations/01_create_products_table.php')->up();
+
+        } else {
+            $this->loadMigrationsFrom(realpath(__DIR__.'/Fixtures/Database/Migrations'));
+        }
     }
 
     protected function defineRoutes($router)
