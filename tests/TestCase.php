@@ -13,6 +13,7 @@ use Filament\Support\SupportServiceProvider;
 use Filament\Tables\TablesServiceProvider;
 use Filament\Widgets\WidgetsServiceProvider;
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\SanctumServiceProvider;
 use Livewire\LivewireServiceProvider;
@@ -21,7 +22,6 @@ use Rupadana\ApiService\ApiServiceServiceProvider;
 use Rupadana\ApiService\Tests\Fixtures\Providers\AdminPanelProvider;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 use Spatie\QueryBuilder\QueryBuilderServiceProvider;
-use Illuminate\Foundation\Application;
 
 class TestCase extends Orchestra
 {
@@ -70,9 +70,9 @@ class TestCase extends Orchestra
         if (version_compare(Application::VERSION, '11', '<')) {
             config()->set('database.default', 'testing');
 
-            (include __DIR__ . '/Fixtures/Database/Migrations/2014_10_12_000000_create_users_table.php')->up();
-            (include __DIR__ . '/Fixtures/Database/Migrations/2019_12_14_000001_create_personal_access_tokens_table.php')->up();
-            (include __DIR__ . '/Fixtures/Database/Migrations/01_create_products_table.php')->up();
+            (include __DIR__.'/Fixtures/Database/Migrations/2014_10_12_000000_create_users_table.php')->up();
+            (include __DIR__.'/Fixtures/Database/Migrations/2019_12_14_000001_create_personal_access_tokens_table.php')->up();
+            (include __DIR__.'/Fixtures/Database/Migrations/01_create_products_table.php')->up();
 
         } else {
             $this->loadMigrationsFrom(realpath(__DIR__.'/Fixtures/Database/Migrations'));
