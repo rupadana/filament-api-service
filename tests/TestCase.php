@@ -13,6 +13,7 @@ use Filament\Support\SupportServiceProvider;
 use Filament\Tables\TablesServiceProvider;
 use Filament\Widgets\WidgetsServiceProvider;
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\SanctumServiceProvider;
 use Livewire\LivewireServiceProvider;
@@ -21,7 +22,6 @@ use Rupadana\ApiService\ApiServiceServiceProvider;
 use Rupadana\ApiService\Tests\Fixtures\Providers\AdminPanelProvider;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 use Spatie\QueryBuilder\QueryBuilderServiceProvider;
-use Illuminate\Foundation\Application;
 
 class TestCase extends Orchestra
 {
