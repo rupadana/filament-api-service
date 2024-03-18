@@ -67,11 +67,4 @@ class TestCase extends Orchestra
     {
         $this->loadMigrationsFrom(realpath(__DIR__.'/Fixtures/Database/Migrations'));
     }
-
-    protected function defineRoutes($router)
-    {
-        // $router->group(['prefix' => 'api'], function () {
-        //     ProductApiService::routes();
-        // });
-    }
 }
