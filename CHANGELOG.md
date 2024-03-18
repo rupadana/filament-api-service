@@ -2,6 +2,19 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.2.0 - 2024-03-18
+
+### What's Changed
+
+* Bump tsickert/discord-webhook from 5.3.0 to 5.4.0 by @dependabot in https://github.com/rupadana/filament-api-service/pull/43
+* add Laravel 11 support by @atmonshi in https://github.com/rupadana/filament-api-service/pull/21
+
+### New Contributors
+
+* @atmonshi made their first contribution in https://github.com/rupadana/filament-api-service/pull/21
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.1.4...3.2.0
+
 ## 3.1.4 - 2024-03-17
 
 ### What's Changed
