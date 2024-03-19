@@ -13,12 +13,13 @@ class PaginationHandler extends Handlers {
 
     public function handler()
     {
-        $model = static::getModel();
+        $model = static::getEloquentQuery();
 
         $query = QueryBuilder::for($model)
         ->allowedFields($model::$allowedFields ?? [])
         ->allowedSorts($model::$allowedSorts ?? [])
         ->allowedFilters($model::$allowedFilters ?? [])
+        ->allowedIncludes($model::$allowedIncludes ?? null)
         ->paginate(request()->query('per_page'))
         ->appends(request()->query());
 

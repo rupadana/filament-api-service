@@ -1,10 +1,17 @@
 <?php
 
-// config for Rupadana/ApiService
 return [
     'navigation' => [
+        /**
+         * @deprecated 3.2
+         */
         'group' => [
             'token' => 'User',
+        ],
+        'token' => [
+            'group' => 'User',
+            'sort' => -1,
+            'icon' => 'heroicon-o-key',
         ],
     ],
     'models' => [
@@ -12,9 +19,12 @@ return [
             'enable_policy' => true,
         ],
     ],
+    'route' => [
+        'panel_prefix' => true,
+        'use_resource_middlewares' => false,
+    ],
     'tenancy' => [
-        'enabled'   => false,
-        'is_tenant_aware' => false,
-        'tenant_ownership_relationship_name' => 'team',
-    ]
+        'enabled' => false,
+        'awareness' => false,
+    ],
 ];
