@@ -2,6 +2,14 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.2.1 - 2024-03-21
+
+### What's Changed
+
+* fix: unusefull static::handlers() by @rupadana in https://github.com/rupadana/filament-api-service/pull/46
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.2.0...3.2.1
+
 ## 3.2.0 - 2024-03-18
 
 ### What's Changed
