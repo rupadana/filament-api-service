@@ -48,8 +48,6 @@ class ApiService
             ->middleware($resourceRouteMiddlewares)
             ->prefix(static::$groupRouteName ?? $slug)
             ->group(function (Router $route) {
-                static::handlers();
-
                 foreach (static::handlers() as $key => $handler) {
                     app($handler)->route($route);
                 }
