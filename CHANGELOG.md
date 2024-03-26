@@ -2,6 +2,15 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.2.2 - 2024-03-26
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 1.6.0 to 2.0.0 by @dependabot in https://github.com/rupadana/filament-api-service/pull/47
+* fix(bug): failed to get allowedFilters, etc. by @rupadana in https://github.com/rupadana/filament-api-service/pull/48
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.2.1...3.2.2
+
 ## 3.2.1 - 2024-03-21
 
 ### What's Changed
