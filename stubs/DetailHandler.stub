@@ -18,10 +18,10 @@ class DetailHandler extends Handlers
     {
         $id = $request->route('id');
         
-        $model = static::getEloquentQuery();
+        $query = static::getEloquentQuery();
 
         $query = QueryBuilder::for(
-            $model->where(static::getKeyName(), $id)
+            $query->where(static::getKeyName(), $id)
         )
             ->first();
 
