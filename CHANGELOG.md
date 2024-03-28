@@ -2,6 +2,18 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.2.3 - 2024-03-28
+
+### What's Changed
+
+* Fix failure to produce proper tenant query when using a polymorphic tenancy by @JonErickson in https://github.com/rupadana/filament-api-service/pull/49
+
+### New Contributors
+
+* @JonErickson made their first contribution in https://github.com/rupadana/filament-api-service/pull/49
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.2.2...3.2.3
+
 ## 3.2.2 - 2024-03-26
 
 ### What's Changed
