@@ -2,12 +2,6 @@
 
 return [
     'navigation' => [
-        /**
-         * @deprecated 3.2
-         */
-        'group' => [
-            'token' => 'User',
-        ],
         'token' => [
             'group' => 'User',
             'sort' => -1,
