@@ -261,6 +261,32 @@ class PaginationHandler extends Handlers {
 }
 ```
 
+## Swagger Api Docs Generation
+
+It is possible to generate Swagger API docs with this package. You have to make sure you have the following dependencies:
+
+```
+composer require darkaonline/l5-swagger
+```
+
+And make sure you install it correctly according to their [installation manual](https://github.com/DarkaOnLine/L5-Swagger/wiki/Installation-&-Configuration#installation).
+In development we recommend setting the config in `l5-swagger.php` `defaults.generate_always` to `true`.
+
+Then you can use the following command to generate API docs for your resources:
+
+```bash
+php artisan make:filament-api-docs {resource?} {namespace?}
+```
+
+The CLI command accepts two optional parameters: `{resource?}` and `{namespace?}`.
+By default the Swagger API Docs will be placed in `App\Virtual\Filament\Resources`.
+
+First it will check if you have an existing the Swagger Docs Server config. This is a file `ApiDocsController.php` and resides in `app/Virtual/Filament/Resources`.
+It holds some general information about your swagger API Docs server. All generated files can be manual edited afterwards.
+Regenerating an API Docs Serverinfo or Resource will always ask you if you want to override the existing file.
+
+When done, you can go to the defined swagger documentation URL as defined in `l5-swagger.php` config as `documentations.routes.api`.
+
 ## License
 
 The MIT License (MIT).
