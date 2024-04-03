@@ -279,7 +279,9 @@ php artisan make:filament-api-docs {resource?} {namespace?}
 ```
 
 The CLI command accepts two optional parameters: `{resource?}` and `{namespace?}`.
-By default the Swagger API Docs will be placed in `App\Virtual\Filament\Resources`.
+By default the Swagger API Docs will be placed in `app/Virtual/Filament/Resources` folder under their own resource name.
+
+For example the BlogResource Api Docs wil be in the following folder `app/Virtual/Filament/Resource/BlogResource`.
 
 First it will check if you have an existing the Swagger Docs Server config. This is a file `ApiDocsController.php` and resides in `app/Virtual/Filament/Resources`.
 It holds some general information about your swagger API Docs server. All generated files can be manual edited afterwards.
