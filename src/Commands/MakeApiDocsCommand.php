@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Rupadana\ApiService\Commands;
 
 use Exception;
 use Filament\Facades\Filament;
