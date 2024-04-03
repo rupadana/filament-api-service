@@ -153,6 +153,7 @@ class MakeApiDocsCommand extends Command
             $stubVars = [
                 'namespace' => $namespace,
                 'modelClass' => $pluralModelClass,
+                'resourceClass' => $resourceClass,
                 'transformerName'   => $transformerClass,
             ];
 
