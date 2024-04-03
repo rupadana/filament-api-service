@@ -83,8 +83,6 @@ class MakeApiDocsCommand extends Command
             ]);
         }
 
-        $panel = Filament::getDefaultPanel();
-
         $model = (string) str($this->argument('resource') ?? text(
             label: 'What is the Resource name?',
             placeholder: 'Blog',
