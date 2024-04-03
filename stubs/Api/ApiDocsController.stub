@@ -6,6 +6,7 @@ use OpenApi\Attributes as OAT;
 use Rupadana\ApiService\ApiService;
 
 $panel_enums = [];
+
 foreach (filament()->getPanels() as $panel) {
     if ($panel->hasPlugin('api-service')) {
         $panelId = $panel->getId();
@@ -17,6 +18,7 @@ foreach (filament()->getPanels() as $panel) {
     }
 }
 $panel_enums = array_unique($panel_enums);
+
 (defined("PANEL_ENUMS")) ?: define("PANEL_ENUMS", $panel_enums);
 (defined("BASE_URL")) ?: define("BASE_URL", config('app.url'));
 
@@ -33,7 +35,6 @@ $panel_enums = array_unique($panel_enums);
     url: BASE_URL . "/api/"
 )]
 
-
 #[OAT\SecurityScheme(
     name: "bearerAuth",
     securityScheme: "bearerAuth",
@@ -43,7 +44,4 @@ $panel_enums = array_unique($panel_enums);
     in: "header"
 )]
 
-class ApiDocsController
-{
-
-}
+class ApiDocsController {}

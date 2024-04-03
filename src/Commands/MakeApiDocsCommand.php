@@ -197,7 +197,6 @@ class MakeApiDocsCommand extends Command
         return static::SUCCESS;
     }
 
-
     private function createDirectory(string $path): void
     {
         $path = app_path($path);
