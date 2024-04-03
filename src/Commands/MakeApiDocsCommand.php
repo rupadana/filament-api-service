@@ -3,15 +3,10 @@
 namespace Rupadana\ApiService\Commands;
 
 use Exception;
-use Filament\Facades\Filament;
-use Filament\Panel;
 use Filament\Support\Commands\Concerns\CanManipulateFiles;
 use Illuminate\Console\Command;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
-use ReflectionMethod;
 
-use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
 class MakeApiDocsCommand extends Command
