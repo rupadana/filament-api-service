@@ -169,8 +169,10 @@ next step you need to edit & add it to your Resource
 
     class BlogResource extends Resource
     {
-        ...
-        public static function getApiTransformer()
+        /**
+        * @return string|null
+        */
+        public static function getApiTransformer(): ?string
         {
             return BlogTransformer::class;
         }
@@ -278,6 +280,12 @@ Then you can use the following command to generate API docs for your resources:
 php artisan make:filament-api-docs {resource?} {namespace?}
 ```
 
+so for example:
+
+```bash
+php artisan make:filament-api-docs BlogResource
+```
+
 The CLI command accepts two optional parameters: `{resource?}` and `{namespace?}`.
 By default the Swagger API Docs will be placed in `app/Virtual/Filament/Resources` folder under their own resource name.
 
@@ -288,6 +296,12 @@ It holds some general information about your swagger API Docs server. All genera
 Regenerating an API Docs Serverinfo or Resource will always ask you if you want to override the existing file.
 
 When done, you can go to the defined swagger documentation URL as defined in `l5-swagger.php` config as `documentations.routes.api`.
+
+If you want to manually generate the Api Docs manually because in you `l5-swagger.php` config you have set `defatuls.generate_always` to `false` you can do so by invoking:
+
+```bash
+php artisan l5-swagger:generate
+```
 
 ## License
 

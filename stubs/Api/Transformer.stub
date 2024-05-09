@@ -9,7 +9,7 @@ use OpenApi\Attributes as OAT;
     schema: "{{ transformerName }}",
     title: "{{ transformerName }}",
     description: "{{ modelClass }} API Transformer",
-    xml: new OAT\XML(name: "{{ transformerName }}"),
+    xml: new OAT\Xml(name: "{{ transformerName }}"),
 )]
 
 class {{ transformerName }} {
