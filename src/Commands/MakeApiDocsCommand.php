@@ -126,7 +126,7 @@ class MakeApiDocsCommand extends Command
         $resourceClass = "{$modelClass}Resource";
 
         $resourcePath = (string) str($modelNamespace)->replace('\\', '/')->replace('//', '/');
-        $baseResourceSourcePath =  (string) str($resourceClass)->prepend('/')->prepend(base_path($resourcePath))->replace('\\', '/')->replace('//', '/');
+        $baseResourceSourcePath =  (string) str($resourceClass)->prepend('/')->prepend(base_path($resourcePath))->replace('\\', '/')->replace('//', '/')->replace('App', 'app');
 
         $handlerSourceDirectory = "{$baseResourceSourcePath}/Api/Handlers/";
         $transformersSourceDirectory = "{$baseResourceSourcePath}/Api/Transformers/";
