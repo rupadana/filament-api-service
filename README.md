@@ -297,7 +297,7 @@ Regenerating an API Docs Serverinfo or Resource will always ask you if you want 
 
 When done, you can go to the defined swagger documentation URL as defined in `l5-swagger.php` config as `documentations.routes.api`.
 
-If you want to manually generate the Api Docs manually because in you `l5-swagger.php` config you have set `defatuls.generate_always` to `false` you can do so by invoking:
+If you want to generate the Api Docs manually because in your `l5-swagger.php` config you have set `defatuls.generate_always` to `false` you can do so by invoking:
 
 ```bash
 php artisan l5-swagger:generate
