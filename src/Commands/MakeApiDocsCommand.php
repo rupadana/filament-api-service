@@ -184,7 +184,7 @@ class MakeApiDocsCommand extends Command
                             'handlerClass' => $handler,
                             'handlerName' => $handlerName,
                             'capitalsResource' => strtoupper($modelClass),
-                            'path' => '/' . strtolower($pluralModelClass),
+                            'path' => '/' . str($pluralModelClass)->kebab(),
                         ]);
                     }
                 }
