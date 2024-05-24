@@ -320,7 +320,7 @@ class BlogTransformer {
         items: new OAT\Items(
             properties: [
                 new OAT\Property(property: "id", type: "integer", title: "ID", description: "id of the blog", example: ""),
-                
+
                 // Add your own properties corresponding to the BlogTransformer
             ]
         ),
@@ -333,7 +333,6 @@ class BlogTransformer {
 ```
 
 You can find more about all possible properties at https://zircote.github.io/swagger-php/reference/attributes.html#property
-
 
 ## License
 
