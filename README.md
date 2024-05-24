@@ -274,6 +274,10 @@ composer require darkaonline/l5-swagger
 And make sure you install it correctly according to their [installation manual](https://github.com/DarkaOnLine/L5-Swagger/wiki/Installation-&-Configuration#installation).
 In development we recommend setting the config in `l5-swagger.php` `defaults.generate_always` to `true`.
 
+When generating Api Swagger Docs for an Filament Resource it is required to define a Transformer. Otherwise the generator does not know how your resource entity types are being handled. What the response format and types look like.
+
+therefor you should always create an Transformer, which is explained above at the section "[Transform API Resonse](#transform-api-response)".
+
 Then you can use the following command to generate API docs for your resources:
 
 ```bash
