@@ -312,7 +312,7 @@ After you have generated the Swagger API Docs, you can add your required Transfo
 by default as an example it will generate this when you use a BlogTransformer:
 
 ```php
-    class BlogTransformer {
+class BlogTransformer {
 
     #[OAT\Property(
         property: "data",
