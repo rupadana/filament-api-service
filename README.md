@@ -276,7 +276,7 @@ In development we recommend setting the config in `l5-swagger.php` `defaults.gen
 
 When generating Api Swagger Docs for an Filament Resource it is required to define a Transformer. Otherwise the generator does not know how your resource entity types are being handled. What the response format and types look like.
 
-therefor you should always create an Transformer, which is explained above at the section "[Transform API Resonse](#transform-api-response)".
+Therefor you should always create an Transformer, which is explained above at the section "[Transform API Resonse](#transform-api-response)".
 
 Then you can use the following command to generate API docs for your resources:
 
@@ -306,6 +306,34 @@ If you want to generate the Api Docs manually because in your `l5-swagger.php` c
 ```bash
 php artisan l5-swagger:generate
 ```
+
+After you have generated the Swagger API Docs, you can add your required Transformer properties as needed.
+
+by default as an example it will generate this when you use a BlogTransformer:
+
+```
+    class BlogTransformer {
+
+    #[OAT\Property(
+        property: "data",
+        type: "array",
+        items: new OAT\Items(
+            properties: [
+                new OAT\Property(property: "id", type: "integer", title: "ID", description: "id of the blog", example: ""),
+                
+                // Add your own properties corresponding to the BlogTransformer
+            ]
+        ),
+    )]
+    public $data;
+
+    ...
+}
+
+```
+
+You can find more about all possible properties at https://zircote.github.io/swagger-php/reference/attributes.html#property
+
 
 ## License
 
