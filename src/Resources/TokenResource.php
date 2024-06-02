@@ -131,6 +131,11 @@ class TokenResource extends Resource
         ];
     }
 
+    public static function getCluster(): ?string
+    {
+        return config('api-service.navigation.token.cluster') ?? config('api-service.navigation.cluster.token');
+    }
+
     public static function getNavigationGroup(): ?string
     {
         return config('api-service.navigation.token.group') ?? config('api-service.navigation.group.token');
