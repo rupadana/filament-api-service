@@ -276,7 +276,7 @@ In development we recommend setting the config in `l5-swagger.php` `defaults.gen
 
 When generating Api Swagger Docs for an Filament Resource it is required to define a Transformer. Otherwise the generator does not know how your resource entity types are being handled. What the response format and types look like.
 
-Therefor you should always create a Transformer, which is explained above at the section [Transform API Resonse](#transform-api-response).
+Therefor you should always create a Transformer, which is explained above at the section [Transform API Response](#transform-api-response).
 
 Then you can use the following command to generate API docs for your resources:
 
