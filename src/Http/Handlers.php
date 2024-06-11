@@ -10,12 +10,14 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Str;
 use Rupadana\ApiService\ApiService;
 use Rupadana\ApiService\Exceptions\TransformerNotFoundException;
+use Rupadana\ApiService\Traits\HasHandlerTenantScope;
 use Rupadana\ApiService\Traits\HttpResponse;
 use Rupadana\ApiService\Transformers\DefaultTransformer;
 
 class Handlers
 {
     use HttpResponse;
+    use HasHandlerTenantScope;
     protected Panel $panel;
     public static ?string $uri = '/';
     public static string $method = 'get';
