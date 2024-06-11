@@ -5,6 +5,7 @@ declare(strict_types=1);
 return [
     'navigation' => [
         'token' => [
+            'cluster' => null,
             'group' => 'User',
             'sort' => -1,
             'icon' => 'heroicon-o-key',

@@ -34,6 +34,7 @@ php artisan vendor:publish --tag=api-service-config
 return [
     'navigation' => [
         'token' => [
+            'cluster' => null,
             'group' => 'User',
             'sort' => -1,
             'icon' => 'heroicon-o-key'
