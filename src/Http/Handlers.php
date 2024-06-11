@@ -7,7 +7,9 @@ use Filament\Panel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Str;
 use Rupadana\ApiService\ApiService;
+use Rupadana\ApiService\Exceptions\TransformerNotFoundException;
 use Rupadana\ApiService\Traits\HttpResponse;
 use Rupadana\ApiService\Transformers\DefaultTransformer;
 
@@ -101,6 +103,41 @@ class Handlers
 
         return static::$resource::getApiTransformer();
     }
+
+    /**
+     * @return array<string, string>
+     */
+    protected static function getApiTransformers(): array
+    {
+        return array_merge([
+            'default' => DefaultTransformer::class,
+        ], method_exists(static::$resource, 'apiTransformers') ? array_combine(
+            array_map(fn ($class) => Str::kebab(class_basename($class)), $transformers = static::$resource::apiTransformers()),
+            $transformers
+        ) : []); // @phpstan-ignore-line
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected static function getTransformerFromRequestHeader(): string
+    {
+        $headerName = config('api-service.route.api_transformer_header');
+        $headerName = strtolower($headerName);
+        if (!request()->headers->has($headerName)) {
+            return self::getApiTransformers()['default'];
+        }
+
+        $transformer = request()->headers->get($headerName);
+        $transformer = Str::kebab($transformer);
+
+        if ($transformer && !array_key_exists($transformer, self::getApiTransformers())) {
+            throw new TransformerNotFoundException($transformer);
+        }
+
+        return self::getApiTransformers()[$transformer];
+    }
+
 
     public static function getKeyName(): ?string
     {
