@@ -180,6 +180,60 @@ next step you need to edit & add it to your Resource
     }
 ```
 
+### Multiple Transformers via HTTP Header
+
+Sometimes you need a different response structure of your API resource. Then you can create multiple Transformers as described above. In your API request you need to set an extra http header with the value of your Transformer class name.
+You can specify the name/key of the HTTP Header in the config `route.api_transformer_header`.
+
+By default the HTTP Header is called `X-API-TRANSFORMER`. You could also override it in your .env config file with the parameter: `API_TRANSFORMER_HEADER`. After you set and know the http header you need to create some extra Transformers where the structure is different as needed. You have to register all the extra transformers in your Resource like so:
+
+```php
+use App\Filament\Resources\BlogResource\Api\Transformers\BlogTransformer;
+use App\Filament\Resources\BlogResource\Api\Transformers\ModifiedBlogTransformer;
+use App\Filament\Resources\BlogResource\Api\Transformers\ExtraBlogColumnsTransformer;
+
+class BlogResource extends Resource
+    {
+        /**
+        * @return array<string>
+        */
+        public static function apiTransformers(): array
+        {
+            return 
+            [
+                BlogTransformer::class,
+                ModifiedBlogTransformer::class,
+                ExtraBlogColumnsTransformer::class,
+                ... etc.
+            ]
+        }
+        ...
+    }
+
+```
+
+Now you can use the extra HTTP HEADER `X-API-TRANSFORMER` in your request with the name of the transformer class.
+
+Here an example in guzzle:
+
+```php
+$client->request('GET', '/api/blogs', [
+    'headers' => [
+        'X-API-TRANSFORMER' => 'ModifiedBlogTransformer'
+    ]
+]);
+
+or
+
+$client->request('GET', '/api/blogs', [
+    'headers' => [
+        'X-API-TRANSFORMER' => 'ExtraBlogColumnsTransformer'
+    ]
+]);
+```
+
+This way the correct transformer will be used to give you the correct response json.
+
 ### Group Name & Prefix
 
 You can edit prefix & group route name as you want, default this plugin use model singular label;

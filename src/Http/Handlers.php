@@ -97,11 +97,7 @@ class Handlers
 
     public static function getApiTransformer(): ?string
     {
-        if (! method_exists(static::$resource, 'getApiTransformer')) {
-            return DefaultTransformer::class;
-        }
-
-        return static::$resource::getApiTransformer();
+        return static::getTransformerFromRequestHeader();
     }
 
     /**
@@ -125,7 +121,10 @@ class Handlers
         $headerName = config('api-service.route.api_transformer_header');
         $headerName = strtolower($headerName);
         if (!request()->headers->has($headerName)) {
-            return self::getApiTransformers()['default'];
+            if (!method_exists(static::$resource, 'getApiTransformer')) {
+                return self::getApiTransformers()['default'];
+            }
+            return static::$resource::getApiTransformer();
         }
 
         $transformer = request()->headers->get($headerName);
