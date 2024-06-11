@@ -2,6 +2,20 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.2.4 - 2024-06-04
+
+### What's Changed
+
+* Bump tsickert/discord-webhook from 5.4.0 to 5.5.0 by @dependabot in https://github.com/rupadana/filament-api-service/pull/50
+* Bump dependabot/fetch-metadata from 2.0.0 to 2.1.0 by @dependabot in https://github.com/rupadana/filament-api-service/pull/53
+* Add ability to use FilamentPHP Clusters feature by @carlosbarretoeng in https://github.com/rupadana/filament-api-service/pull/54
+
+### New Contributors
+
+* @carlosbarretoeng made their first contribution in https://github.com/rupadana/filament-api-service/pull/54
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.2.3...3.2.4
+
 ## 3.2.3 - 2024-03-28
 
 ### What's Changed
