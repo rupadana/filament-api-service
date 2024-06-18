@@ -169,8 +169,10 @@ next step you need to edit & add it to your Resource
 
     class BlogResource extends Resource
     {
-        ...
-        public static function getApiTransformer()
+        /**
+        * @return string|null
+        */
+        public static function getApiTransformer(): ?string
         {
             return BlogTransformer::class;
         }
@@ -260,6 +262,77 @@ class PaginationHandler extends Handlers {
     public static bool $public = true;
 }
 ```
+
+## Swagger Api Docs Generation
+
+It is possible to generate Swagger API docs with this package. You have to make sure you have the following dependencies:
+
+```
+composer require darkaonline/l5-swagger
+```
+
+And make sure you install it correctly according to their [installation manual](https://github.com/DarkaOnLine/L5-Swagger/wiki/Installation-&-Configuration#installation).
+In development we recommend setting the config in `l5-swagger.php` `defaults.generate_always` to `true`.
+
+When generating Api Swagger Docs for an Filament Resource it is required to define a Transformer. Otherwise the generator does not know how your resource entity types are being handled. What the response format and types look like.
+
+Therefor you should always create a Transformer, which is explained above at the section [Transform API Response](#transform-api-response).
+
+Then you can use the following command to generate API docs for your resources:
+
+```bash
+php artisan make:filament-api-docs {resource?} {namespace?}
+```
+
+so for example:
+
+```bash
+php artisan make:filament-api-docs BlogResource
+```
+
+The CLI command accepts two optional parameters: `{resource?}` and `{namespace?}`.
+By default the Swagger API Docs will be placed in `app/Virtual/Filament/Resources` folder under their own resource name.
+
+For example the BlogResource Api Docs wil be in the following folder `app/Virtual/Filament/Resource/BlogResource`.
+
+First it will check if you have an existing the Swagger Docs Server config. This is a file `ApiDocsController.php` and resides in `app/Virtual/Filament/Resources`.
+It holds some general information about your swagger API Docs server. All generated files can be manual edited afterwards.
+Regenerating an API Docs Serverinfo or Resource will always ask you if you want to override the existing file.
+
+When done, you can go to the defined swagger documentation URL as defined in `l5-swagger.php` config as `documentations.routes.api`.
+
+If you want to generate the Api Docs manually because in your `l5-swagger.php` config you have set `defatuls.generate_always` to `false` you can do so by invoking:
+
+```bash
+php artisan l5-swagger:generate
+```
+
+After you have generated the Swagger API Docs, you can add your required Transformer properties as needed.
+
+by default as an example it will generate this when you use a BlogTransformer:
+
+```php
+class BlogTransformer {
+
+    #[OAT\Property(
+        property: "data",
+        type: "array",
+        items: new OAT\Items(
+            properties: [
+                new OAT\Property(property: "id", type: "integer", title: "ID", description: "id of the blog", example: ""),
+
+                // Add your own properties corresponding to the BlogTransformer
+            ]
+        ),
+    )]
+    public $data;
+
+    ...
+}
+
+```
+
+You can find more about all possible properties at https://zircote.github.io/swagger-php/reference/attributes.html#property
 
 ## License
 

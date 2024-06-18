@@ -1,0 +1,101 @@
+<?php
+
+namespace {{ handlersVirtualNamespace }};
+
+use {{ resource }};
+use {{ realResource }} as {{ handlerName }}Real;
+
+use OpenApi\Attributes as OAT;
+use Rupadana\ApiService\ApiService;
+
+$panel = filament()->getCurrentPanel();
+
+$panelId = $panel->getId();
+$panelPath = $panel->getPath();
+$hasTenancy = $panel->hasTenancy();
+$tenantSlugAttribute = $panel->getTenantSlugAttribute();
+$panelPrefix = app(ApiService::class)->isRoutePrefixedByPanel() ? $panelPath ?? $panelId : '';
+
+if (
+    ApiService::isTenancyEnabled() &&
+    ApiService::tenancyAwareness() &&
+    app({{ resourceClass }}::class)->isScopedToTenant()
+) {
+    defined("TENANT_AWARENESS_{{ capitalsResource }}") ?: define("TENANT_AWARENESS_{{ capitalsResource }}", true);
+} else {
+    defined("TENANT_AWARENESS_{{ capitalsResource }}") ?: define("TENANT_AWARENESS_{{ capitalsResource }}", false);
+}
+
+if ({{ handlerName }}Real::isPublic()) {
+    defined("RESOURCE_PUBLIC_{{ capitalsResource }}_UPDATE") ?: define("RESOURCE_PUBLIC_{{ capitalsResource }}_UPDATE", true);
+} else {
+    defined("RESOURCE_PUBLIC_{{ capitalsResource }}_UPDATE") ?: define("RESOURCE_PUBLIC_{{ capitalsResource }}_UPDATE", false);
+}
+
+defined("PANEL_PREFIX_{{ capitalsResource }}_UPDATE") ?: define("PANEL_PREFIX_{{ capitalsResource }}_UPDATE", $panelPrefix);
+defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
+
+#[OAT\Put(
+    path: "{{ path }}/{id}",
+    operationId: "update{{ modelClass }}",
+    tags: ["{{ pluralClass }}"],
+    summary: "Update existing {{ modelClass }}",
+    description: "Returns updated {{ modelClass }} data",
+    servers: [
+        (TENANT_AWARENESS_{{ capitalsResource }}) ?
+            new OAT\Server(
+                description: "API Server Filament Panel",
+                url: BASE_URL . "/api/{panel}" . PANEL_PREFIX_{{ capitalsResource }}_PAGINATION . "/{tenant}",
+                variables: [
+                    new OAT\ServerVariable(
+                        serverVariable: "panel",
+                        description: "Select the Filament Panel",
+                        enum: PANEL_ENUMS,
+                        default: PANEL_ENUMS[0]
+                    ),
+                    new OAT\ServerVariable(
+                        serverVariable: "tenant",
+                        description: 'ID of the tenant',
+                        default: ""
+                    ),
+
+                ]
+            ) :
+            new OAT\Server(
+                description: "API Server Filament Panel",
+                url: BASE_URL . "/api/" . PANEL_PREFIX_{{ capitalsResource }}_PAGINATION . "/",
+            )
+    ],
+    security: (!RESOURCE_PUBLIC_{{ capitalsResource }}_UPDATE) ?  [["bearerAuth" => []]] : null,
+    parameters: [
+        // (TENANT_AWARENESS_{{ capitalsResource }}) ? new OAT\Parameter(ref: "#/components/parameters/tenant") : null,
+        new OAT\Parameter(
+            name: "id",
+            description: "{{ modelClass }} id",
+            required: true,
+            in: "path",
+            schema: new OAT\Schema(type: "integer"),
+            example: "", // OAT\Examples(example="int", value="0", summary="An int value."),
+        ),
+    ],
+    requestBody: new OAT\RequestBody(
+        required: true,
+        content: new OAT\MediaType(
+            mediaType: "application/json",
+            schema: new OAT\Schema(ref: "#/components/schemas/{{ modelClass }}Transformer/properties/data/items")
+        )
+
+    ),
+    responses: [
+        new OAT\Response(response: 200, description: 'Operation succesful', content: new OAT\JsonContent(type: "object", properties: [
+            new OAT\Property(property: "message", type: "string", example: "Successfully Updated Resource"),
+            new OAT\Property(property: "data", type: "object", ref: "#/components/schemas/{{ modelClass }}Transformer/properties/data")
+        ])),
+        new OAT\Response(response: 400, description: 'Bad Request'),
+        new OAT\Response(response: 401, description: 'Unauthenticated'),
+        new OAT\Response(response: 403, description: 'Forbidden'),
+        new OAT\Response(response: 404, description: 'Resource not Found'),
+    ]
+)]
+
+class {{ handlerName }} extends {{ handlerName }}Real {}
