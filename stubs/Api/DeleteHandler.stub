@@ -62,7 +62,6 @@ defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
                         description: 'ID of the tenant',
                         default: ""
                     ),
-
                 ]
             ) :
             new OAT\Server(
@@ -86,7 +85,10 @@ defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
         new OAT\Response(response: 200, description: 'Operation succesful', content: new OAT\JsonContent(type: "object", properties: [
             new OAT\Property(property: "message", type: "string", example: "Successfully Delete Resource"),
             (RESOURCE_{{ capitalsResource }}_DELETE_CUSTOM_TRANSFORMERS > 0) ?
-                new OAT\Property(property: "data", type: "object", ref: "#/components/schemas/{{ modelClass }}Transformer/properties/data/items") :
+                new OAT\Property(property: "data", type: "object", oneOf: [
+                    new OAT\Schema(ref: "#/components/schemas/{{ modelClass }}Transformer/properties/data/items"),
+                    new OAT\Schema(ref: "#/components/schemas/DefaultTransformer/properties/data/items")
+                ]) :
                 new OAT\Property(property: "data", type: "object", ref: "#/components/schemas/DefaultTransformer/properties/data/items")
         ])),
         new OAT\Response(response: 400, description: 'Bad Request'),

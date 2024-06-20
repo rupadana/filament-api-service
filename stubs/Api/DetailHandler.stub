@@ -137,7 +137,10 @@ defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
     responses: [
         new OAT\Response(response: 200, description: 'Operation succesful', content:
             (RESOURCE_{{ capitalsResource }}_DETAIL_CUSTOM_TRANSFORMERS > 0) ?
-                new OAT\JsonContent(type: "object", ref: "#/components/schemas/{{ modelClass }}Transformer/properties/data/items") :
+                new OAT\JsonContent(oneOf: [
+                    new OAT\Schema(ref: "#/components/schemas/{{ modelClass }}Transformer/properties/data/items"),
+                    new OAT\Schema(ref: "#/components/schemas/DefaultTransformer/properties/data/items"),
+                ]) :
                 new OAT\JsonContent(type: "object", ref: "#/components/schemas/DefaultTransformer/properties/data/items")
         ),
         new OAT\Response(response: 400, description: 'Bad Request'),
