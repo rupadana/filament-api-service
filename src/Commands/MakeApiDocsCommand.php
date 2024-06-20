@@ -22,7 +22,7 @@ class MakeApiDocsCommand extends Command
         $serverNameSpace = 'App\\Virtual';
         $serverFile = 'ApiDocsController.php';
 
-        $virtualResourcePath = $baseServerPath . 'Filament/Resources';
+        $virtualResourcePath = $baseServerPath . '/Filament/Resources';
         $virtualResourceNameSpace = $serverNameSpace . '\\Filament\\Resources';
 
         $isNotInstalled = $this->checkForCollision([$baseServerPath . '/' . $serverFile]);
@@ -165,14 +165,6 @@ class MakeApiDocsCommand extends Command
             }
         }
 
-        $resourceTransformers = [];
-        if (method_exists($resource, 'apiTransformers')) {
-            $transformers = ($modelNamespace . "\\" . $resourceClass)::apiTransformers();
-            foreach($transformers as $transformer) {
-                $resourceTransformers[] = str($transformer)->afterLast('\\')->kebab();
-            }
-        }
-
         try {
             $handlerMethods = File::allFiles($handlerSourceDirectory);
 
@@ -195,7 +187,6 @@ class MakeApiDocsCommand extends Command
                             'handlerClass' => $handler,
                             'handlerName' => $handlerName,
                             'capitalsResource' => strtoupper($modelClass),
-                            'resourceTransformers' => $resourceTransformers,
                             'path' => '/' . str($pluralModelClass)->kebab(),
                         ]);
                     }

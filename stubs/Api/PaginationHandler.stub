@@ -33,6 +33,17 @@ if ({{ handlerName }}Real::isPublic()) {
     defined("RESOURCE_PUBLIC_{{ capitalsResource }}_PAGINATION") ?: define("RESOURCE_PUBLIC_{{ capitalsResource }}_PAGINATION", false);
 }
 
+$resourceTransformers = [];
+$transformers = {{ handlerName }}Real::getApiTransformers();
+if (!empty($transformers)) {
+    foreach ($transformers as $tr_key => $transformer) {
+        $resourceTransformers[] = $tr_key;
+    }
+}
+
+defined("RESOURCE_{{ capitalsResource }}_PAGINATION_TRANSFORMERS") ?: define("RESOURCE_{{ capitalsResource }}_PAGINATION_TRANSFORMERS", $resourceTransformers);
+defined("RESOURCE_{{ capitalsResource }}_PAGINATION_TRANSFORMER_HEADER_KEY") ?: define("RESOURCE_{{ capitalsResource }}_PAGINATION_TRANSFORMER_HEADER_KEY", config('api-service.route.api_transformer_header'));
+
 defined("PANEL_PREFIX_{{ capitalsResource }}_PAGINATION") ?: define("PANEL_PREFIX_{{ capitalsResource }}_PAGINATION", $panelPrefix);
 defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
 
@@ -72,11 +83,11 @@ defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
     parameters: [
 
         new OAT\HeaderParameter(
-            name: "{{ config('api-service.route.api_transformer_header') }}",
+            name: RESOURCE_{{ capitalsResource }}_PAGINATION_TRANSFORMER_HEADER_KEY,
             description: "Select a custom Transformer if needed",
             in: "header",
             allowEmptyValue: true,
-            schema: new OAT\Schema(enum: {{ resourceTransformers }}),
+            schema: new OAT\Schema(enum: RESOURCE_{{ capitalsResource }}_PAGINATION_TRANSFORMERS),
         ),
 
         // (TENANT_AWARENESS_{{ capitalsResource }}) ? new OAT\Parameter(ref: "#/components/parameters/tenant") : null,

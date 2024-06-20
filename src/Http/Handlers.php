@@ -105,7 +105,7 @@ class Handlers
     /**
      * @return array<string, string>
      */
-    protected static function getApiTransformers(): array
+    public static function getApiTransformers(): array
     {
         return array_merge([
             'default' => DefaultTransformer::class,
