@@ -32,6 +32,10 @@ if ({{ handlerName }}Real::isPublic()) {
     defined("RESOURCE_PUBLIC_{{ capitalsResource }}_UPDATE") ?: define("RESOURCE_PUBLIC_{{ capitalsResource }}_UPDATE", false);
 }
 
+$transformers = {{ handlerName }}Real::getApiTransformers();
+$custom_transformers = count(array_except($transformers, ['default']));
+defined("RESOURCE_{{ capitalsResource }}_UPDATE_CUSTOM_TRANSFORMERS") ?: define("RESOURCE_{{ capitalsResource }}_UPDATE_CUSTOM_TRANSFORMERS", $custom_transformers ?? 0);
+
 defined("PANEL_PREFIX_{{ capitalsResource }}_UPDATE") ?: define("PANEL_PREFIX_{{ capitalsResource }}_UPDATE", $panelPrefix);
 defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
 
@@ -82,15 +86,26 @@ defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
         required: true,
         content: new OAT\MediaType(
             mediaType: "application/json",
-            schema: new OAT\Schema(ref: "#/components/schemas/{{ modelClass }}Transformer/properties/data/items")
+            schema: (RESOURCE_{{ capitalsResource }}_UPDATE_CUSTOM_TRANSFORMERS > 0) ?
+                new OAT\Schema(
+                    oneOf: [
+                        new OAT\Schema(ref: "#/components/schemas/{{ modelClass }}Transformer/properties/data/items"),
+                        new OAT\Schema(ref: "#/components/schemas/DefaultTransformer/properties/data/items"),
+                    ]) :
+                new OAT\Schema(ref: "#/components/schemas/DefaultTransformer/properties/data/items")
         )
-
     ),
     responses: [
-        new OAT\Response(response: 200, description: 'Operation succesful', content: new OAT\JsonContent(type: "object", properties: [
-            new OAT\Property(property: "message", type: "string", example: "Successfully Updated Resource"),
-            new OAT\Property(property: "data", type: "object", ref: "#/components/schemas/{{ modelClass }}Transformer/properties/data")
-        ])),
+        new OAT\Response(response: 200, description: 'Operation succesful', content:
+            new OAT\JsonContent(type: "object", properties: [
+                new OAT\Property(property: "message", type: "string", example: "Successfully Updated Resource"),
+                (RESOURCE_{{ capitalsResource }}_UPDATE_CUSTOM_TRANSFORMERS > 0) ?
+                    new OAT\Property(property: "data", type: "object", oneOf: [
+                        new OAT\Schema(ref: "#/components/schemas/{{ modelClass }}Transformer/properties/data"),
+                        new OAT\Schema(ref: "#/components/schemas/DefaultTransformer/properties/data")
+                    ]) :
+                    new OAT\Property(property: "data", type: "object", ref: "#/components/schemas/DefaultTransformer/properties/data")
+            ])),
         new OAT\Response(response: 400, description: 'Bad Request'),
         new OAT\Response(response: 401, description: 'Unauthenticated'),
         new OAT\Response(response: 403, description: 'Forbidden'),

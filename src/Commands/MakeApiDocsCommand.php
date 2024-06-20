@@ -18,13 +18,16 @@ class MakeApiDocsCommand extends Command
     public function handle(): int
     {
 
-        // ApiDocsController exists?
-        $serverPath = app_path('Virtual/Filament/Resources');
-        $serverNameSpace = 'App\\Virtual\\Filament\\Resources';
+        $baseServerPath = app_path('Virtual');
+        $serverNameSpace = 'App\\Virtual';
         $serverFile = 'ApiDocsController.php';
 
-        $isNotInstalled = $this->checkForCollision([$serverPath . '/' . $serverFile]);
+        $virtualResourcePath = $baseServerPath . '/Filament/Resources';
+        $virtualResourceNameSpace = $serverNameSpace . '\\Filament\\Resources';
 
+        $isNotInstalled = $this->checkForCollision([$baseServerPath . '/' . $serverFile]);
+
+        // ApiDocsController exists?
         if (!$isNotInstalled) {
 
             $this->components->info("Please provide basic API Docs information.");
@@ -66,7 +69,7 @@ class MakeApiDocsCommand extends Command
 
             $this->createDirectory('Virtual/Filament/Resources');
 
-            $this->copyStubToApp('Api/ApiDocsController', $serverPath . '/' . $serverFile, [
+            $this->copyStubToApp('Api/ApiDocsController', $baseServerPath . '/' . $serverFile, [
                 'namespace' => $serverNameSpace,
                 'title' => $serverTitle,
                 'version' => $serverVersion,
@@ -76,6 +79,21 @@ class MakeApiDocsCommand extends Command
                 'licenseName' => 'MIT License',
                 'licenseUrl' => 'https://opensource.org/license/mit',
             ]);
+
+            // Generate DefaultTransformer
+            $transformerClass = 'DefaultTransformer';
+
+            $stubVarsDefaultTransformer = [
+                'namespace' => $serverNameSpace,
+                'modelClass' => 'Default',
+                'resourceClass' => null,
+                'transformerName'   => $transformerClass,
+            ];
+
+            if (!$this->checkForCollision(["{$baseServerPath}/{$transformerClass}.php"])) {
+                $this->copyStubToApp("Api/Transformer", $baseServerPath . '/' . $transformerClass . '.php', $stubVarsDefaultTransformer);
+            }
+
         }
 
         $model = (string) str($this->argument('resource') ?? text(
@@ -133,13 +151,13 @@ class MakeApiDocsCommand extends Command
 
         $namespace = text(
             label: 'In which namespace would you like to create this API Docs Resource in?',
-            default: $serverNameSpace
+            default: $virtualResourceNameSpace
         );
 
         $handlersVirtualNamespace = "{$namespace}\\{$resourceClass}\\Handlers";
         $transformersVirtualNamespace = "{$namespace}\\{$resourceClass}\\Transformers";
 
-        $baseResourceVirtualPath = (string) str($resourceClass)->prepend('/')->prepend($serverPath)->replace('\\', '/')->replace('//', '/');
+        $baseResourceVirtualPath = (string) str($resourceClass)->prepend('/')->prepend($virtualResourcePath)->replace('\\', '/')->replace('//', '/');
 
         $handlerVirtualDirectory = "{$baseResourceVirtualPath}/Handlers/";
         $transformersVirtualDirectory = "{$baseResourceVirtualPath}/Transformers/";
@@ -153,7 +171,7 @@ class MakeApiDocsCommand extends Command
             $stubVars = [
                 'namespace' => $namespace,
                 'modelClass' => $pluralModelClass,
-                'resourceClass' => $resourceClass,
+                'resourceClass' => '\\' . $resourceClass . '\\Transformers',
                 'transformerName'   => $transformerClass,
             ];
 
