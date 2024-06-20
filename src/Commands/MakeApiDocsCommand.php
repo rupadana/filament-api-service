@@ -18,12 +18,12 @@ class MakeApiDocsCommand extends Command
     public function handle(): int
     {
 
-        $baseServerPath = app_path('Virtual/');
+        $baseServerPath = app_path('Virtual');
         $serverNameSpace = 'App\\Virtual';
         $serverFile = 'ApiDocsController.php';
 
-        $resourcePath = $baseServerPath . 'Filament/Resources';
-        $resourceNameSpace = $serverNameSpace . '\\Filament\\Resources';
+        $virtualResourcePath = $baseServerPath . 'Filament/Resources';
+        $virtualResourceNameSpace = $serverNameSpace . '\\Filament\\Resources';
 
         $isNotInstalled = $this->checkForCollision([$baseServerPath . '/' . $serverFile]);
 
@@ -136,13 +136,13 @@ class MakeApiDocsCommand extends Command
 
         $namespace = text(
             label: 'In which namespace would you like to create this API Docs Resource in?',
-            default: $resourceNameSpace
+            default: $virtualResourceNameSpace
         );
 
         $handlersVirtualNamespace = "{$namespace}\\{$resourceClass}\\Handlers";
         $transformersVirtualNamespace = "{$namespace}\\{$resourceClass}\\Transformers";
 
-        $baseResourceVirtualPath = (string) str($resourceClass)->prepend('/')->prepend($resourcePath)->replace('\\', '/')->replace('//', '/');
+        $baseResourceVirtualPath = (string) str($resourceClass)->prepend('/')->prepend($virtualResourcePath)->replace('\\', '/')->replace('//', '/');
 
         $handlerVirtualDirectory = "{$baseResourceVirtualPath}/Handlers/";
         $transformersVirtualDirectory = "{$baseResourceVirtualPath}/Transformers/";
