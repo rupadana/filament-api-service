@@ -1,6 +1,6 @@
 <?php
 
-namespace {{ namespace }}\{{ resourceClass }}\Transformers;
+namespace {{ namespace }}{{ resourceClass }};
 
 
 use OpenApi\Attributes as OAT;

@@ -69,7 +69,7 @@ class MakeApiDocsCommand extends Command
 
             $this->createDirectory('Virtual/Filament/Resources');
 
-            $this->copyStubToApp('ApiDocsController', $baseServerPath . '/' . $serverFile, [
+            $this->copyStubToApp('Api/ApiDocsController', $baseServerPath . '/' . $serverFile, [
                 'namespace' => $serverNameSpace,
                 'title' => $serverTitle,
                 'version' => $serverVersion,
@@ -79,6 +79,21 @@ class MakeApiDocsCommand extends Command
                 'licenseName' => 'MIT License',
                 'licenseUrl' => 'https://opensource.org/license/mit',
             ]);
+
+            // Generate DefaultTransformer
+            $transformerClass = 'DefaultTransformer';
+
+            $stubVarsDefaultTransformer = [
+                'namespace' => $serverNameSpace,
+                'modelClass' => 'Default',
+                'resourceClass' => null,
+                'transformerName'   => $transformerClass,
+            ];
+
+            if (!$this->checkForCollision(["{$baseServerPath}/{$transformerClass}.php"])) {
+                $this->copyStubToApp("Api/Transformer", $baseServerPath . '/' . $transformerClass . '.php', $stubVarsDefaultTransformer);
+            }
+
         }
 
         $model = (string) str($this->argument('resource') ?? text(
@@ -156,7 +171,7 @@ class MakeApiDocsCommand extends Command
             $stubVars = [
                 'namespace' => $namespace,
                 'modelClass' => $pluralModelClass,
-                'resourceClass' => $resourceClass,
+                'resourceClass' => '\\' . $resourceClass . '\\Transformers',
                 'transformerName'   => $transformerClass,
             ];
 
