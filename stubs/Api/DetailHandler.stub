@@ -41,7 +41,7 @@ if (!empty($transformers)) {
     $custom_transformers = count(array_except($transformers, ['default']));
 }
 
-defined("RESOURCE_{{ capitalsResource }}_DETAIL_CUSTOM_TRANSFORMERS") ?: define("RESOURCE_{{ capitalsResource }}_DETAIL_CUSTOM_TRANSFORMERS", $has_custom_transformers ?? 0);
+defined("RESOURCE_{{ capitalsResource }}_DETAIL_CUSTOM_TRANSFORMERS") ?: define("RESOURCE_{{ capitalsResource }}_DETAIL_CUSTOM_TRANSFORMERS", $custom_transformers ?? 0);
 
 defined("RESOURCE_{{ capitalsResource }}_DETAIL_TRANSFORMERS") ?: define("RESOURCE_{{ capitalsResource }}_DETAIL_TRANSFORMERS", $resourceTransformers);
 defined("RESOURCE_{{ capitalsResource }}_DETAIL_TRANSFORMER_HEADER_KEY") ?: define("RESOURCE_{{ capitalsResource }}_DETAIL_TRANSFORMER_HEADER_KEY", config('api-service.route.api_transformer_header'));

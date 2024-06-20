@@ -34,7 +34,7 @@ if ({{ handlerName }}Real::isPublic()) {
 
 $transformers = {{ handlerName }}Real::getApiTransformers();
 $custom_transformers = count(array_except($transformers, ['default']));
-defined("RESOURCE_{{ capitalsResource }}_CREATE_CUSTOM_TRANSFORMERS") ?: define("RESOURCE_{{ capitalsResource }}_CREATE_CUSTOM_TRANSFORMERS", $has_custom_transformers ?? 0);
+defined("RESOURCE_{{ capitalsResource }}_CREATE_CUSTOM_TRANSFORMERS") ?: define("RESOURCE_{{ capitalsResource }}_CREATE_CUSTOM_TRANSFORMERS", $custom_transformers ?? 0);
 
 defined("PANEL_PREFIX_{{ capitalsResource }}_CREATE") ?: define("PANEL_PREFIX_{{ capitalsResource }}_CREATE", $panelPrefix);
 defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
