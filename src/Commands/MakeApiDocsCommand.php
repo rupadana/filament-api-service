@@ -18,13 +18,16 @@ class MakeApiDocsCommand extends Command
     public function handle(): int
     {
 
-        // ApiDocsController exists?
-        $serverPath = app_path('Virtual/Filament/Resources');
-        $serverNameSpace = 'App\\Virtual\\Filament\\Resources';
+        $baseServerPath = app_path('Virtual/');
+        $serverNameSpace = 'App\\Virtual';
         $serverFile = 'ApiDocsController.php';
 
-        $isNotInstalled = $this->checkForCollision([$serverPath . '/' . $serverFile]);
+        $resourcePath = $baseServerPath . 'Filament/Resources';
+        $resourceNameSpace = $serverNameSpace . '\\Filament\\Resources';
 
+        $isNotInstalled = $this->checkForCollision([$baseServerPath . '/' . $serverFile]);
+
+        // ApiDocsController exists?
         if (!$isNotInstalled) {
 
             $this->components->info("Please provide basic API Docs information.");
@@ -66,7 +69,7 @@ class MakeApiDocsCommand extends Command
 
             $this->createDirectory('Virtual/Filament/Resources');
 
-            $this->copyStubToApp('Api/ApiDocsController', $serverPath . '/' . $serverFile, [
+            $this->copyStubToApp('ApiDocsController', $baseServerPath . '/' . $serverFile, [
                 'namespace' => $serverNameSpace,
                 'title' => $serverTitle,
                 'version' => $serverVersion,
@@ -133,13 +136,13 @@ class MakeApiDocsCommand extends Command
 
         $namespace = text(
             label: 'In which namespace would you like to create this API Docs Resource in?',
-            default: $serverNameSpace
+            default: $resourceNameSpace
         );
 
         $handlersVirtualNamespace = "{$namespace}\\{$resourceClass}\\Handlers";
         $transformersVirtualNamespace = "{$namespace}\\{$resourceClass}\\Transformers";
 
-        $baseResourceVirtualPath = (string) str($resourceClass)->prepend('/')->prepend($serverPath)->replace('\\', '/')->replace('//', '/');
+        $baseResourceVirtualPath = (string) str($resourceClass)->prepend('/')->prepend($resourcePath)->replace('\\', '/')->replace('//', '/');
 
         $handlerVirtualDirectory = "{$baseResourceVirtualPath}/Handlers/";
         $transformersVirtualDirectory = "{$baseResourceVirtualPath}/Transformers/";
@@ -159,6 +162,14 @@ class MakeApiDocsCommand extends Command
 
             if (!$this->checkForCollision(["{$transformersVirtualDirectory}/{$transformerClass}.php"])) {
                 $this->copyStubToApp("Api/Transformer", $transformersVirtualDirectory . '/' . $transformerClass . '.php', $stubVars);
+            }
+        }
+
+        $resourceTransformers = [];
+        if (method_exists($resource, 'apiTransformers')) {
+            $transformers = ($modelNamespace . "\\" . $resourceClass)::apiTransformers();
+            foreach($transformers as $transformer) {
+                $resourceTransformers[] = str($transformer)->afterLast('\\')->kebab();
             }
         }
 
@@ -184,6 +195,7 @@ class MakeApiDocsCommand extends Command
                             'handlerClass' => $handler,
                             'handlerName' => $handlerName,
                             'capitalsResource' => strtoupper($modelClass),
+                            'resourceTransformers' => $resourceTransformers,
                             'path' => '/' . str($pluralModelClass)->kebab(),
                         ]);
                     }
