@@ -87,7 +87,7 @@ defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
         content: new OAT\MediaType(
             mediaType: "application/json",
             schema: (RESOURCE_{{ capitalsResource }}_UPDATE_CUSTOM_TRANSFORMERS > 0) ?
-                new OAT\JsonContent(
+                new OAT\Schema(
                     oneOf: [
                         new OAT\Schema(ref: "#/components/schemas/{{ modelClass }}Transformer/properties/data/items"),
                         new OAT\Schema(ref: "#/components/schemas/DefaultTransformer/properties/data/items"),
