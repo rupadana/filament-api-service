@@ -90,6 +90,9 @@ Token Resource is protected by TokenPolicy. You can disable it by publishing the
     ],
 ```
 
+> [!IMPORTANT]  
+> If you use Laravel 11, don't forget to run ``` php artisan install:api ``` to publish the personal_access_tokens migration after that run ``` php artisan migrate ``` to migrate the migration, but as default if you run the ``` php artisan install:api ``` it will ask you to migrate your migration.
+
 ### Filtering & Allowed Field
 
 We used `"spatie/laravel-query-builder": "^5.3"` to handle query selecting, sorting and filtering. Check out [the spatie/laravel-query-builder documentation](https://spatie.be/docs/laravel-query-builder/v5/introduction) for more information.
