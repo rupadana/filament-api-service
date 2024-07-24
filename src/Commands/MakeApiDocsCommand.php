@@ -3,6 +3,7 @@
 namespace Rupadana\ApiService\Commands;
 
 use Exception;
+use ReflectionClass;
 use Filament\Support\Commands\Concerns\CanManipulateFiles;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
@@ -93,7 +94,6 @@ class MakeApiDocsCommand extends Command
             if (!$this->checkForCollision(["{$baseServerPath}/{$transformerClass}.php"])) {
                 $this->copyStubToApp("Api/Transformer", $baseServerPath . '/' . $transformerClass . '.php', $stubVarsDefaultTransformer);
             }
-
         }
 
         $model = (string) str($this->argument('resource') ?? text(
@@ -154,6 +154,9 @@ class MakeApiDocsCommand extends Command
             default: $virtualResourceNameSpace
         );
 
+        $modelOfResource = $resource::getModel();
+        $modelDto = new $modelOfResource();
+
         $handlersVirtualNamespace = "{$namespace}\\{$resourceClass}\\Handlers";
         $transformersVirtualNamespace = "{$namespace}\\{$resourceClass}\\Transformers";
 
@@ -164,19 +167,29 @@ class MakeApiDocsCommand extends Command
 
         if (method_exists($resource, 'getApiTransformer')) {
             // generate API transformer
-            $transformer = ($modelNamespace . "\\" . $resourceClass)::getApiTransformer();
-            $transformerClassPath = (string) str($transformer);
-            $transformerClass = (string) str($transformerClassPath)->afterLast('\\');
+            $transformers = method_exists($resource, 'apiTransformers') ? ($modelNamespace . "\\" . $resourceClass)::apiTransformers() : [($modelNamespace . "\\" . $resourceClass)::getApiTransformer()];
+            foreach ($transformers as $transformer) {
+                $transformerClassPath = (string) str($transformer);
+                $transformerClass = (string) str($transformerClassPath)->afterLast('\\');
 
-            $stubVars = [
-                'namespace' => $namespace,
-                'modelClass' => $pluralModelClass,
-                'resourceClass' => '\\' . $resourceClass . '\\Transformers',
-                'transformerName'   => $transformerClass,
-            ];
+                $stubVars = [
+                    'namespace' => $namespace,
+                    'modelClass' => $pluralModelClass,
+                    'resourceClass' => '\\' . $resourceClass . '\\Transformers',
+                    'transformerName'   => $transformerClass,
+                ];
+                if (property_exists($modelDto, 'dataClass') || method_exists($modelDto, 'dataClass')) {
+                    $stubVars['transformerProperties'] = '';
+                    $dtoProperties = $this->readModelDto($modelDto::class);
+                    foreach ($dtoProperties as $dtoLine) {
+                        $stubVars['transformerProperties'] .= $dtoLine . ",";
+                        $stubVars['transformerProperties'] .= "\n                ";
+                    }
+                }
 
-            if (!$this->checkForCollision(["{$transformersVirtualDirectory}/{$transformerClass}.php"])) {
-                $this->copyStubToApp("Api/Transformer", $transformersVirtualDirectory . '/' . $transformerClass . '.php', $stubVars);
+                if (!$this->checkForCollision(["{$transformersVirtualDirectory}/{$transformerClass}.php"])) {
+                    $this->copyStubToApp("Api/Transformer", $transformersVirtualDirectory . '/' . $transformerClass . '.php', $stubVars);
+                }
             }
         }
 
@@ -214,6 +227,28 @@ class MakeApiDocsCommand extends Command
         $this->components->info("Successfully created API Docs for {$resource}!");
 
         return static::SUCCESS;
+    }
+
+    private function readModelDto(string $model): array
+    {
+
+        $modelReflection = new ReflectionClass($model);
+
+        $dtoClass = $modelReflection->getProperty('dataClass')->getDefaultValue();
+        $dtoReflection = new ReflectionClass($dtoClass);
+        $properties = [];
+
+        foreach ($dtoReflection->getProperties() as $property) {
+            if (!empty($property->getAttributes())) {
+                $attribute = $property->getAttributes()[0];
+                array_push(
+                    $properties,
+                    "new OAT\Property(property: '" . $property->getName() . "', type: '" . $property->getType() . "', title: '" . $property->getName() . "', description: '" . ($attribute->getArguments()["description"] ?? '') . "', example: '" . ($attribute->getArguments()["example"] ?? '') . "')"
+                );
+            }
+        }
+
+        return $properties;
     }
 
     private function createDirectory(string $path): void

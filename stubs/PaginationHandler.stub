@@ -24,6 +24,11 @@ class PaginationHandler extends Handlers {
         ->paginate(request()->query('per_page'))
         ->appends(request()->query());
 
+        $dtoModel = static::getDto();
+
+        if (!empty($dtoModel)) {
+            return static::getApiTransformer()::collection($dtoModel::collect($query));
+        }
         return static::getApiTransformer()::collection($query);
     }
 }

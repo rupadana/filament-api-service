@@ -28,6 +28,13 @@ class UpdateHandler extends Handlers {
 
         $model->fill($request->all());
 
+        $dtoModel = static::getDto();
+
+        if (!empty($dtoModel)) {
+            $dtoModelData = static::getDto()::validateAndCreate($model);
+            $model->fill($dtoModelData->all());
+        }
+
         $model->save();
 
         return static::sendSuccessResponse($model, "Successfully Update Resource");

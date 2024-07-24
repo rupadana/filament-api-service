@@ -2,6 +2,7 @@
 
 namespace Rupadana\ApiService\Http;
 
+use ReflectionClass;
 use Filament\Facades\Filament;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Model;
@@ -95,6 +96,15 @@ class Handlers
     public static function getModel()
     {
         return static::$resource::getModel();
+    }
+
+    public static function getDto(): ?string
+    {
+        $modelReflection = new ReflectionClass(static::getModel());
+        if (property_exists(static::getModel(), 'dataClass')) {
+            return $modelReflection->getProperty('dataClass')->getDefaultValue();
+        }
+        return null;
     }
 
     public static function getApiTransformer(): ?string
