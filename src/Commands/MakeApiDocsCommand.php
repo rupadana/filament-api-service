@@ -177,9 +177,10 @@ class MakeApiDocsCommand extends Command
                     'modelClass' => $pluralModelClass,
                     'resourceClass' => '\\' . $resourceClass . '\\Transformers',
                     'transformerName'   => $transformerClass,
+                    'transformerProperties' => '',
                 ];
+
                 if (property_exists($modelDto, 'dataClass') || method_exists($modelDto, 'dataClass')) {
-                    $stubVars['transformerProperties'] = '';
                     $dtoProperties = $this->readModelDto($modelDto::class);
                     foreach ($dtoProperties as $dtoLine) {
                         $stubVars['transformerProperties'] .= $dtoLine . ",";
