@@ -200,7 +200,7 @@ class BlogResource extends Resource
         */
         public static function apiTransformers(): array
         {
-            return 
+            return
             [
                 BlogTransformer::class,
                 ModifiedBlogTransformer::class,
@@ -322,7 +322,7 @@ class PaginationHandler extends Handlers {
 
 It is possible to generate Swagger API docs with this package. You have to make sure you have the following dependencies:
 
-```
+```bash
 composer require darkaonline/l5-swagger
 ```
 
@@ -387,7 +387,7 @@ class BlogTransformer {
 
 ```
 
-You can find more about all possible properties at https://zircote.github.io/swagger-php/reference/attributes.html#property
+You can find more about all possible properties at <https://zircote.github.io/swagger-php/reference/attributes.html#property>
 
 ### Laravel-Data package integration (optional)
 
