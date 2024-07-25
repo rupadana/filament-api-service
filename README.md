@@ -242,6 +242,7 @@ It is possible to use Spatie/Laravel-data package to autogenerate the correct da
 For the Generator to work your DTO needs some attributes where i can derives the properties from.
 Basic properties like the property name and type will be fetched using Reflection class methods.
 But some extra optional properties like: `description`, `example` are not available in the model or DTO.
+By default the following attributes can be added: `title`, `description` and `example`. all other fields you want to include have to be used as an array. See the last item in the example.
 So this is how you can implement those:
 
 ```php
@@ -258,7 +259,8 @@ class BlogData extends Data
         public ?int $id,
         #[ApiPropertyInfo(description: 'Name of the Blog', example: '')]
         public string $name,
-        #[ApiPropertyInfo(description: 'Image Url of the Blog', example: '')]
+        #[ApiPropertyInfo(description: 'Image Url of the Blog', example: '', ["ref" => "MyBlogSchema", "", "oneOf" => '{ new OAT\Schema(type="string"), new OAT\Schema(type="integer")}']
+        )]
         public string $image,
     ) {
     }
@@ -292,7 +294,17 @@ class BlogTransformer {
             properties: [
                 new OAT\Property(property: 'id', type: 'int', title: 'id', description: 'ID of the Blog DTO', example: ''),
                 new OAT\Property(property: 'name', type: 'string', title: 'name', description: 'Name of the Blog', example: ''),
-                new OAT\Property(property: 'image', type: 'string', title: 'image', description: 'Image Url of the Blog', example: ''),
+                new OAT\Property(
+                    property: 'image', 
+                    type: 'string', 
+                    title: 'image', 
+                    description: 'Image Url of the Blog', 
+                    example: '', 
+                    ref: "MyBlogSchema",
+                    oneOf: {
+                        new OAT\Schema(type="string"),
+                        new OAT\Schema(type="integer")
+                    }),
             ]
         ),
     )],
