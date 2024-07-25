@@ -237,15 +237,11 @@ class MakeApiDocsCommand extends Command
 
         $dtoClass = $modelReflection->getProperty('dataClass')->getDefaultValue();
         $dtoReflection = new ReflectionClass($dtoClass);
-        $properties = [];
 
         foreach ($dtoReflection->getProperties() as $property) {
             if (!empty($property->getAttributes())) {
                 $attribute = $property->getAttributes()[0];
-                array_push(
-                    $properties,
-                    "new OAT\Property(property: '" . $property->getName() . "', type: '" . $property->getType() . "', title: '" . $property->getName() . "', description: '" . ($attribute->getArguments()["description"] ?? '') . "', example: '" . ($attribute->getArguments()["example"] ?? '') . "')"
-                );
+                $properties[] = "new OAT\Property(property: '" . $property->getName() . "', type: '" . $property->getType() . "', title: '" . $property->getName() . "', description: '" . ($attribute->getArguments()["description"] ?? '') . "', example: '" . ($attribute->getArguments()["example"] ?? '') . "')";
             }
         }
 
