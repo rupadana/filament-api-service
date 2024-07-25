@@ -7,6 +7,7 @@ use ReflectionClass;
 use Filament\Support\Commands\Concerns\CanManipulateFiles;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Rupadana\ApiService\Attributes\ApiPropertyInfo;
 
 use function Laravel\Prompts\text;
 
@@ -232,7 +233,6 @@ class MakeApiDocsCommand extends Command
 
     private function readModelDto(string $model): array
     {
-
         $modelReflection = new ReflectionClass($model);
 
         $dtoClass = $modelReflection->getProperty('dataClass')->getDefaultValue();
@@ -241,16 +241,24 @@ class MakeApiDocsCommand extends Command
         foreach ($dtoReflection->getProperties() as $property) {
             if (!empty($property->getAttributes())) {
                 $attribute = $property->getAttributes()[0];
+                if (strpos($attribute->getName(), ApiPropertyInfo::class) !== false) {
+                    $propertyTxt = "";
+                    $propertyTxt .= "new OAT\Property(property: '" . $property->getName() . "', type: '" . $property->getType()->getName() . "', title: '" . $property->getName() . "', ";
 
-                $propertyTxt = "";
-                $propertyTxt .= "new OAT\Property(property: '" . $property->getName() . "', type: '" . $property->getType()->getName() . "', title: '" . $property->getName() . "', ";
 
-                foreach ($attribute->getArguments() as $key => $argument) {
-                    $propertyTxt .= $key . ": '" . $argument . "', ";
+                    foreach ($attribute->getArguments() as $key => $argument) {
+                        if ($key == 'extraProperties') {
+                            foreach ($argument as $extraKey => $extraArgument) {
+                                $propertyTxt .= $extraKey . ": " . $extraArgument . ", ";
+                            }
+                        } else {
+                            $propertyTxt .= $key . ": '" . $argument . "', ";
+                        }
+                    }
+                    $propertyTxt = rtrim($propertyTxt, ', ');
+                    $propertyTxt .= ")";
+                    $properties[] = $propertyTxt;
                 }
-                $propertyTxt = rtrim($propertyTxt, ', ');
-                $propertyTxt .= ")";
-                $properties[] = $propertyTxt;
             }
         }
 
