@@ -7,6 +7,7 @@ use ReflectionClass;
 use Filament\Support\Commands\Concerns\CanManipulateFiles;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use OpenApi\Attributes as OAT;
 use Rupadana\ApiService\Attributes\ApiPropertyInfo;
 
 use function Laravel\Prompts\text;
@@ -233,6 +234,13 @@ class MakeApiDocsCommand extends Command
 
     private function readModelDto(string $model): array
     {
+        $openAttrReflection = new ReflectionClass(OAT\Property::class);
+
+        $typesProperty = array_values(array_filter($openAttrReflection->getProperties(), function ($v) {
+            return  $v->getName() == '_types';
+        }));
+
+        $openApiAttrTypes = $typesProperty[0]->getValue();
         $modelReflection = new ReflectionClass($model);
 
         $dtoClass = $modelReflection->getProperty('dataClass')->getDefaultValue();
@@ -241,16 +249,15 @@ class MakeApiDocsCommand extends Command
         foreach ($dtoReflection->getProperties() as $property) {
             if (!empty($property->getAttributes())) {
                 $attribute = $property->getAttributes()[0];
+
                 if (strpos($attribute->getName(), ApiPropertyInfo::class) !== false) {
                     $propertyTxt = "";
                     $propertyTxt .= "new OAT\Property(property: '" . $property->getName() . "', type: '" . $property->getType()->getName() . "', title: '" . $property->getName() . "', ";
 
-
                     foreach ($attribute->getArguments() as $key => $argument) {
-                        if ($key == 'extraProperties') {
-                            foreach ($argument as $extraKey => $extraArgument) {
-                                $propertyTxt .= $extraKey . ": " . $extraArgument . ", ";
-                            }
+
+                        if (array_key_exists($key, $openApiAttrTypes) && $openApiAttrTypes[$key] !== 'string') {
+                            $propertyTxt .= $key . ": " . $argument . ", ";
                         } else {
                             $propertyTxt .= $key . ": '" . $argument . "', ";
                         }

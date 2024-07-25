@@ -413,7 +413,7 @@ class BlogData extends Data
         public ?int $id,
         #[ApiPropertyInfo(description: 'Name of the Blog', example: '')]
         public string $name,
-        #[ApiPropertyInfo(description: 'Image Url of the Blog', example: '', extraProperties: ["ref" => "'ImageBlogSchema'", "oneOf" => '[ new OAT\Schema(type:"string"), new OAT\Schema(type:"integer")]']
+        #[ApiPropertyInfo(description: 'Image Url of the Blog', example: '', ref: "ImageBlogSchema", oneOf: '[new OAT\Schema(type:"string"), new OAT\Schema(type:"integer")]']
         )]
         public string $image,
     ) {
