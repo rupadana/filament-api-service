@@ -235,84 +235,6 @@ $client->request('GET', '/api/blogs', [
 
 This way the correct transformer will be used to give you the correct response json.
 
-### Laravel-Data package integration (optional)
-
-It is possible to use Spatie/Laravel-data package to autogenerate the correct data model fields for a transformer. But first you need to setup your laravel-data package see [more info package spatie/laravel-data](https://spatie.be/docs/laravel-data) for installation instructions.
-
-For the Generator to work your DTO needs some attributes where i can derives the properties from.
-Basic properties like the property name and type will be fetched using Reflection class methods.
-But some extra optional properties like: `description`, `example` are not available in the model or DTO.
-By default the following attributes can be added: `title`, `description` and `example`. all other fields you want to include have to be used as an array. See the last item in the example.
-So this is how you can implement those:
-
-```php
-
-namespace App\Data;
-
-use Rupadana\ApiService\Attributes\ApiPropertyInfo; // <-- add this Attribute to you DTO
-use Spatie\LaravelData\Data;
-
-class BlogData extends Data
-{
-    public function __construct(
-        #[ApiPropertyInfo(description: 'ID of the Blog DTO', example: '')]
-        public ?int $id,
-        #[ApiPropertyInfo(description: 'Name of the Blog', example: '')]
-        public string $name,
-        #[ApiPropertyInfo(description: 'Image Url of the Blog', example: '', ["ref" => "MyBlogSchema", "", "oneOf" => '{ new OAT\Schema(type="string"), new OAT\Schema(type="integer")}']
-        )]
-        public string $image,
-    ) {
-    }
-}
-
-```
-
-As you can see you can add attributes above each property. this way when generating the transformer Api Docs it will add these information.
-
-The result of the Api Docs generation of the Transformer(s) will look like this:
-
-```php
-namespace App\Virtual\Filament\Resources\BlogResource\Transformers;
-
-
-use OpenApi\Attributes as OAT;
-
-#[OAT\Schema(
-    schema: "BlogTransformer",
-    title: "BlogTransformer",
-    description: "Brands API Transformer",
-    xml: new OAT\Xml(name: "BlogTransformer"),
-)]
-
-class BlogTransformer {
-
-    #[OAT\Property(
-        property: "data",
-        type: "array",
-        items: new OAT\Items(
-            properties: [
-                new OAT\Property(property: 'id', type: 'int', title: 'id', description: 'ID of the Blog DTO', example: ''),
-                new OAT\Property(property: 'name', type: 'string', title: 'name', description: 'Name of the Blog', example: ''),
-                new OAT\Property(
-                    property: 'image', 
-                    type: 'string', 
-                    title: 'image', 
-                    description: 'Image Url of the Blog', 
-                    example: '', 
-                    ref: "MyBlogSchema",
-                    oneOf: {
-                        new OAT\Schema(type="string"),
-                        new OAT\Schema(type="integer")
-                    }),
-            ]
-        ),
-    )],
-    public $data;
-    ...
-```
-
-
 ### Group Name & Prefix
 
 You can edit prefix & group route name as you want, default this plugin use model singular label;
@@ -466,6 +388,83 @@ class BlogTransformer {
 ```
 
 You can find more about all possible properties at https://zircote.github.io/swagger-php/reference/attributes.html#property
+
+### Laravel-Data package integration (optional)
+
+It is possible to use Spatie/Laravel-data package to autogenerate the correct data model fields for a transformer. But first you need to setup your laravel-data package see [more info package spatie/laravel-data](https://spatie.be/docs/laravel-data) for installation instructions.
+
+For the Generator to work your DTO needs some attributes where i can derives the properties from.
+Basic properties like the property name and type will be fetched using Reflection class methods.
+But some extra optional properties like: `description`, `example` are not available in the model or DTO.
+By default the following attributes can be added: `title`, `description` and `example`. all other fields you want to include have to be used as an array. See the last item in the example.
+So this is how you can implement those:
+
+```php
+
+namespace App\Data;
+
+use Rupadana\ApiService\Attributes\ApiPropertyInfo; // <-- add this Attribute to you DTO
+use Spatie\LaravelData\Data;
+
+class BlogData extends Data
+{
+    public function __construct(
+        #[ApiPropertyInfo(description: 'ID of the Blog DTO', example: '')]
+        public ?int $id,
+        #[ApiPropertyInfo(description: 'Name of the Blog', example: '')]
+        public string $name,
+        #[ApiPropertyInfo(description: 'Image Url of the Blog', example: '', ["ref" => "MyBlogSchema", "", "oneOf" => '{ new OAT\Schema(type="string"), new OAT\Schema(type="integer")}']
+        )]
+        public string $image,
+    ) {
+    }
+}
+
+```
+
+As you can see you can add attributes above each property. this way when generating the transformer Api Docs it will add these information.
+
+The result of the Api Docs generation of the Transformer(s) will look like this:
+
+```php
+namespace App\Virtual\Filament\Resources\BlogResource\Transformers;
+
+
+use OpenApi\Attributes as OAT;
+
+#[OAT\Schema(
+    schema: "BlogTransformer",
+    title: "BlogTransformer",
+    description: "Brands API Transformer",
+    xml: new OAT\Xml(name: "BlogTransformer"),
+)]
+
+class BlogTransformer {
+
+    #[OAT\Property(
+        property: "data",
+        type: "array",
+        items: new OAT\Items(
+            properties: [
+                new OAT\Property(property: 'id', type: 'int', title: 'id', description: 'ID of the Blog DTO', example: ''),
+                new OAT\Property(property: 'name', type: 'string', title: 'name', description: 'Name of the Blog', example: ''),
+                new OAT\Property(
+                    property: 'image', 
+                    type: 'string', 
+                    title: 'image', 
+                    description: 'Image Url of the Blog', 
+                    example: '', 
+                    ref: "MyBlogSchema",
+                    oneOf: {
+                        new OAT\Schema(type="string"),
+                        new OAT\Schema(type="integer")
+                    }),
+            ]
+        ),
+    )],
+    public $data;
+    ...
+```
 
 ## License
 
