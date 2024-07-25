@@ -242,7 +242,6 @@ class MakeApiDocsCommand extends Command
             if (!empty($property->getAttributes())) {
                 $attribute = $property->getAttributes()[0];
 
-
                 $propertyTxt = "";
                 $propertyTxt .= "new OAT\Property(property: '" . $property->getName() . "', type: '" . $property->getType()->getName() . "', title: '" . $property->getName() . "', ";
 

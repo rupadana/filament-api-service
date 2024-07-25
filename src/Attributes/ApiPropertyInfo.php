@@ -4,6 +4,7 @@ namespace Rupadana\ApiService\Attributes;
 
 use Attribute;
 
+#[\AllowDynamicProperties]
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
 class ApiPropertyInfo
 {
