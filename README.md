@@ -449,11 +449,11 @@ class BlogTransformer {
                 new OAT\Property(property: 'id', type: 'int', title: 'id', description: 'ID of the Blog DTO', example: ''),
                 new OAT\Property(property: 'name', type: 'string', title: 'name', description: 'Name of the Blog', example: ''),
                 new OAT\Property(
-                    property: 'image', 
-                    type: 'string', 
-                    title: 'image', 
-                    description: 'Image Url of the Blog', 
-                    example: '', 
+                    property: 'image',
+                    type: 'string',
+                    title: 'image',
+                    description: 'Image Url of the Blog',
+                    example: '',
                     ref: "MyBlogSchema",
                     oneOf: {
                         new OAT\Schema(type="string"),
