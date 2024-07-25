@@ -13,7 +13,7 @@ class ApiPropertyInfo
     public string $example;
     private array $extraProperties;
 
-    public function __construct(string $title = '', string $description = '', string $example = '', $extraProperties = [])
+    public function __construct(string $title = '', string $description = '', string $example = '', array $extraProperties = [])
     {
         $this->title = $title;
         $this->description = $description;
