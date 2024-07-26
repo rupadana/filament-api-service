@@ -252,12 +252,24 @@ class MakeApiDocsCommand extends Command
 
                 if (strpos($attribute->getName(), ApiPropertyInfo::class) !== false) {
                     $propertyTxt = "";
+
                     $propertyTxt .= "new OAT\Property(property: '" . $property->getName() . "', type: '" . $property->getType()->getName() . "', ";
 
-                    foreach ($attribute->getArguments() as $key => $argument) {
+                    $propertyTxt .= match ($property->getType()->getName()) {
+                        'array' => "items: new OAT\Items(), ",
+                        'object' => "schema: '{}', ",
+                        default => '',
+                    };
 
+                    foreach ($attribute->getArguments() as $key => $argument) {
                         if (array_key_exists($key, $openApiAttrTypes) && $openApiAttrTypes[$key] !== 'string') {
-                            $propertyTxt .= $key . ": " . $argument . ", ";
+                            $propertyTxt .= $key . ": '" . $argument . "', ";
+
+                            $propertyTxt .= match ($argument) {
+                                'array' => "items: new OAT\Items(), ",
+                                'object' => "schema: '{}', ",
+                                default => '',
+                            };
                         } else {
                             $propertyTxt .= $key . ": '" . $argument . "', ";
                         }
