@@ -68,11 +68,13 @@ So, You don't need to register the routes manually.
 
 The routes will be :
 
-- [GET] '/api/`admin`/blogs'   - Return LengthAwarePaginator
-- [GET] '/api/`admin`/blogs/1' - Return single resource
-- [PUT] '/api/`admin`/blogs/1' - Update resource
-- [POST] '/api/`admin`/blogs' - Create resource
-- [DELETE] '/api/`admin`/blogs/1' - Delete resource
+| Method | Endpoint             | Description                 |
+| ------ | -------------------- | --------------------------- |
+| GET    | /api/`admin`/blogs   | Return LengthAwarePaginator |
+| GET    | /api/`admin`/blogs/1 | Return single resource      |
+| PUT    | /api/`admin`/blogs/1 | Update resource             |
+| POST   | /api/`admin`/blogs   | Create resource             |
+| DELETE | /api/`admin`/blogs/1 | Delete resource             |
 
 On CreateHandler, you need to be create your custom request validation.
 
