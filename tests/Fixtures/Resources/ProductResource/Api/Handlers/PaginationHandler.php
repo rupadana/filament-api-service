@@ -16,9 +16,9 @@ class PaginationHandler extends Handlers
         $model = static::getModel();
 
         $query = QueryBuilder::for($model)
-            ->allowedFields($model::$allowedFields ?? [])
-            ->allowedSorts($model::$allowedSorts ?? [])
-            ->allowedFilters($model::$allowedFilters ?? [])
+            ->allowedFields($model::getAllowedFields() ?? [])
+            ->allowedSorts($model::getAllowedSorts() ?? [])
+            ->allowedFilters($model::getAllowedFilters() ?? [])
             ->paginate(request()->query('per_page'))
             ->appends(request()->query());
 
