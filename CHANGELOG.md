@@ -2,6 +2,21 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.3.0 - 2024-08-13
+
+### What's Changed
+
+* add notes to fix personal_access_token missing in laravel 11 by @christmex in https://github.com/rupadana/filament-api-service/pull/59
+* Bump dependabot/fetch-metadata from 2.1.0 to 2.2.0 by @dependabot in https://github.com/rupadana/filament-api-service/pull/64
+* Allow the usage of more complex filter methods by Spatie\QueryBuilder by @bfiessinger in https://github.com/rupadana/filament-api-service/pull/67
+
+### New Contributors
+
+* @christmex made their first contribution in https://github.com/rupadana/filament-api-service/pull/59
+* @bfiessinger made their first contribution in https://github.com/rupadana/filament-api-service/pull/67
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.2.4...3.3.0
+
 ## 3.2.4 - 2024-06-04
 
 ### What's Changed
