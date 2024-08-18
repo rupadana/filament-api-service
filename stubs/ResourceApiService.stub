@@ -10,6 +10,14 @@ class {{ apiServiceClass }} extends ApiService
 {
     protected static string | null $resource = {{ resourceClass }}::class;
 
+    /**
+     * @return array<string, string>
+     */
+    public static function apiTransformers(): array
+    {
+        return [];
+    }
+
     public static function handlers() : array
     {
         return [
