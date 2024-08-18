@@ -241,7 +241,7 @@ Alternative methods could also be used, like using as a prefix in the URL path o
 
 You can set the method in the config `route.api_version_method` to 'path' or 'query'. You can also set the default Transformername via `route.default_transformer_name` (defaults to 'default').
 
-When you set `route.api_version_method` to 'path' the you can use the name of the transformer in the first segment of the API URL. the name of that fist segment is the key which you have defined in the `apiTransformers()` function.
+When you set `route.api_version_method` to 'path' then you can use the name of the transformer in the first segment of the API URL. the name of that fist segment is the key which you have defined in the `apiTransformers()` function.
 
 So for example if you want to use the `'mod-blog'` transformer in your api response. the url might look like this:
 '<https://myproject.com/api/`mod-blog`/blog/1>'
@@ -264,11 +264,11 @@ public static function apiTransformers(): array
         }
 ```
 
-Another method is using  `route.api_version_method` to 'query'. This way in the URL you can add an extra parameter with the name which you defined in your config under `route.api_version_parameter_name`
+Another method is using  `route.api_version_method` to 'query'. This way you can add an extra parameter in the URL with the name which you defined in your config under `route.api_version_parameter_name`
 by default this parameter is `version`. With this config the URL would look like this:
 '<https://myproject.com/api/blog/1?version=v1>'
 
-Note: You can only use one method for this package for API versioning.
+IMPORTANT: You can only use one method for this package for API versioning.
 
 ### Group Name & Prefix
 
