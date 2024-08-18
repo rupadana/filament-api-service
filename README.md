@@ -48,6 +48,7 @@ return [
     'route' => [
         'panel_prefix' => true,
         'use_resource_middlewares' => false,
+        'api_transformer_header' => env('API_TRANSFORMER_HEADER', 'X-API-TRANSFORMER'),
     ],
     'tenancy' => [
         'enabled' => false,
