@@ -123,10 +123,11 @@ class Handlers
     {
         return array_merge([
             ApiService::getDefaultTransformerName() => DefaultTransformer::class,
-        ], method_exists(static::$resource, 'apiTransformers') ? array_combine(
+        ], method_exists(static::$resource, 'apiTransformers') ?
+        array_flip(array_combine(
             array_map(fn ($class) => Str::kebab(class_basename($class)), $transformers = static::$resource::apiTransformers()),
-            $transformers
-        ) : []); // @phpstan-ignore-line
+            array_keys($transformers)
+        )) : []); // @phpstan-ignore-line
     }
 
     /**
@@ -134,11 +135,10 @@ class Handlers
      */
     protected static function getTransformerFromUrlPath(): string
     {
-        // $routeApiVersion = request()->segment(1);
         $routeApiVersion = request()->route(ApiService::getApiVersionParameterName());
         $transformer = Str::kebab($routeApiVersion);
 
-        if ($transformer && !array_key_exists($transformer, self::getApiTransformers())) {
+        if ($transformer && !array_key_exists($transformer, array_keys(self::getApiTransformers()))) {
             throw new TransformerNotFoundException($transformer);
         }
 
@@ -162,7 +162,7 @@ class Handlers
         $transformer = request()->input($queryName);
         $transformer = Str::kebab($transformer);
 
-        if ($transformer && !array_key_exists($transformer, self::getApiTransformers())) {
+        if ($transformer && !array_key_exists($transformer, array_keys(self::getApiTransformers()))) {
             throw new TransformerNotFoundException($transformer);
         }
 
@@ -186,7 +186,7 @@ class Handlers
         $transformer = request()->headers->get($headerName);
         $transformer = Str::kebab($transformer);
 
-        if ($transformer && !array_key_exists($transformer, self::getApiTransformers())) {
+        if ($transformer && !array_key_exists($transformer, array_keys(self::getApiTransformers()))) {
             throw new TransformerNotFoundException($transformer);
         }
 

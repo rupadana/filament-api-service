@@ -170,7 +170,7 @@ class MakeApiDocsCommand extends Command
         if (method_exists($resource, 'getApiTransformer')) {
             // generate API transformer
             $transformers = method_exists($resource, 'apiTransformers') ? ($modelNamespace . "\\" . $resourceClass)::apiTransformers() : [($modelNamespace . "\\" . $resourceClass)::getApiTransformer()];
-            foreach ($transformers as $transformer) {
+            foreach ($transformers as $transKey => $transformer) {
                 $transformerClassPath = (string) str($transformer);
                 $transformerClass = (string) str($transformerClassPath)->afterLast('\\');
 

@@ -68,13 +68,11 @@ So, You don't need to register the routes manually.
 
 The routes will be :
 
-| Method | Endpoint             | Description                 |
-| ------ | -------------------- | --------------------------- |
-| GET    | /api/`admin`/blogs   | Return LengthAwarePaginator |
-| GET    | /api/`admin`/blogs/1 | Return single resource      |
-| PUT    | /api/`admin`/blogs/1 | Update resource             |
-| POST   | /api/`admin`/blogs   | Create resource             |
-| DELETE | /api/`admin`/blogs/1 | Delete resource             |
+- [GET] '/api/`admin`/blogs'   - Return LengthAwarePaginator
+- [GET] '/api/`admin`/blogs/1' - Return single resource
+- [PUT] '/api/`admin`/blogs/1' - Update resource
+- [POST] '/api/`admin`/blogs' - Create resource
+- [DELETE] '/api/`admin`/blogs/1' - Delete resource
 
 On CreateHandler, you need to be create your custom request validation.
 
@@ -92,34 +90,28 @@ Token Resource is protected by TokenPolicy. You can disable it by publishing the
     ],
 ```
 
-> [!IMPORTANT]  
-> If you use Laravel 11, don't forget to run ``` php artisan install:api ``` to publish the personal_access_tokens migration after that run ``` php artisan migrate ``` to migrate the migration, but as default if you run the ``` php artisan install:api ``` it will ask you to migrate your migration.
-
 ### Filtering & Allowed Field
 
 We used `"spatie/laravel-query-builder": "^5.3"` to handle query selecting, sorting and filtering. Check out [the spatie/laravel-query-builder documentation](https://spatie.be/docs/laravel-query-builder/v5/introduction) for more information.
-
-In order to allow modifying the query for your model you can implement the `HasAllowedFields`, `HasAllowedSorts` and `HasAllowedFilters` Contracts in your model.
+You can specified `allowedFilters` and `allowedFields` in your model. For example:
 
 ```php
-class User extends Model implements HasAllowedFields, HasAllowedSorts, HasAllowedFilters {
+class User extends Model {
     // Which fields can be selected from the database through the query string
-    public function getAllowedFields(): array
-    {
-        // Your implementation here
-    }
+    public static array $allowedFields = [
+        'name'
+    ];
 
     // Which fields can be used to sort the results through the query string
-    public function getAllowedSorts(): array
-    {
-        // Your implementation here
-    }
+    public static array $allowedSorts = [
+        'name',
+        'created_at'
+    ];
 
     // Which fields can be used to filter the results through the query string
-    public function getAllowedFilters(): array
-    {
-        // Your implementation here
-    }
+    public static array $allowedFilters = [
+        'name'
+    ];
 }
 ```
 
@@ -210,9 +202,9 @@ class BlogResource extends Resource
         {
             return
             [
-                BlogTransformer::class,
-                ModifiedBlogTransformer::class,
-                ExtraBlogColumnsTransformer::class,
+                'blog' => BlogTransformer::class,
+                'mod-blog' => ModifiedBlogTransformer::class,
+                'extra-blog-column' => ExtraBlogColumnsTransformer::class,
                 ... etc.
             ]
         }
@@ -242,6 +234,41 @@ $client->request('GET', '/api/blogs', [
 ```
 
 This way the correct transformer will be used to give you the correct response json.
+
+### Multiple Transformers via URL Path or URL Query
+
+Alternative methods could also be used, like using as a prefix in the URL path or in the URL Query.
+
+You can set the method in the config `route.api_version_method` to 'path' or 'query'. You can also set the default Transformername via `route.default_transformer_name` (defaults to 'default').
+
+When you set `route.api_version_method` to 'path' the you can use the name of the transformer in the first segment of the API URL. the name of that fist segment is the key which you have defined in the `apiTransformers()` function.
+
+So for example if you want to use the `'mod-blog'` transformer in your api response. the url might look like this:
+'<https://myproject.com/api/`mod-blog`/blog/1>'
+
+It will always be in front of all other options like `tenant` or `panel` names in the url.
+
+With this method you could use API versioning like `/api/v1` where `v1` is an item in the `apiTransformers()` function.
+
+like so:
+
+```php
+
+public static function apiTransformers(): array
+        {
+            return
+            [
+                'v1' => VersionOneTransformer::class,
+                ... etc.
+            ]
+        }
+```
+
+Another method is using  `route.api_version_method` to 'query'. This way in the URL you can add an extra parameter with the name which you defined in your config under `route.api_version_parameter_name`
+by default this parameter is `version`. With this config the URL would look like this:
+'<https://myproject.com/api/blog/1?version=v1>'
+
+Note: You can only use one method for this package for API versioning.
 
 ### Group Name & Prefix
 
