@@ -92,7 +92,6 @@ trait HasHandlerTenantScope
                     !ApiService::tenancyAwareness() &&
                     static::isScopedToTenant()
                 ) {
-
                     if (auth()->check()) {
 
                         $query = match (true) {
