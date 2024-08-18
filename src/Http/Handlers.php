@@ -138,7 +138,7 @@ class Handlers
         $routeApiVersion = request()->route(ApiService::getApiVersionParameterName());
         $transformer = Str::kebab($routeApiVersion);
 
-        if ($transformer && !array_key_exists($transformer, array_keys(self::getApiTransformers()))) {
+        if ($transformer && !array_key_exists($transformer, self::getApiTransformers())) {
             throw new TransformerNotFoundException($transformer);
         }
 
@@ -162,7 +162,7 @@ class Handlers
         $transformer = request()->input($queryName);
         $transformer = Str::kebab($transformer);
 
-        if ($transformer && !array_key_exists($transformer, array_keys(self::getApiTransformers()))) {
+        if ($transformer && !array_key_exists($transformer, self::getApiTransformers())) {
             throw new TransformerNotFoundException($transformer);
         }
 
@@ -186,7 +186,7 @@ class Handlers
         $transformer = request()->headers->get($headerName);
         $transformer = Str::kebab($transformer);
 
-        if ($transformer && !array_key_exists($transformer, array_keys(self::getApiTransformers()))) {
+        if ($transformer && !array_key_exists($transformer, self::getApiTransformers())) {
             throw new TransformerNotFoundException($transformer);
         }
 
