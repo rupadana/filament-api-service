@@ -125,8 +125,8 @@ class Handlers
             ApiService::getDefaultTransformerName() => DefaultTransformer::class,
         ], method_exists(static::$resource, 'apiTransformers') ?
         array_combine(
-            array_map(fn($class) => Str::kebab(class_basename($class)), $transformers = static::$resource::apiTransformers()),
-            array_values($transformers)
+            array_map(fn($class) => Str::kebab(class_basename($class)), $transformers = array_flip(static::$resource::apiTransformers())),
+            array_keys($transformers)
         ) : []); // @phpstan-ignore-line
     }
 
