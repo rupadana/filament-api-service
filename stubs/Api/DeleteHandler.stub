@@ -16,6 +16,35 @@ $hasTenancy = $panel->hasTenancy();
 $tenantSlugAttribute = $panel->getTenantSlugAttribute();
 $panelPrefix = app(ApiService::class)->isRoutePrefixedByPanel() ? $panelPath ?? $panelId : '';
 
+defined("API_DEFAULT_TRANSFORMER_NAME") ?: define("API_DEFAULT_TRANSFORMER_NAME", config('api-service.route.default_transformer_name'));
+defined("API_VERSION_PARAMETER_NAME") ?: define("API_VERSION_PARAMETER_NAME", config('api-service.route.api_version_parameter_name'));
+defined("API_TRANSFORMER_HEADER") ?: define("API_TRANSFORMER_HEADER", config('api-service.route.api_transformer_header'));
+
+function apiVersionPath() {
+    defined("API_VERSION_URL_PATH") ?: define("API_VERSION_URL_PATH", '{version}/');
+}
+
+function apiVersionQuery() {
+    defined("API_VERSION_URL_QUERY") ?: define("API_VERSION_URL_QUERY", true);
+}
+
+function apiVersionHeaders() {
+    defined("API_VERSION_URL_HEADERS") ?: define("API_VERSION_URL_HEADERS", true);
+}
+
+function apiVersionDefault() {
+    defined("API_VERSION_URL_PATH") ?: define("API_VERSION_URL_PATH", '');
+    defined("API_VERSION_URL_QUERY") ?: define("API_VERSION_URL_QUERY", false);
+    defined("API_VERSION_URL_HEADERS") ?: define("API_VERSION_URL_HEADERS", false);
+}
+
+match (config('api-service.route.api_version_method')) {
+    'path' => apiVersionPath(),
+    'query' => apiVersionQuery(),
+    'headers' => apiVersionHeaders(),
+    default => apiVersionDefault(),
+};
+
 if (
     ApiService::isTenancyEnabled() &&
     ApiService::tenancyAwareness() &&
@@ -49,7 +78,7 @@ defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
         (TENANT_AWARENESS_{{ capitalsResource }}) ?
             new OAT\Server(
                 description: "API Server Filament Panel",
-                url: BASE_URL . "/api/{panel}" . PANEL_PREFIX_{{ capitalsResource }}_DELETE . "/{tenant}",
+                url: BASE_URL . "/api/" . API_VERSION_URL_PATH . "{panel}" . PANEL_PREFIX_{{ capitalsResource }}_DELETE . "/{tenant}",
                 variables: [
                     new OAT\ServerVariable(
                         serverVariable: "panel",
@@ -62,11 +91,27 @@ defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
                         description: 'ID of the tenant',
                         default: ""
                     ),
-                ]
+                (API_VERSION_URL_PATH != '') ?
+                    new OAT\ServerVariable(
+                        serverVariable: "version",
+                        description: 'Version or Transformer name of this API endpoint',
+                        default: API_DEFAULT_TRANSFORMER_NAME,
+                    ),
+                : null,
+            ]
             ) :
             new OAT\Server(
                 description: "API Server Filament Panel",
-                url: BASE_URL . "/api/" . PANEL_PREFIX_{{ capitalsResource }}_DELETE . "/",
+                url: BASE_URL . "/api/" . API_VERSION_URL_PATH . PANEL_PREFIX_{{ capitalsResource }}_DELETE . "/",
+                variables: [
+                (API_VERSION_URL_PATH != '') ?
+                    new OAT\ServerVariable(
+                        serverVariable: "version",
+                        description: 'Version or Transformer name of this API endpoint',
+                        default: API_DEFAULT_TRANSFORMER_NAME,
+                    ),
+                : null,
+                ]
             )
     ],
     security: (!RESOURCE_PUBLIC_{{ capitalsResource }}_DELETE) ?  [["bearerAuth" => []]] : null,
@@ -80,6 +125,21 @@ defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
             schema: new OAT\Schema(type: "integer"),
             example: "", // OAT\Examples(example="int", value="0", summary="An int value."),
         ),
+        (API_VERSION_URL_QUERY) ? new OAT\Parameter(
+            name: API_VERSION_PARAMETER_NAME,
+            in: "query",
+            required: true,
+            description: "Set the correct API Version / Transformer you want to use.",
+            schema: new OAT\Schema(type: "string")
+        ) : null,
+
+        (API_VERSION_URL_HEADERS) ? new OAT\Parameter(
+            name: API_TRANSFORMER_HEADER,
+            in: "header",
+            required: true,
+            description: "Set the correct API Version / Transformer you want to use.",
+            schema: new OAT\Schema(type: "string")
+        ) : null,
     ],
     responses: [
         new OAT\Response(response: 200, description: 'Operation succesful', content: new OAT\JsonContent(type: "object", properties: [
