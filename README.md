@@ -34,6 +34,7 @@ php artisan vendor:publish --tag=api-service-config
 return [
     'navigation' => [
         'token' => [
+            'cluster' => null,
             'group' => 'User',
             'sort' => -1,
             'icon' => 'heroicon-o-key'
@@ -47,6 +48,7 @@ return [
     'route' => [
         'panel_prefix' => true,
         'use_resource_middlewares' => false,
+        'api_transformer_header' => env('API_TRANSFORMER_HEADER', 'X-API-TRANSFORMER'),
     ],
     'tenancy' => [
         'enabled' => false,
@@ -67,11 +69,13 @@ So, You don't need to register the routes manually.
 
 The routes will be :
 
-- [GET] '/api/`admin`/blogs'   - Return LengthAwarePaginator
-- [GET] '/api/`admin`/blogs/1' - Return single resource
-- [PUT] '/api/`admin`/blogs/1' - Update resource
-- [POST] '/api/`admin`/blogs' - Create resource
-- [DELETE] '/api/`admin`/blogs/1' - Delete resource
+| Method | Endpoint             | Description                 |
+| ------ | -------------------- | --------------------------- |
+| GET    | /api/`admin`/blogs   | Return LengthAwarePaginator |
+| GET    | /api/`admin`/blogs/1 | Return single resource      |
+| PUT    | /api/`admin`/blogs/1 | Update resource             |
+| POST   | /api/`admin`/blogs   | Create resource             |
+| DELETE | /api/`admin`/blogs/1 | Delete resource             |
 
 On CreateHandler, you need to be create your custom request validation.
 
@@ -89,28 +93,34 @@ Token Resource is protected by TokenPolicy. You can disable it by publishing the
     ],
 ```
 
+> [!IMPORTANT]  
+> If you use Laravel 11, don't forget to run ``` php artisan install:api ``` to publish the personal_access_tokens migration after that run ``` php artisan migrate ``` to migrate the migration, but as default if you run the ``` php artisan install:api ``` it will ask you to migrate your migration.
+
 ### Filtering & Allowed Field
 
 We used `"spatie/laravel-query-builder": "^5.3"` to handle query selecting, sorting and filtering. Check out [the spatie/laravel-query-builder documentation](https://spatie.be/docs/laravel-query-builder/v5/introduction) for more information.
-You can specified `allowedFilters` and `allowedFields` in your model. For example:
+
+In order to allow modifying the query for your model you can implement the `HasAllowedFields`, `HasAllowedSorts` and `HasAllowedFilters` Contracts in your model.
 
 ```php
-class User extends Model {
+class User extends Model implements HasAllowedFields, HasAllowedSorts, HasAllowedFilters {
     // Which fields can be selected from the database through the query string
-    public static array $allowedFields = [
-        'name'
-    ];
+    public function getAllowedFields(): array
+    {
+        // Your implementation here
+    }
 
     // Which fields can be used to sort the results through the query string
-    public static array $allowedSorts = [
-        'name',
-        'created_at'
-    ];
+    public function getAllowedSorts(): array
+    {
+        // Your implementation here
+    }
 
     // Which fields can be used to filter the results through the query string
-    public static array $allowedFilters = [
-        'name'
-    ];
+    public function getAllowedFilters(): array
+    {
+        // Your implementation here
+    }
 }
 ```
 
@@ -179,6 +189,60 @@ next step you need to edit & add it to your Resource
         ...
     }
 ```
+
+### Multiple Transformers via HTTP Header
+
+Sometimes you need a different response structure of your API resource. Then you can create multiple Transformers as described above. In your API request you need to set an extra http header with the value of your Transformer class name.
+You can specify the name/key of the HTTP Header in the config `route.api_transformer_header`.
+
+By default the HTTP Header is called `X-API-TRANSFORMER`. You could also override it in your .env config file with the parameter: `API_TRANSFORMER_HEADER`. After you set and know the http header you need to create some extra Transformers where the structure is different as needed. You have to register all the extra transformers in your Resource like so:
+
+```php
+use App\Filament\Resources\BlogResource\Api\Transformers\BlogTransformer;
+use App\Filament\Resources\BlogResource\Api\Transformers\ModifiedBlogTransformer;
+use App\Filament\Resources\BlogResource\Api\Transformers\ExtraBlogColumnsTransformer;
+
+class BlogResource extends Resource
+    {
+        /**
+        * @return array<string>
+        */
+        public static function apiTransformers(): array
+        {
+            return
+            [
+                BlogTransformer::class,
+                ModifiedBlogTransformer::class,
+                ExtraBlogColumnsTransformer::class,
+                ... etc.
+            ]
+        }
+        ...
+    }
+
+```
+
+Now you can use the extra HTTP HEADER `X-API-TRANSFORMER` in your request with the name of the transformer class.
+
+Here an example in guzzle:
+
+```php
+$client->request('GET', '/api/blogs', [
+    'headers' => [
+        'X-API-TRANSFORMER' => 'ModifiedBlogTransformer'
+    ]
+]);
+
+or
+
+$client->request('GET', '/api/blogs', [
+    'headers' => [
+        'X-API-TRANSFORMER' => 'ExtraBlogColumnsTransformer'
+    ]
+]);
+```
+
+This way the correct transformer will be used to give you the correct response json.
 
 ### Group Name & Prefix
 
@@ -267,7 +331,7 @@ class PaginationHandler extends Handlers {
 
 It is possible to generate Swagger API docs with this package. You have to make sure you have the following dependencies:
 
-```
+```bash
 composer require darkaonline/l5-swagger
 ```
 
@@ -332,7 +396,84 @@ class BlogTransformer {
 
 ```
 
-You can find more about all possible properties at https://zircote.github.io/swagger-php/reference/attributes.html#property
+You can find more about all possible properties at <https://zircote.github.io/swagger-php/reference/attributes.html#property>
+
+### Laravel-Data package integration (optional)
+
+It is possible to use Spatie/Laravel-data package to autogenerate the correct data model fields for a transformer. But first you need to setup your laravel-data package see [more info package spatie/laravel-data](https://spatie.be/docs/laravel-data) for installation instructions.
+
+For the Generator to work your DTO needs some attributes where i can derives the properties from.
+Basic properties like the property name and type will be fetched using Reflection class methods.
+But some extra optional properties like: `description`, `example` are not available in the model or DTO.
+By default the following attributes can be added: `title`, `description` and `example`. all other fields you want to include have to be used as an array in the `extraProperties` parameter. See the last item in the example.
+So this is how you can implement those:
+
+```php
+
+namespace App\Data;
+
+use Rupadana\ApiService\Attributes\ApiPropertyInfo; // <-- add this Attribute to you DTO
+use Spatie\LaravelData\Data;
+
+class BlogData extends Data
+{
+    public function __construct(
+        #[ApiPropertyInfo(description: 'ID of the Blog DTO', example: '')]
+        public ?int $id,
+        #[ApiPropertyInfo(description: 'Name of the Blog', example: '')]
+        public string $name,
+        #[ApiPropertyInfo(description: 'Image Url of the Blog', example: '', ref: "ImageBlogSchema", oneOf: '[new OAT\Schema(type:"string"), new OAT\Schema(type:"integer")]']
+        )]
+        public string $image,
+    ) {
+    }
+}
+
+```
+
+As you can see you can add attributes above each property. this way when generating the transformer Api Docs it will add these information.
+
+The result of the Api Docs generation of the Transformer(s) will look like this:
+
+```php
+namespace App\Virtual\Filament\Resources\BlogResource\Transformers;
+
+
+use OpenApi\Attributes as OAT;
+
+#[OAT\Schema(
+    schema: "BlogTransformer",
+    title: "BlogTransformer",
+    description: "Brands API Transformer",
+    xml: new OAT\Xml(name: "BlogTransformer"),
+)]
+
+class BlogTransformer {
+
+    #[OAT\Property(
+        property: "data",
+        type: "array",
+        items: new OAT\Items(
+            properties: [
+                new OAT\Property(property: 'id', type: 'int', title: 'id', description: 'ID of the Blog DTO', example: ''),
+                new OAT\Property(property: 'name', type: 'string', title: 'name', description: 'Name of the Blog', example: ''),
+                new OAT\Property(
+                    property: 'image',
+                    type: 'string',
+                    title: 'image',
+                    description: 'Image Url of the Blog',
+                    example: '',
+                    ref: "MyBlogSchema",
+                    oneOf: [
+                        new OAT\Schema(type="string"),
+                        new OAT\Schema(type="integer")
+                    ]),
+            ]
+        ),
+    )],
+    public $data;
+    ...
+```
 
 ## License
 

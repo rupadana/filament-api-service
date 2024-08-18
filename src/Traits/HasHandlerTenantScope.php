@@ -16,7 +16,7 @@ trait HasHandlerTenantScope
 {
     protected static ?string $tenantOwnershipRelationshipName = null;
 
-    protected static function getTenantOwnershipRelationshipName(): string
+    public static function getTenantOwnershipRelationshipName(): string
     {
         return static::$tenantOwnershipRelationshipName ?? Filament::getTenantOwnershipRelationshipName();
     }
@@ -26,7 +26,7 @@ trait HasHandlerTenantScope
         return static::getOwnerRelationshipName() . '_' . app(static::getModel())->getKeyName();
     }
 
-    protected static function getTenantOwnershipRelationship(Model $record): Relation
+    public static function getTenantOwnershipRelationship(Model $record): Relation
     {
         $relationshipName = static::getTenantOwnershipRelationshipName();
 
@@ -43,9 +43,7 @@ trait HasHandlerTenantScope
 
     protected static function modifyTenantQuery(Builder $query, ?Model $tenant = null): Builder
     {
-
         if (request()->routeIs('api.*')) {
-
             $reqPanel ??= request()->route()->parameter('panel');
             $tenantId ??= request()->route()->parameter('tenant');
 
@@ -82,7 +80,7 @@ trait HasHandlerTenantScope
                             ),
                             default => $query->whereHas(
                                 $tenantOwnershipRelationshipName,
-                                fn (Builder $query) => $query->whereKey($tenantModel->getKey()),
+                                fn (Builder $query) => $query->whereKey($tenant->getKey()),
                             ),
                         };
                     }
@@ -106,7 +104,7 @@ trait HasHandlerTenantScope
                             ),
                             default => $query->whereHas(
                                 $tenantOwnershipRelationshipName,
-                                fn (Builder $query) => $query->whereKey($tenantModel->getKey()),
+                                fn (Builder $query) => $query->whereKey($tenant->getKey()),
                             ),
                         };
                     }

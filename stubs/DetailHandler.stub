@@ -17,7 +17,7 @@ class DetailHandler extends Handlers
     public function handler(Request $request)
     {
         $id = $request->route('id');
-        
+
         $query = static::getEloquentQuery();
 
         $query = QueryBuilder::for(
@@ -29,6 +29,12 @@ class DetailHandler extends Handlers
 
         $transformer = static::getApiTransformer();
 
+        $dtoModel = static::getDto();
+
+        if (!empty($dtoModel)) {
+            return new $transformer($dtoModel::from($query));
+        }
         return new $transformer($query);
+
     }
 }
