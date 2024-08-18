@@ -109,7 +109,11 @@ class Handlers
 
     public static function getApiTransformer(): ?string
     {
-        return static::getTransformerFromRequestHeader();
+        return match (ApiService::getApiVersionMethod()) {
+            'path' => static::getTransformerFromUrlPath(),
+            'query' => static::getTransformerFromUrlQuery(),
+            'header' => static::getTransformerFromRequestHeader(),
+        };
     }
 
     /**
@@ -118,7 +122,7 @@ class Handlers
     public static function getApiTransformers(): array
     {
         return array_merge([
-            'default' => DefaultTransformer::class,
+            ApiService::getDefaultTransformerName() => DefaultTransformer::class,
         ], method_exists(static::$resource, 'apiTransformers') ? array_combine(
             array_map(fn ($class) => Str::kebab(class_basename($class)), $transformers = static::$resource::apiTransformers()),
             $transformers
@@ -126,15 +130,55 @@ class Handlers
     }
 
     /**
-     * @throws Exception
+     * @throws TransformerNotFoundException
+     */
+    protected static function getTransformerFromUrlPath(): string
+    {
+        // $routeApiVersion = request()->segment(1);
+        $routeApiVersion = request()->route(ApiService::getApiVersionParameterName());
+        $transformer = Str::kebab($routeApiVersion);
+
+        if ($transformer && !array_key_exists($transformer, self::getApiTransformers())) {
+            throw new TransformerNotFoundException($transformer);
+        }
+
+        return self::getApiTransformers()[$transformer];
+    }
+
+    /**
+     * @throws TransformerNotFoundException
+     */
+    protected static function getTransformerFromUrlQuery(): string
+    {
+        $queryName = strtolower(ApiService::getApiVersionParameterName());
+
+        if (!request()->filled($queryName)) {
+            if (!method_exists(static::$resource, 'getApiTransformer')) {
+                return self::getApiTransformers()[ApiService::getDefaultTransformerName()];
+            }
+            return static::$resource::getApiTransformer();
+        }
+
+        $transformer = request()->input($queryName);
+        $transformer = Str::kebab($transformer);
+
+        if ($transformer && !array_key_exists($transformer, self::getApiTransformers())) {
+            throw new TransformerNotFoundException($transformer);
+        }
+
+        return self::getApiTransformers()[$transformer];
+
+    }
+
+    /**
+     * @throws TransformerNotFoundException
      */
     protected static function getTransformerFromRequestHeader(): string
     {
-        $headerName = config('api-service.route.api_transformer_header');
-        $headerName = strtolower($headerName);
+        $headerName = strtolower(config('api-service.route.api_transformer_header'));
         if (!request()->headers->has($headerName)) {
             if (!method_exists(static::$resource, 'getApiTransformer')) {
-                return self::getApiTransformers()['default'];
+                return self::getApiTransformers()[ApiService::getDefaultTransformerName()];
             }
             return static::$resource::getApiTransformer();
         }
