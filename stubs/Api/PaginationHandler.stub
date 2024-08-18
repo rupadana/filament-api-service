@@ -23,13 +23,19 @@ defined("API_TRANSFORMER_HEADER") ?: define("API_TRANSFORMER_HEADER", config('ap
 
 function apiVersionPath() {
     defined("API_VERSION_URL_PATH") ?: define("API_VERSION_URL_PATH", '{version}/');
+    defined("API_VERSION_URL_QUERY") ?: define("API_VERSION_URL_QUERY", false);
+    defined("API_VERSION_URL_HEADERS") ?: define("API_VERSION_URL_HEADERS", false);
 }
 
 function apiVersionQuery() {
+    defined("API_VERSION_URL_PATH") ?: define("API_VERSION_URL_PATH", '');
     defined("API_VERSION_URL_QUERY") ?: define("API_VERSION_URL_QUERY", true);
+    defined("API_VERSION_URL_HEADERS") ?: define("API_VERSION_URL_HEADERS", false);
 }
 
 function apiVersionHeaders() {
+    defined("API_VERSION_URL_PATH") ?: define("API_VERSION_URL_PATH", '');
+    defined("API_VERSION_URL_QUERY") ?: define("API_VERSION_URL_QUERY", false);
     defined("API_VERSION_URL_HEADERS") ?: define("API_VERSION_URL_HEADERS", true);
 }
 
