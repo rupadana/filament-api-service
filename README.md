@@ -203,7 +203,7 @@ use App\Filament\Resources\BlogResource\Api\Transformers\ExtraBlogColumnsTransfo
 class BlogResource extends Resource
     {
         /**
-        * @return array<string, string>
+        * @return array<string>
         */
         public static function apiTransformers(): array
         {
