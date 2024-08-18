@@ -128,14 +128,6 @@ defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
     security: (!RESOURCE_PUBLIC_{{ capitalsResource }}_DETAIL) ?  [["bearerAuth" => []]] : null,
     parameters: [
 
-        new OAT\HeaderParameter(
-            name: RESOURCE_{{ capitalsResource }}_DETAIL_TRANSFORMER_HEADER_KEY,
-            description: "Select a custom Transformer if needed",
-            in: "header",
-            allowEmptyValue: true,
-            schema: new OAT\Schema(enum: RESOURCE_{{ capitalsResource }}_DETAIL_TRANSFORMERS),
-        ),
-
         // (TENANT_AWARENESS_{{ capitalsResource }}) ? new OAT\Parameter(ref: "#/components/parameters/tenant") : null,
 
         (API_VERSION_URL_QUERY) ? new OAT\Parameter(
@@ -146,10 +138,11 @@ defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
             schema: new OAT\Schema(type: "string")
         ) : null,
 
-        (API_VERSION_URL_HEADERS) ? new OAT\Parameter(
+        (API_VERSION_URL_HEADERS) ? new OAT\HeaderParameter(
             name: API_TRANSFORMER_HEADER,
             in: "header",
             required: true,
+            allowEmptyValue: true,
             description: "Set the correct API Version / Transformer you want to use.",
             schema: new OAT\Schema(type: "string")
         ) : null,

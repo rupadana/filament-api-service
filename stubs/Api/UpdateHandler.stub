@@ -126,10 +126,11 @@ defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
             schema: new OAT\Schema(type: "string")
         ) : null,
 
-        (API_VERSION_URL_HEADERS) ? new OAT\Parameter(
+        (API_VERSION_URL_HEADERS) ? new OAT\HeaderParameter(
             name: API_TRANSFORMER_HEADER,
             in: "header",
             required: true,
+            allowEmptyValue: true,
             description: "Set the correct API Version / Transformer you want to use.",
             schema: new OAT\Schema(type: "string")
         ) : null,
