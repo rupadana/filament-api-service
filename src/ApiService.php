@@ -104,11 +104,11 @@ class ApiService
 
     public static function getApiVersionMethod(): string
     {
-        return config('api-service.route.api_version_method');
+        return config('api-service.route.api_version_method', 'headers');
     }
 
     public static function getApiVersionParameterName(): string
     {
-        return config('api-service.route.api_version_parameter_name');
+        return config('api-service.route.api_version_parameter_name', 'version');
     }
 }
