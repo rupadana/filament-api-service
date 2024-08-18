@@ -44,7 +44,6 @@ trait HasHandlerTenantScope
     protected static function modifyTenantQuery(Builder $query, ?Model $tenant = null): Builder
     {
         if (request()->routeIs('api.*')) {
-
             $reqPanel ??= request()->route()->parameter('panel');
             $tenantId ??= request()->route()->parameter('tenant');
 
