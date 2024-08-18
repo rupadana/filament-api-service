@@ -124,10 +124,10 @@ class Handlers
         return array_merge([
             ApiService::getDefaultTransformerName() => DefaultTransformer::class,
         ], method_exists(static::$resource, 'apiTransformers') ?
-        array_flip(array_combine(
-            array_map(fn ($class) => Str::kebab(class_basename($class)), $transformers = static::$resource::apiTransformers()),
-            array_keys($transformers)
-        )) : []); // @phpstan-ignore-line
+        array_combine(
+            array_map(fn($class) => Str::kebab(class_basename($class)), $transformers = static::$resource::apiTransformers()),
+            array_values($transformers)
+        ) : []); // @phpstan-ignore-line
     }
 
     /**
