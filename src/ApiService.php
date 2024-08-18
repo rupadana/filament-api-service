@@ -35,18 +35,22 @@ class ApiService
         return static::$resource;
     }
 
-    public static function registerRoutes(Panel $panel)
+    public static function registerRoutes(Panel $panel, string $baseRoutePrefix)
     {
 
-        $versionPrefix = '';
+        $versionPrefix = $baseRoutePrefix;
+
+        $slug = static::getResource()::getSlug();
 
         if (static::getApiVersionMethod() === 'path') {
 
-            $transformers = static::getResource()::getApiTransformers();
+            $transformers = static::getResource()::apiTransformers();
 
             foreach ($transformers as $transKey => $transformer) {
 
                 $versionPrefix = '{' . self::getApiVersionParameterName() . '}/';
+                $versionPrefix .= $baseRoutePrefix;
+
                 $namePrefix = str($transKey)->kebab() . '/';
                 $name = (string) str($namePrefix . (static::$groupRouteName ?? $slug))
                     ->replace('/', '.')

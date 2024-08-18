@@ -102,7 +102,7 @@ defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
                         serverVariable: "version",
                         description: 'Version or Transformer name of this API endpoint',
                         default: API_DEFAULT_TRANSFORMER_NAME,
-                    ),
+                    )
                 : null,
             ]
             ) :
@@ -115,7 +115,7 @@ defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
                         serverVariable: "version",
                         description: 'Version or Transformer name of this API endpoint',
                         default: API_DEFAULT_TRANSFORMER_NAME,
-                    ),
+                    )
                 : null,
                 ]
             )
