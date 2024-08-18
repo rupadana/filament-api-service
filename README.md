@@ -68,11 +68,13 @@ So, You don't need to register the routes manually.
 
 The routes will be :
 
-- [GET] '/api/`admin`/blogs'   - Return LengthAwarePaginator
-- [GET] '/api/`admin`/blogs/1' - Return single resource
-- [PUT] '/api/`admin`/blogs/1' - Update resource
-- [POST] '/api/`admin`/blogs' - Create resource
-- [DELETE] '/api/`admin`/blogs/1' - Delete resource
+| Method | Endpoint             | Description                 |
+| ------ | -------------------- | --------------------------- |
+| GET    | /api/`admin`/blogs   | Return LengthAwarePaginator |
+| GET    | /api/`admin`/blogs/1 | Return single resource      |
+| PUT    | /api/`admin`/blogs/1 | Update resource             |
+| POST   | /api/`admin`/blogs   | Create resource             |
+| DELETE | /api/`admin`/blogs/1 | Delete resource             |
 
 On CreateHandler, you need to be create your custom request validation.
 
@@ -90,28 +92,33 @@ Token Resource is protected by TokenPolicy. You can disable it by publishing the
     ],
 ```
 
+> [!IMPORTANT]  
+> If you use Laravel 11, don't forget to run ``` php artisan install:api ``` to publish the personal_access_tokens migration after that run ``` php artisan migrate ``` to migrate the migration, but as default if you run the ``` php artisan install:api ``` it will ask you to migrate your migration.
+
 ### Filtering & Allowed Field
 
 We used `"spatie/laravel-query-builder": "^5.3"` to handle query selecting, sorting and filtering. Check out [the spatie/laravel-query-builder documentation](https://spatie.be/docs/laravel-query-builder/v5/introduction) for more information.
-You can specified `allowedFilters` and `allowedFields` in your model. For example:
+In order to allow modifying the query for your model you can implement the `HasAllowedFields`, `HasAllowedSorts` and `HasAllowedFilters` Contracts in your model.
 
 ```php
-class User extends Model {
+class User extends Model implements HasAllowedFields, HasAllowedSorts, HasAllowedFilters {
     // Which fields can be selected from the database through the query string
-    public static array $allowedFields = [
-        'name'
-    ];
+    public function getAllowedFields(): array
+    {
+        // Your implementation here
+    }
 
     // Which fields can be used to sort the results through the query string
-    public static array $allowedSorts = [
-        'name',
-        'created_at'
-    ];
+    public function getAllowedSorts(): array
+    {
+        // Your implementation here
+    }
 
     // Which fields can be used to filter the results through the query string
-    public static array $allowedFilters = [
-        'name'
-    ];
+    public function getAllowedFilters(): array
+    {
+        // Your implementation here
+    }
 }
 ```
 
