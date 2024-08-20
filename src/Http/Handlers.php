@@ -112,7 +112,7 @@ class Handlers
         return match (ApiService::getApiVersionMethod()) {
             'path' => static::getTransformerFromUrlPath(),
             'query' => static::getTransformerFromUrlQuery(),
-            'header' => static::getTransformerFromRequestHeader(),
+            'headers' => static::getTransformerFromRequestHeader(),
         };
     }
 
