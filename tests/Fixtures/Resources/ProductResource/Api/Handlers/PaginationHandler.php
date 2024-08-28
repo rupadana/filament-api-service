@@ -15,28 +15,12 @@ class PaginationHandler extends Handlers
     {
         $model = static::getModel();
 
-        $allowedFields = method_exists($model, 'getAllowedFields') && is_array($model::getAllowedFields())
-            ? $model::getAllowedFields()
-            : (property_exists($model, 'allowedFields') && is_array($model::$allowedFields)
-                ? $model::$allowedFields
-                : []);
-
-        $allowedSorts = method_exists($model, 'getAllowedSorts') && is_array($model::getAllowedSorts())
-            ? $model::getAllowedSorts()
-            : (property_exists($model, 'allowedSorts') && is_array($model::$allowedSorts)
-                ? $model::$allowedSorts
-                : []);
-
-        $allowedFilters = method_exists($model, 'getAllowedFilters') && is_array($model::getAllowedFilters())
-            ? $model::getAllowedFilters()
-            : (property_exists($model, 'allowedFilters') && is_array($model::$allowedFilters)
-                ? $model::$allowedFilters
-                : []);
 
         $query = QueryBuilder::for($model)
-            ->allowedFields($allowedFields)
-            ->allowedSorts($allowedSorts)
-            ->allowedFilters($allowedFilters)
+            ->allowedFields($this->getAllowedFields() ?? [])
+            ->allowedSorts($this->getAllowedSorts() ?? [])
+            ->allowedFilters($this->getAllowedFilters() ?? [])
+            ->allowedIncludes($this->getAllowedIncludes() ?? [])
             ->paginate(request()->query('per_page'))
             ->appends(request()->query());
 
