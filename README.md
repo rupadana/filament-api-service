@@ -125,7 +125,7 @@ class User extends Model implements HasAllowedFields, HasAllowedSorts, HasAllowe
 
 ### Create a Handler
 
-To create a handler you can use this command. By default, i'm using CreateHandler
+To create a handler you can use this command. We have 5 Handler, CreateHandler, UpdateHandler, DeleteHandler, DetailHandler, PaginationHandler, If you want a custom handler then write what handler you want.
 
 ```bash
 php artisan make:filament-api-handler BlogResource
