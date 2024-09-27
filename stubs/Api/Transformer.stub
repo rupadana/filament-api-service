@@ -1,0 +1,67 @@
+<?php
+
+namespace {{ namespace }}{{ resourceClass }};
+
+
+use OpenApi\Attributes as OAT;
+
+#[OAT\Schema(
+    schema: "{{ transformerName }}",
+    title: "{{ transformerName }}",
+    description: "{{ modelClass }} API Transformer",
+    xml: new OAT\Xml(name: "{{ transformerName }}"),
+)]
+
+class {{ transformerName }} {
+
+    #[OAT\Property(
+        property: "data",
+        type: "array",
+        items: new OAT\Items(
+            properties: [
+                {{ transformerProperties }}
+                // add/modify your own properties corresponding to the {{ transformerName }}
+            ]
+        ),
+    )]
+    public $data;
+
+    #[OAT\Property(
+        property: "meta",
+        type: "object",
+        properties: [
+            new OAT\Property(property: "current_page", type: "integer", title: "Current Page", description: "current page of product", example: ""),
+            new OAT\Property(property: "from", type: "integer", title: "", description: "", example: ""),
+            new OAT\Property(property: "last_page", type: "integer", title: "", description: "", example: ""),
+            new OAT\Property(property: "path", type: "string", title: "", description: "", example: ""),
+            new OAT\Property(property: "per_page", type: "integer", title: "", description: "", example: ""),
+            new OAT\Property(property: "to", type: "integer", title: "", description: "", example: ""),
+            new OAT\Property(property: "total", type: "integer", title: "", description: "", example: ""),
+            new OAT\Property(property: "", type: "integer", title: "", description: "", example: ""),
+            new OAT\Property(
+                property: "links",
+                type: "array",
+                items: new OAT\Items(properties: [
+                    new OAT\Property(property: "url", type: "string", description: "URL of Pagination"),
+                    new OAT\Property(property: "label", type: "string", description: "Label of Pagination"),
+                    new OAT\Property(property: "active", type: "bool", description: "Pagination is Active"),
+                ])
+            )
+        ]
+    )]
+    public $meta;
+
+    #[
+        OAT\Property(
+            property: "links",
+            type: "object",
+            properties: [
+                new OAT\Property(property: "first", type: "string", description: "first page link URL of product", example: ""),
+                new OAT\Property(property: "last", type: "string", description: "last page link URL of product", example: ""),
+                new OAT\Property(property: "prev", type: "string", description: "prev page link URL of product", example: ""),
+                new OAT\Property(property: "next", type: "string", description: "next page link URL of product", example: ""),
+            ]
+        )
+    ]
+    public $links;
+}

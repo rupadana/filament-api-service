@@ -7,6 +7,7 @@ use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
 use Laravel\Sanctum\Http\Middleware\CheckAbilities;
 use Laravel\Sanctum\Http\Middleware\CheckForAnyAbility;
+use Rupadana\ApiService\Commands\MakeApiDocsCommand;
 use Rupadana\ApiService\Commands\MakeApiHandlerCommand;
 use Rupadana\ApiService\Commands\MakeApiServiceCommand;
 use Rupadana\ApiService\Commands\MakeApiTransformerCommand;
@@ -101,6 +102,7 @@ class ApiServiceServiceProvider extends PackageServiceProvider
             MakeApiHandlerCommand::class,
             MakeApiServiceCommand::class,
             MakeApiTransformerCommand::class,
+            MakeApiDocsCommand::class,
         ];
     }
 
