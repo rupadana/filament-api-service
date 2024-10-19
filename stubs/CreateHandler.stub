@@ -22,7 +22,13 @@ class CreateHandler extends Handlers {
     {
         $model = new (static::getModel());
 
-        $model->fill($request->all());
+        $dtoModel = static::getDto();
+
+        if (!empty($dtoModel)) {
+            $model->fill($dtoModel::from($request)->all());
+        } else {
+            $model->fill($request->all());
+        }
 
         $model->save();
 
