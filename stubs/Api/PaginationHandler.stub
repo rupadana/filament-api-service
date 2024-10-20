@@ -122,7 +122,7 @@ defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
                 description: "API Server Filament Panel",
                 url: BASE_URL . "/api" . API_VERSION_URL_PATH . ((PANEL_PREFIX_{{ capitalsResource }}_PAGINATION !== null) ? "/{panel}" : ""),
                 variables: [
-                (PANEL_PREFIX_{{ capitalsResource }}_PAGINATE !== null) ?
+                (PANEL_PREFIX_{{ capitalsResource }}_PAGINATION !== null) ?
                     new OAT\ServerVariable(
                         serverVariable: "panel",
                         description: "Select the Filament Panel",
