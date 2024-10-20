@@ -14,41 +14,41 @@ $panelId = $panel->getId();
 $panelPath = $panel->getPath();
 $hasTenancy = $panel->hasTenancy();
 $tenantSlugAttribute = $panel->getTenantSlugAttribute();
-$panelPrefix = app(ApiService::class)->isRoutePrefixedByPanel() ? $panelPath ?? $panelId : '';
+$panelPrefix = (app(ApiService::class)->isRoutePrefixedByPanel() || count(PANEL_ENUMS) > 1) ? $panelPath ?? $panelId : null;
 
 defined("API_DEFAULT_TRANSFORMER_NAME") ?: define("API_DEFAULT_TRANSFORMER_NAME", config('api-service.route.default_transformer_name'));
 defined("API_VERSION_PARAMETER_NAME") ?: define("API_VERSION_PARAMETER_NAME", config('api-service.route.api_version_parameter_name'));
 defined("API_TRANSFORMER_HEADER") ?: define("API_TRANSFORMER_HEADER", config('api-service.route.api_transformer_header'));
 
-function apiVersionPath() {
+function apiVersionPath_DETAIL_{{ capitalsResource }}() {
     defined("API_VERSION_URL_PATH") ?: define("API_VERSION_URL_PATH", '{version}/');
     defined("API_VERSION_URL_QUERY") ?: define("API_VERSION_URL_QUERY", false);
     defined("API_VERSION_URL_HEADERS") ?: define("API_VERSION_URL_HEADERS", false);
 }
 
-function apiVersionQuery() {
+function apiVersionQuery_DETAIL_{{ capitalsResource }}() {
     defined("API_VERSION_URL_PATH") ?: define("API_VERSION_URL_PATH", '');
     defined("API_VERSION_URL_QUERY") ?: define("API_VERSION_URL_QUERY", true);
     defined("API_VERSION_URL_HEADERS") ?: define("API_VERSION_URL_HEADERS", false);
 }
 
-function apiVersionHeaders() {
+function apiVersionHeaders_DETAIL_{{ capitalsResource }}() {
     defined("API_VERSION_URL_PATH") ?: define("API_VERSION_URL_PATH", '');
     defined("API_VERSION_URL_QUERY") ?: define("API_VERSION_URL_QUERY", false);
     defined("API_VERSION_URL_HEADERS") ?: define("API_VERSION_URL_HEADERS", true);
 }
 
-function apiVersionDefault() {
+function apiVersionDefault_DETAIL_{{ capitalsResource }}() {
     defined("API_VERSION_URL_PATH") ?: define("API_VERSION_URL_PATH", '');
     defined("API_VERSION_URL_QUERY") ?: define("API_VERSION_URL_QUERY", false);
     defined("API_VERSION_URL_HEADERS") ?: define("API_VERSION_URL_HEADERS", false);
 }
 
 match (config('api-service.route.api_version_method')) {
-    'path' => apiVersionPath(),
-    'query' => apiVersionQuery(),
-    'headers' => apiVersionHeaders(),
-    default => apiVersionDefault(),
+    'path' => apiVersionPath_DETAIL_{{ capitalsResource }}(),
+    'query' => apiVersionQuery_DETAIL_{{ capitalsResource }}(),
+    'headers' => apiVersionHeaders_DETAIL_{{ capitalsResource }}(),
+    default => apiVersionDefault_DETAIL_{{ capitalsResource }}(),
 };
 
 
@@ -95,9 +95,9 @@ defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
         (TENANT_AWARENESS_{{ capitalsResource }}) ?
             new OAT\Server(
                 description: "API Server Filament Panel",
-                url: BASE_URL . "/api/" . API_VERSION_URL_PATH . ((PANEL_PREFIX_{{ capitalsResource }}_DETAIL) ? "{panel}" : "") . PANEL_PREFIX_{{ capitalsResource }}_DETAIL . "/{tenant}",
+                url: BASE_URL . "/api" . API_VERSION_URL_PATH . ((PANEL_PREFIX_{{ capitalsResource }}_DETAIL !== null) ? "/{panel}" : "") . "/{tenant}",
                 variables: [
-                (PANEL_PREFIX_{{ capitalsResource }}_DETAIL) ?
+                (PANEL_PREFIX_{{ capitalsResource }}_DETAIL !== null) ?
                     new OAT\ServerVariable(
                         serverVariable: "panel",
                         description: "Select the Filament Panel",
@@ -120,8 +120,16 @@ defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
             ) :
             new OAT\Server(
                 description: "API Server Filament Panel",
-                url: BASE_URL . "/api/" . API_VERSION_URL_PATH . PANEL_PREFIX_{{ capitalsResource }}_DETAIL . "/",
+                url: BASE_URL . "/api" . API_VERSION_URL_PATH . ((PANEL_PREFIX_{{ capitalsResource }}_DETAIL !== null) ? "/{panel}" : ""),
                 variables: [
+                (PANEL_PREFIX_{{ capitalsResource }}_DETAIL !== null) ?
+                    new OAT\ServerVariable(
+                        serverVariable: "panel",
+                        description: "Select the Filament Panel",
+                        enum: PANEL_ENUMS,
+                        default: PANEL_ENUMS[0]
+                    ) :
+                null,
                 (API_VERSION_URL_PATH != '') ?
                     new OAT\ServerVariable(
                         serverVariable: "version",

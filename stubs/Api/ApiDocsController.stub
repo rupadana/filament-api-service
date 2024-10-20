@@ -12,7 +12,7 @@ foreach (filament()->getPanels() as $panel) {
         $panelId = $panel->getId();
         $panelPath = $panel->getPath();
         $tenantSlugAttribute = $panel->getTenantSlugAttribute();
-        $panelPrefix = app(ApiService::class)->isRoutePrefixedByPanel() ? $panelPath ?? $panelId : '';
+        $panelPrefix = app(ApiService::class)->isRoutePrefixedByPanel() ? $panelPath ?? $panelId : null;
 
         $panel_enums[] = $panelPrefix;
     }
