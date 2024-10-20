@@ -60,13 +60,18 @@ trait HasHandlerTenantScope
                 $tenantOwnershipRelationship = static::getTenantOwnershipRelationship($query->getModel());
                 $tenantOwnershipRelationshipName = static::getTenantOwnershipRelationshipName();
                 $tenantModel = app(Filament::getTenantModel());
+                $tenant = $tenantModel::where(Filament::getCurrentPanel()->getTenantSlugAttribute() ?? $tenantModel->getRouteKeyName(), $tenantId)->first();
+
+                if (empty($tenant)) {
+                    $query->whereRaw('1 = 0');
+                }
 
                 if (
                     ApiService::isTenancyEnabled() &&
                     ApiService::tenancyAwareness() &&
                     static::isScopedToTenant() &&
                     $tenantId &&
-                    $tenant = $tenantModel::where(Filament::getCurrentPanel()->getTenantSlugAttribute() ?? $tenantModel->getKeyName(), $tenantId)->first()
+                    $tenant
                 ) {
                     if (auth()->check()) {
 
@@ -95,7 +100,6 @@ trait HasHandlerTenantScope
                     if (auth()->check()) {
 
                         $query = match (true) {
-
                             $tenantOwnershipRelationship instanceof MorphTo => $query
                                 ->where($tenantModel->getRelationWithoutConstraints($tenantOwnershipRelationshipName)->getMorphType(), $tenantModel->getMorphClass())
                                 ->whereIn($tenantModel->getRelationWithoutConstraints($tenantOwnershipRelationshipName)->getForeignKeyName(), request()->user()->{Str::plural($tenantOwnershipRelationshipName)}->pluck($tenantModel->getKeyName())->toArray()),

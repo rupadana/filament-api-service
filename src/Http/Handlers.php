@@ -293,7 +293,7 @@ class Handlers
 
     protected static function getEloquentQuery()
     {
-        $query = app(static::getModel())->query();
+        $query = app(static::getModel())->query()->withoutGlobalScopes();
 
         if (static::isScopedToTenant() && ApiService::tenancyAwareness() && Filament::getCurrentPanel()) {
             $query = static::modifyTenantQuery($query);
