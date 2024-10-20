@@ -180,7 +180,9 @@ class Handlers
     protected static function getTransformerFromRequestHeader(): string
     {
         $headerName = strtolower(config('api-service.route.api_transformer_header'));
-        if (!request()->headers->has($headerName)) {
+        if (!request()->headers->has($headerName) ||
+            (request()->headers->has($headerName) && request()->headers->get($headerName) == '')
+        ) {
             if (!method_exists(static::$resource, 'getApiTransformer')) {
                 return self::getApiTransformers()[ApiService::getDefaultTransformerName()];
             }
