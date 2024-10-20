@@ -246,6 +246,8 @@ class MakeApiDocsCommand extends Command
         $dtoClass = $modelReflection->getProperty('dataClass')->getDefaultValue();
         $dtoReflection = new ReflectionClass($dtoClass);
 
+        $properties = [];
+
         foreach ($dtoReflection->getProperties() as $property) {
             if (!empty($property->getAttributes())) {
                 $attribute = $property->getAttributes()[0];
