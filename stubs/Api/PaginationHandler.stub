@@ -94,14 +94,15 @@ defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
         (TENANT_AWARENESS_{{ capitalsResource }}) ?
             new OAT\Server(
                 description: "API Server Filament Panel",
-                url: BASE_URL . "/api/" . API_VERSION_URL_PATH . "{panel}" . PANEL_PREFIX_{{ capitalsResource }}_PAGINATION . "/{tenant}",
+                url: BASE_URL . "/api/" . API_VERSION_URL_PATH . ((PANEL_PREFIX_{{ capitalsResource }}_PAGINATION) ? "{panel}" : "") . PANEL_PREFIX_{{ capitalsResource }}_PAGINATION . "/{tenant}",
                 variables: [
+                (PANEL_PREFIX_{{ capitalsResource }}_PAGINATION) ?
                     new OAT\ServerVariable(
                         serverVariable: "panel",
                         description: "Select the Filament Panel",
                         enum: PANEL_ENUMS,
                         default: PANEL_ENUMS[0]
-                    ),
+                    ) : null,
                     new OAT\ServerVariable(
                         serverVariable: "tenant",
                         description: 'ID of the tenant',
