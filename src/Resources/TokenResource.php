@@ -42,6 +42,10 @@ class TokenResource extends Resource
                             ->hidden(function () {
                                 $user = auth()->user();
 
+                                $policy = config('api-service.models.token.enable_policy', true);
+
+                                if ($policy === false) return false;
+
                                 return ! $user->hasRole('super_admin');
                             })
                             ->required(),
