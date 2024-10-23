@@ -2,6 +2,19 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.3.2 - 2024-10-23
+
+### What's Changed
+
+* Support spatie/laravel-query-builder to ^6.2 by @rupadana in https://github.com/rupadana/filament-api-service/pull/72
+* Refer to policy before checking user role by @Aniruddh-J in https://github.com/rupadana/filament-api-service/pull/75
+
+### New Contributors
+
+* @Aniruddh-J made their first contribution in https://github.com/rupadana/filament-api-service/pull/75
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.3.1...3.3.2
+
 ## 3.3.1 - 2024-08-28
 
 **Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.3.0...3.3.1
