@@ -8,11 +8,12 @@ use Rupadana\ApiService\Exceptions\InvalidTenancyConfiguration;
 Route::prefix('api')
     ->name('api.')
     ->group(function () {
-        if (ApiService::tenancyAwareness() && (! ApiService::isRoutePrefixedByPanel() || ! ApiService::isTenancyEnabled())) {
-            throw new InvalidTenancyConfiguration("Tenancy awareness is enabled!. Please set 'api-service.route.panel_prefix=true' and 'api-service.tenancy.enabled=true'");
-        }
 
         $panels = Filament::getPanels();
+
+        if ((ApiService::tenancyAwareness() && count($panels) > 1) && (! ApiService::isRoutePrefixedByPanel() || ! ApiService::isTenancyEnabled())) {
+            throw new InvalidTenancyConfiguration("Tenancy awareness is enabled!. Please set 'api-service.route.panel_prefix=true' and 'api-service.tenancy.enabled=true'");
+        }
 
         foreach ($panels as $key => $panel) {
             try {
@@ -22,29 +23,28 @@ Route::prefix('api')
                 $tenantSlugAttribute = $panel->getTenantSlugAttribute();
                 $apiServicePlugin = $panel->getPlugin('api-service');
                 $middlewares = $apiServicePlugin->getMiddlewares();
-                $panelRoutePrefix = ApiService::isRoutePrefixedByPanel() ? '{panel}' : '';
+                $panelRoutePrefix = ApiService::isRoutePrefixedByPanel() ? '{panel}/' : '';
                 $panelNamePrefix = $panelRoutePrefix ? $panel->getId() . '.' : '';
 
                 if (
                     $hasTenancy &&
-                    ApiService::isTenancyEnabled() &&
-                    ApiService::tenancyAwareness()
+                    ApiService::isTenancyEnabled()
                 ) {
-                    Route::prefix($panelRoutePrefix . '/' . (($tenantRoutePrefix) ? "{$tenantRoutePrefix}/" : '') . '{tenant' . (($tenantSlugAttribute) ? ":{$tenantSlugAttribute}" : '') . '}')
-                        ->name($panelNamePrefix)
+                    $routePrefix = $panelRoutePrefix . ((ApiService::tenancyAwareness() && $tenantRoutePrefix) ? "{$tenantRoutePrefix}/" : '') . '{tenant' . (($tenantSlugAttribute) ? ":{$tenantSlugAttribute}" : '') . '}/';
+                    Route::name($panelNamePrefix)
                         ->middleware($middlewares)
-                        ->group(function () use ($panel, $apiServicePlugin) {
-                            $apiServicePlugin->route($panel);
+                        ->group(function () use ($panel, $routePrefix, $apiServicePlugin) {
+                            $apiServicePlugin->route($panel, $routePrefix);
                         });
                 }
 
                 if (! ApiService::tenancyAwareness()) {
-                    Route::prefix($panelRoutePrefix)
-                        ->name($panelNamePrefix)
+                    $routePrefix = $panelRoutePrefix;
+                    Route::name($panelNamePrefix)
                         ->middleware($middlewares)
-                        ->group(function () use ($panel) {
+                        ->group(function () use ($panel, $routePrefix, $apiServicePlugin) {
                             $apiServicePlugin = $panel->getPlugin('api-service');
-                            $apiServicePlugin->route($panel);
+                            $apiServicePlugin->route($panel, $routePrefix);
                         });
                 }
             } catch (Exception $e) {

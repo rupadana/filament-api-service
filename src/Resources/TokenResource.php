@@ -8,8 +8,10 @@ use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\DeleteAction;
@@ -53,7 +55,8 @@ class TokenResource extends Resource
 
                 Section::make('Abilities')
                     ->description('Select abilities of the token')
-                    ->schema(static::getAbilitiesSchema()),
+                    ->schema(static::getAbilitiesSchema())
+                    ->columns(3),
             ]);
     }
 
@@ -62,6 +65,8 @@ class TokenResource extends Resource
         $schema = [];
 
         $abilities = ApiServicePlugin::getAbilities(Filament::getCurrentPanel());
+
+        $schema[] = Toggle::make('all_abilities')->live()->columnSpan(3);
 
         foreach ($abilities as $resource => $handler) {
             $extractedAbilities = [];
@@ -79,7 +84,9 @@ class TokenResource extends Resource
                         ->deselectAllAction(fn (Action $action) => $action->label('Unselect All'))
                         ->bulkToggleable(),
                 ])
-                ->collapsible();
+                ->collapsible()
+                ->visible(fn(Get $get): bool => !$get('all_abilities'))
+                ->columnSpan(1);
         }
 
         return $schema;

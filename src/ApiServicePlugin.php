@@ -60,7 +60,7 @@ class ApiServicePlugin implements Plugin
         return $abilities;
     }
 
-    public function route(Panel $panel): void
+    public function route(Panel $panel, string $baseRoutePrefix): void
     {
         $resources = $panel->getResources();
 
@@ -70,7 +70,7 @@ class ApiServicePlugin implements Plugin
 
                 $apiServiceClass = $resource . '\\Api\\' . $resourceName . 'ApiService';
 
-                app($apiServiceClass)->registerRoutes($panel);
+                app($apiServiceClass)->registerRoutes($panel, $baseRoutePrefix);
             } catch (Exception $e) {
             }
         }

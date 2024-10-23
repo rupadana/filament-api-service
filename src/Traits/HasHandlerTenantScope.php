@@ -30,7 +30,7 @@ trait HasHandlerTenantScope
     {
         $relationshipName = static::getTenantOwnershipRelationshipName();
 
-        if (! $record->isRelation($relationshipName)) {
+        if (!$record->isRelation($relationshipName)) {
 
             $resourceClass = static::class;
             $recordClass = $record::class;
@@ -43,59 +43,75 @@ trait HasHandlerTenantScope
 
     protected static function modifyTenantQuery(Builder $query, ?Model $tenant = null): Builder
     {
-        if (request()->routeIs('api.*') && Filament::hasTenancy()) {
+        if (request()->routeIs('api.*')) {
+
+            $reqPanel ??= request()->route()->parameter('panel');
             $tenantId ??= request()->route()->parameter('tenant');
 
-            $tenantOwnershipRelationship = static::getTenantOwnershipRelationship($query->getModel());
-            $tenantOwnershipRelationshipName = static::getTenantOwnershipRelationshipName();
-            $tenantModel = app(Filament::getTenantModel());
-
-            if (
-                ApiService::isTenancyEnabled() &&
-                ApiService::tenancyAwareness() &&
-                static::isScopedToTenant() &&
-                $tenantId &&
-                $tenant = $tenantModel::where(Filament::getCurrentPanel()->getTenantSlugAttribute() ?? $tenantModel->getKeyName(), $tenantId)->first()
-            ) {
-                if (auth()->check()) {
-
-                    $query = match (true) {
-                        $tenantOwnershipRelationship instanceof MorphTo => $query->whereMorphedTo(
-                            $tenantOwnershipRelationshipName,
-                            $tenant,
-                        ),
-                        $tenantOwnershipRelationship instanceof BelongsTo => $query->whereBelongsTo(
-                            $tenant,
-                            $tenantOwnershipRelationshipName,
-                        ),
-                        default => $query->whereHas(
-                            $tenantOwnershipRelationshipName,
-                            fn (Builder $query) => $query->whereKey($tenant->getKey()),
-                        ),
-                    };
+            foreach (Filament::getPanels() as $panel) {
+                if ($panel->getPath() == $reqPanel) {
+                    Filament::setCurrentPanel($panel);
+                    break;
                 }
             }
 
-            if (
-                ApiService::isTenancyEnabled() &&
-                ! ApiService::tenancyAwareness() &&
-                static::isScopedToTenant()
-            ) {
-                if (auth()->check()) {
+            if (Filament::hasTenancy()) {
 
-                    $query = match (true) {
+                $tenantOwnershipRelationship = static::getTenantOwnershipRelationship($query->getModel());
+                $tenantOwnershipRelationshipName = static::getTenantOwnershipRelationshipName();
+                $tenantModel = app(Filament::getTenantModel());
+                $tenant = $tenantModel::where(Filament::getCurrentPanel()->getTenantSlugAttribute() ?? $tenantModel->getRouteKeyName(), $tenantId)->first();
 
-                        $tenantOwnershipRelationship instanceof MorphTo => $query
-                            ->where($tenantModel->getRelationWithoutConstraints($tenantOwnershipRelationshipName)->getMorphType(), $tenantModel->getMorphClass())
-                            ->whereIn($tenantModel->getRelationWithoutConstraints($tenantOwnershipRelationshipName)->getForeignKeyName(), request()->user()->{Str::plural($tenantOwnershipRelationshipName)}->pluck($tenantModel->getKeyName())->toArray()),
-                        $tenantOwnershipRelationship instanceof BelongsTo => $query->whereBelongsTo(
-                            request()->user()->{Str::plural($tenantOwnershipRelationshipName)}
-                        ),
-                        default => $query->whereHas(
-                            $tenantOwnershipRelationshipName,
-                            fn (Builder $query) => $query->whereKey($tenant->getKey()),
-                        ),
-                    };
+                if (empty($tenant)) {
+                    $query->whereRaw('1 = 0');
+                }
+
+                if (
+                    ApiService::isTenancyEnabled() &&
+                    ApiService::tenancyAwareness() &&
+                    static::isScopedToTenant() &&
+                    $tenantId &&
+                    $tenant
+                ) {
+                    if (auth()->check()) {
+
+                        $query = match (true) {
+                            $tenantOwnershipRelationship instanceof MorphTo => $query->whereMorphedTo(
+                                $tenantOwnershipRelationshipName,
+                                $tenant,
+                            ),
+                            $tenantOwnershipRelationship instanceof BelongsTo => $query->whereBelongsTo(
+                                $tenant,
+                                $tenantOwnershipRelationshipName,
+                            ),
+                            default => $query->whereHas(
+                                $tenantOwnershipRelationshipName,
+                                fn (Builder $query) => $query->whereKey($tenant->getKey()),
+                            ),
+                        };
+                    }
+                }
+
+                if (
+                    ApiService::isTenancyEnabled() &&
+                    !ApiService::tenancyAwareness() &&
+                    static::isScopedToTenant()
+                ) {
+                    if (auth()->check()) {
+
+                        $query = match (true) {
+                            $tenantOwnershipRelationship instanceof MorphTo => $query
+                                ->where($tenantModel->getRelationWithoutConstraints($tenantOwnershipRelationshipName)->getMorphType(), $tenantModel->getMorphClass())
+                                ->whereIn($tenantModel->getRelationWithoutConstraints($tenantOwnershipRelationshipName)->getForeignKeyName(), request()->user()->{Str::plural($tenantOwnershipRelationshipName)}->pluck($tenantModel->getKeyName())->toArray()),
+                            $tenantOwnershipRelationship instanceof BelongsTo => $query->whereBelongsTo(
+                                request()->user()->{Str::plural($tenantOwnershipRelationshipName)}
+                            ),
+                            default => $query->whereHas(
+                                $tenantOwnershipRelationshipName,
+                                fn (Builder $query) => $query->whereKey($tenant->getKey()),
+                            ),
+                        };
+                    }
                 }
             }
         }
