@@ -1,19 +1,23 @@
 <?php
 namespace {{ namespace }};
 
+{{ dtoNamespace }}
+
+use Rupadana\ApiService\Attributes\UsesDTO;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+{{ dtoUsesDtoAttribute }}
 class {{ apiTransformerClass }} extends JsonResource
 {
 
     /**
-     * Transform the resource into an array.
+     * Transform the resource via a DTO into an array.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
     public function toArray($request)
     {
-        return $this->resource->toArray();
+        {{ returnToArray }}
     }
 }
