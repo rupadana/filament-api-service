@@ -7,6 +7,7 @@ use Filament\Panel;
 use Filament\Support\Commands\Concerns\CanManipulateFiles;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
+use ReflectionClass;
 
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
@@ -56,7 +57,7 @@ class MakeApiTransformerCommand extends Command
             $panel = (count($panels) > 1) ? $panels[select(
                 label: 'Which panel would you like to create this in?',
                 options: array_map(
-                    fn (Panel $panel): string => $panel->getId(),
+                    fn(Panel $panel): string => $panel->getId(),
                     $panels,
                 ),
                 default: Filament::getDefaultPanel()->getId()
@@ -89,13 +90,40 @@ class MakeApiTransformerCommand extends Command
 
         $resourceApiTransformerDirectory = "{$baseResourcePath}/Api/Transformers/$apiTransformerClass.php";
 
-        $this->copyStubToApp('ApiTransformer', $resourceApiTransformerDirectory, [
-            'namespace' => "{$namespace}\\{$resourceClass}\\Api\\Transformers",
-            'resource' => "{$namespace}\\{$resourceClass}",
-            'resourceClass' => $resourceClass,
-            'resourcePageClass' => $resourceApiTransformerDirectory,
-            'apiTransformerClass' => $apiTransformerClass,
-        ]);
+        if ($this->confirm('Will this transformer use a DTO?')) {
+            $dtoClass = $this->ask('What is the full Classname of the DTO? e.g. \\App\\Data\\PostData');
+            if (!class_exists($dtoClass)) {
+                $this->error("The class {$dtoClass} does not exist.");
+                return 1;
+            }
+
+            $reflectionDtoClass = new ReflectionClass($dtoClass);
+            $shortClassName = $reflectionDtoClass->getShortName();
+
+            $extraStubArray = [
+                'dtoNamespace' => "use " . $dtoClass . ";",
+                'dtoUsesDtoAttribute' => "#[UsesDTO(" . $shortClassName . "::class)]",
+                'returnToArray' => "return " . $shortClassName . "::from(\$this->resource)->transform();",
+            ];
+        } else {
+            $extraStubArray = [
+                'dtoNamespace' => "",
+                'dtoUsesDtoAttribute' => "",
+                'returnToArray' => "return \$this->resource->toArray();",
+            ];
+        }
+
+        $this->copyStubToApp(
+            'ApiTransformer',
+            $resourceApiTransformerDirectory,
+            array_merge([
+                'namespace' => "{$namespace}\\{$resourceClass}\\Api\\Transformers",
+                'resource' => "{$namespace}\\{$resourceClass}",
+                'resourceClass' => $resourceClass,
+                'resourcePageClass' => $resourceApiTransformerDirectory,
+                'apiTransformerClass' => $apiTransformerClass,
+            ], $extraStubArray)
+        );
 
         $this->components->info("Successfully created API Transformer for {$resource}!");
         $this->components->info("Add this method to {$namespace}\\{$resourceClass}.php");
