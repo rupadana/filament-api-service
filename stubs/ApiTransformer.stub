@@ -2,7 +2,6 @@
 namespace {{ namespace }};
 
 {{ dtoNamespace }}
-
 use Rupadana\ApiService\Attributes\UsesDTO;
 use Illuminate\Http\Resources\Json\JsonResource;
 

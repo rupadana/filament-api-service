@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Str;
 use Rupadana\ApiService\ApiService;
+use Rupadana\ApiService\Attributes\UsesDTO;
 use Rupadana\ApiService\Exceptions\TransformerNotFoundException;
 use Rupadana\ApiService\Traits\HasHandlerTenantScope;
 use Rupadana\ApiService\Contracts\HasAllowedFields;
@@ -104,9 +105,15 @@ class Handlers
 
     public static function getDto(): ?string
     {
-        $modelReflection = new ReflectionClass(static::getModel());
-        if (property_exists(static::getModel(), 'dataClass')) {
-            return $modelReflection->getProperty('dataClass')->getDefaultValue();
+        $transformerReflection = new ReflectionClass(static::getApiTransformer());
+        $transformerAttributes = $transformerReflection->getAttributes(UsesDTO::class);
+        if (!empty($transformerAttributes)) {
+            return $transformerAttributes[0]->newInstance()->dtoClass;
+        } else {
+            $modelReflection = new ReflectionClass(static::getModel());
+            if (property_exists(static::getModel(), 'dataClass')) {
+                return $modelReflection->getProperty('dataClass')->getDefaultValue();
+            }
         }
         return null;
     }
