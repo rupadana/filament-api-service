@@ -2,6 +2,14 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.3.3 - 2024-11-28
+
+### What's Changed
+
+* change instanceOf to is_subclass_of by @christmex in https://github.com/rupadana/filament-api-service/pull/79
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.3.2...3.3.3
+
 ## 3.3.2 - 2024-10-23
 
 ### What's Changed
