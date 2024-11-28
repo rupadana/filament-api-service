@@ -104,19 +104,19 @@ In order to allow modifying the query for your model you can implement the `HasA
 ```php
 class User extends Model implements HasAllowedFields, HasAllowedSorts, HasAllowedFilters {
     // Which fields can be selected from the database through the query string
-    public function getAllowedFields(): array
+    public static function getAllowedFields(): array
     {
         // Your implementation here
     }
 
     // Which fields can be used to sort the results through the query string
-    public function getAllowedSorts(): array
+    public static function getAllowedSorts(): array
     {
         // Your implementation here
     }
 
     // Which fields can be used to filter the results through the query string
-    public function getAllowedFilters(): array
+    public static function getAllowedFilters(): array
     {
         // Your implementation here
     }
