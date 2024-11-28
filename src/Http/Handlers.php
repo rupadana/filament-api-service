@@ -2,18 +2,23 @@
 
 namespace Rupadana\ApiService\Http;
 
+use ReflectionClass;
 use Filament\Facades\Filament;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Str;
 use Rupadana\ApiService\ApiService;
+use Rupadana\ApiService\Exceptions\TransformerNotFoundException;
+use Rupadana\ApiService\Traits\HasHandlerTenantScope;
 use Rupadana\ApiService\Traits\HttpResponse;
 use Rupadana\ApiService\Transformers\DefaultTransformer;
 
 class Handlers
 {
     use HttpResponse;
+    use HasHandlerTenantScope;
     protected Panel $panel;
     public static ?string $uri = '/';
     public static string $method = 'get';
@@ -93,14 +98,57 @@ class Handlers
         return static::$resource::getModel();
     }
 
+    public static function getDto(): ?string
+    {
+        $modelReflection = new ReflectionClass(static::getModel());
+        if (property_exists(static::getModel(), 'dataClass')) {
+            return $modelReflection->getProperty('dataClass')->getDefaultValue();
+        }
+        return null;
+    }
+
     public static function getApiTransformer(): ?string
     {
-        if (! method_exists(static::$resource, 'getApiTransformer')) {
-            return DefaultTransformer::class;
+        return static::getTransformerFromRequestHeader();
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public static function getApiTransformers(): array
+    {
+        return array_merge([
+            'default' => DefaultTransformer::class,
+        ], method_exists(static::$resource, 'apiTransformers') ? array_combine(
+            array_map(fn ($class) => Str::kebab(class_basename($class)), $transformers = static::$resource::apiTransformers()),
+            $transformers
+        ) : []); // @phpstan-ignore-line
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected static function getTransformerFromRequestHeader(): string
+    {
+        $headerName = config('api-service.route.api_transformer_header');
+        $headerName = strtolower($headerName);
+        if (!request()->headers->has($headerName)) {
+            if (!method_exists(static::$resource, 'getApiTransformer')) {
+                return self::getApiTransformers()['default'];
+            }
+            return static::$resource::getApiTransformer();
         }
 
-        return static::$resource::getApiTransformer();
+        $transformer = request()->headers->get($headerName);
+        $transformer = Str::kebab($transformer);
+
+        if ($transformer && !array_key_exists($transformer, self::getApiTransformers())) {
+            throw new TransformerNotFoundException($transformer);
+        }
+
+        return self::getApiTransformers()[$transformer];
     }
+
 
     public static function getKeyName(): ?string
     {

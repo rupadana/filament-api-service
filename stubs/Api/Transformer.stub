@@ -1,6 +1,6 @@
 <?php
 
-namespace {{ namespace }}\{{ resourceClass }}\Transformers;
+namespace {{ namespace }}{{ resourceClass }};
 
 
 use OpenApi\Attributes as OAT;
@@ -19,8 +19,8 @@ class {{ transformerName }} {
         type: "array",
         items: new OAT\Items(
             properties: [
-                new OAT\Property(property: "id", type: "integer", title: "ID", description: "id of the product", example: ""),
-                // add your own properties corresponding to the {{ transformerName }}
+                {{ transformerProperties }}
+                // add/modify your own properties corresponding to the {{ transformerName }}
             ]
         ),
     )]
