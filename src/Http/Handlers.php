@@ -181,7 +181,7 @@ class Handlers
     {
         $model = static::getModel();
 
-        if($model instanceof HasAllowedFilters) {
+        if (is_subclass_of($model, HasAllowedFilters::class)) {
             return $model::getAllowedFilters();
         }
 
