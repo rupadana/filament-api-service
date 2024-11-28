@@ -2,6 +2,19 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.3.4 - 2024-11-28
+
+### What's Changed
+
+* refactor: change fields method from instance to static access by @mohammadisa2 in https://github.com/rupadana/filament-api-service/pull/70
+* Update README.md by @christmex in https://github.com/rupadana/filament-api-service/pull/80
+
+### New Contributors
+
+* @mohammadisa2 made their first contribution in https://github.com/rupadana/filament-api-service/pull/70
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.3.3...3.3.4
+
 ## 3.3.3 - 2024-11-28
 
 ### What's Changed
