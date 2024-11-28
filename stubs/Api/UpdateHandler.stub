@@ -1,0 +1,194 @@
+<?php
+
+namespace {{ handlersVirtualNamespace }};
+
+use {{ resource }};
+use {{ realResource }} as {{ handlerName }}Real;
+
+use OpenApi\Attributes as OAT;
+use Rupadana\ApiService\ApiService;
+
+$panel = filament()->getCurrentPanel();
+
+$panelId = $panel->getId();
+$panelPath = $panel->getPath();
+$hasTenancy = $panel->hasTenancy();
+$tenantSlugAttribute = $panel->getTenantSlugAttribute();
+$panelPrefix = (app(ApiService::class)->isRoutePrefixedByPanel() || count(PANEL_ENUMS) > 1) ? $panelPath ?? $panelId : null;
+
+defined("API_DEFAULT_TRANSFORMER_NAME") ?: define("API_DEFAULT_TRANSFORMER_NAME", config('api-service.route.default_transformer_name'));
+defined("API_VERSION_PARAMETER_NAME") ?: define("API_VERSION_PARAMETER_NAME", config('api-service.route.api_version_parameter_name'));
+defined("API_TRANSFORMER_HEADER") ?: define("API_TRANSFORMER_HEADER", config('api-service.route.api_transformer_header'));
+
+function apiVersionPath_UPDATE_{{ capitalsResource }}() {
+    defined("API_VERSION_URL_PATH") ?: define("API_VERSION_URL_PATH", '{version}/');
+    defined("API_VERSION_URL_QUERY") ?: define("API_VERSION_URL_QUERY", false);
+    defined("API_VERSION_URL_HEADERS") ?: define("API_VERSION_URL_HEADERS", false);
+}
+
+function apiVersionQuery_UPDATE_{{ capitalsResource }}() {
+    defined("API_VERSION_URL_PATH") ?: define("API_VERSION_URL_PATH", '');
+    defined("API_VERSION_URL_QUERY") ?: define("API_VERSION_URL_QUERY", true);
+    defined("API_VERSION_URL_HEADERS") ?: define("API_VERSION_URL_HEADERS", false);
+}
+
+function apiVersionHeaders_UPDATE_{{ capitalsResource }}() {
+    defined("API_VERSION_URL_PATH") ?: define("API_VERSION_URL_PATH", '');
+    defined("API_VERSION_URL_QUERY") ?: define("API_VERSION_URL_QUERY", false);
+    defined("API_VERSION_URL_HEADERS") ?: define("API_VERSION_URL_HEADERS", true);
+}
+
+function apiVersionDefault_UPDATE_{{ capitalsResource }}() {
+    defined("API_VERSION_URL_PATH") ?: define("API_VERSION_URL_PATH", '');
+    defined("API_VERSION_URL_QUERY") ?: define("API_VERSION_URL_QUERY", false);
+    defined("API_VERSION_URL_HEADERS") ?: define("API_VERSION_URL_HEADERS", false);
+}
+
+match (config('api-service.route.api_version_method')) {
+    'path' => apiVersionPath_UPDATE_{{ capitalsResource }}(),
+    'query' => apiVersionQuery_UPDATE_{{ capitalsResource }}(),
+    'headers' => apiVersionHeaders_UPDATE_{{ capitalsResource }}(),
+    default => apiVersionDefault_UPDATE_{{ capitalsResource }}(),
+};
+
+if (
+    ApiService::isTenancyEnabled() &&
+    ApiService::tenancyAwareness() &&
+    app({{ resourceClass }}::class)->isScopedToTenant()
+) {
+    defined("TENANT_AWARENESS_{{ capitalsResource }}") ?: define("TENANT_AWARENESS_{{ capitalsResource }}", true);
+} else {
+    defined("TENANT_AWARENESS_{{ capitalsResource }}") ?: define("TENANT_AWARENESS_{{ capitalsResource }}", false);
+}
+
+if ({{ handlerName }}Real::isPublic()) {
+    defined("RESOURCE_PUBLIC_{{ capitalsResource }}_UPDATE") ?: define("RESOURCE_PUBLIC_{{ capitalsResource }}_UPDATE", true);
+} else {
+    defined("RESOURCE_PUBLIC_{{ capitalsResource }}_UPDATE") ?: define("RESOURCE_PUBLIC_{{ capitalsResource }}_UPDATE", false);
+}
+
+$transformers = {{ handlerName }}Real::getApiTransformers();
+$custom_transformers = count(array_except($transformers, ['default']));
+defined("RESOURCE_{{ capitalsResource }}_UPDATE_CUSTOM_TRANSFORMERS") ?: define("RESOURCE_{{ capitalsResource }}_UPDATE_CUSTOM_TRANSFORMERS", $custom_transformers ?? 0);
+
+defined("PANEL_PREFIX_{{ capitalsResource }}_UPDATE") ?: define("PANEL_PREFIX_{{ capitalsResource }}_UPDATE", $panelPrefix);
+defined("BASE_URL") ?: define("BASE_URL", config('app.url'));
+
+#[OAT\Put(
+    path: "{{ path }}/{id}",
+    operationId: "update{{ modelClass }}",
+    tags: ["{{ pluralClass }}"],
+    summary: "Update existing {{ modelClass }}",
+    description: "Returns updated {{ modelClass }} data",
+    servers: [
+        (TENANT_AWARENESS_{{ capitalsResource }}) ?
+            new OAT\Server(
+                description: "API Server Filament Panel",
+                url: BASE_URL . "/api" . API_VERSION_URL_PATH . ((PANEL_PREFIX_{{ capitalsResource }}_UPDATE !== null) ? "/{panel}" : "") . "/{tenant}",
+                variables: [
+                (PANEL_PREFIX_{{ capitalsResource }}_UPDATE !== null) ?
+                    new OAT\ServerVariable(
+                        serverVariable: "panel",
+                        description: "Select the Filament Panel",
+                        enum: PANEL_ENUMS,
+                        default: PANEL_ENUMS[0]
+                    ) :
+                null,
+                    new OAT\ServerVariable(
+                        serverVariable: "tenant",
+                        description: 'ID of the tenant',
+                        default: ""
+                    ),
+                (API_VERSION_URL_PATH != '') ?
+                    new OAT\ServerVariable(
+                        serverVariable: "version",
+                        description: 'Version or Transformer name of this API endpoint',
+                        default: API_DEFAULT_TRANSFORMER_NAME,
+                    )
+                : null,
+            ]
+            ) :
+            new OAT\Server(
+                description: "API Server Filament Panel",
+                url: BASE_URL . "/api" . API_VERSION_URL_PATH . ((PANEL_PREFIX_{{ capitalsResource }}_UPDATE !== null) ? "/{panel}" : ""),
+                variables: [
+                (PANEL_PREFIX_{{ capitalsResource }}_UPDATE !== null) ?
+                    new OAT\ServerVariable(
+                        serverVariable: "panel",
+                        description: "Select the Filament Panel",
+                        enum: PANEL_ENUMS,
+                        default: PANEL_ENUMS[0]
+                    ) :
+                null,
+                (API_VERSION_URL_PATH != '') ?
+                    new OAT\ServerVariable(
+                        serverVariable: "version",
+                        description: 'Version or Transformer name of this API endpoint',
+                        default: API_DEFAULT_TRANSFORMER_NAME,
+                    )
+                : null,
+                ]
+            )
+    ],
+    security: (!RESOURCE_PUBLIC_{{ capitalsResource }}_UPDATE) ?  [["bearerAuth" => []]] : null,
+    parameters: [
+        // (TENANT_AWARENESS_{{ capitalsResource }}) ? new OAT\Parameter(ref: "#/components/parameters/tenant") : null,
+
+         (API_VERSION_URL_QUERY) ? new OAT\Parameter(
+            name: API_VERSION_PARAMETER_NAME,
+            in: "query",
+            required: true,
+            description: "Set the correct API Version / Transformer you want to use.",
+            schema: new OAT\Schema(type: "string")
+        ) : null,
+
+        (API_VERSION_URL_HEADERS) ? new OAT\HeaderParameter(
+            name: API_TRANSFORMER_HEADER,
+            in: "header",
+            required: true,
+            allowEmptyValue: true,
+            description: "Set the correct API Version / Transformer you want to use.",
+            schema: new OAT\Schema(type: "string")
+        ) : null,
+
+        new OAT\Parameter(
+            name: "id",
+            description: "{{ modelClass }} id",
+            required: true,
+            in: "path",
+            schema: new OAT\Schema(type: "integer"),
+            example: "", // OAT\Examples(example="int", value="0", summary="An int value."),
+        ),
+    ],
+    requestBody: new OAT\RequestBody(
+        required: true,
+        content: new OAT\MediaType(
+            mediaType: "application/json",
+            schema: (RESOURCE_{{ capitalsResource }}_UPDATE_CUSTOM_TRANSFORMERS > 0) ?
+                new OAT\Schema(
+                    oneOf: [
+                        new OAT\Schema(ref: "#/components/schemas/{{ modelClass }}Transformer/properties/data/items"),
+                        new OAT\Schema(ref: "#/components/schemas/DefaultTransformer/properties/data/items"),
+                    ]) :
+                new OAT\Schema(ref: "#/components/schemas/DefaultTransformer/properties/data/items")
+        )
+    ),
+    responses: [
+        new OAT\Response(response: 200, description: 'Operation succesful', content:
+            new OAT\JsonContent(type: "object", properties: [
+                new OAT\Property(property: "message", type: "string", example: "Successfully Updated Resource"),
+                (RESOURCE_{{ capitalsResource }}_UPDATE_CUSTOM_TRANSFORMERS > 0) ?
+                    new OAT\Property(property: "data", type: "object", oneOf: [
+                        new OAT\Schema(ref: "#/components/schemas/{{ modelClass }}Transformer/properties/data"),
+                        new OAT\Schema(ref: "#/components/schemas/DefaultTransformer/properties/data")
+                    ]) :
+                    new OAT\Property(property: "data", type: "object", ref: "#/components/schemas/DefaultTransformer/properties/data")
+            ])),
+        new OAT\Response(response: 400, description: 'Bad Request'),
+        new OAT\Response(response: 401, description: 'Unauthenticated'),
+        new OAT\Response(response: 403, description: 'Forbidden'),
+        new OAT\Response(response: 404, description: 'Resource not Found'),
+    ]
+)]
+
+class {{ handlerName }} extends {{ handlerName }}Real {}

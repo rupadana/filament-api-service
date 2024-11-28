@@ -14,6 +14,15 @@ class CreateToken extends CreateRecord
     protected static string $resource = TokenResource::class;
     protected $newToken;
 
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        if ($data['all_abilities']) {
+            unset($data['all_abilities']);
+            $data["ability"] = ["*"];
+        }
+        return $data;
+    }
+
     protected function handleRecordCreation(array $data): Model
     {
         if (! isset($data['tokenable_id'])) {

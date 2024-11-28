@@ -48,6 +48,10 @@ return [
     'route' => [
         'panel_prefix' => true,
         'use_resource_middlewares' => false,
+        'default_transformer_name' => 'default',
+        'api_version_method' => 'headers', // options: ['path', 'query', 'headers']
+        'api_version_parameter_name' => env('API_VERSION_PARAMETER_NAME', 'version'),
+        'api_transformer_header' => env('API_TRANSFORMER_HEADER', 'X-API-TRANSFORMER'),
     ],
     'tenancy' => [
         'enabled' => false,
@@ -98,7 +102,6 @@ Token Resource is protected by TokenPolicy. You can disable it by publishing the
 ### Filtering & Allowed Field
 
 We used `"spatie/laravel-query-builder": "^5.3"` to handle query selecting, sorting and filtering. Check out [the spatie/laravel-query-builder documentation](https://spatie.be/docs/laravel-query-builder/v5/introduction) for more information.
-
 In order to allow modifying the query for your model you can implement the `HasAllowedFields`, `HasAllowedSorts` and `HasAllowedFilters` Contracts in your model.
 
 ```php
@@ -178,14 +181,105 @@ next step you need to edit & add it to your Resource
 
     class BlogResource extends Resource
     {
-        ...
-        public static function getApiTransformer()
+        /**
+        * @return string|null
+        */
+        public static function getApiTransformer(): ?string
         {
             return BlogTransformer::class;
         }
         ...
     }
 ```
+
+### Multiple Transformers via HTTP Header
+
+Sometimes you need a different response structure of your API resource. Then you can create multiple Transformers as described above. In your API request you need to set an extra http header with the value of your Transformer class name.
+You can specify the name/key of the HTTP Header in the config `route.api_transformer_header`.
+
+By default the HTTP Header is called `X-API-TRANSFORMER`. You could also override it in your .env config file with the parameter: `API_TRANSFORMER_HEADER`. After you set and know the http header you need to create some extra Transformers where the structure is different as needed. You have to register all the extra transformers in your Resource like so:
+
+```php
+use App\Filament\Resources\BlogResource\Api\Transformers\BlogTransformer;
+use App\Filament\Resources\BlogResource\Api\Transformers\ModifiedBlogTransformer;
+use App\Filament\Resources\BlogResource\Api\Transformers\ExtraBlogColumnsTransformer;
+
+class BlogResource extends Resource
+    {
+        /**
+        * @return array<string, string>
+        */
+        public static function apiTransformers(): array
+        {
+            return
+            [
+                'blog' => BlogTransformer::class,
+                'mod-blog' => ModifiedBlogTransformer::class,
+                'extra-blog-column' => ExtraBlogColumnsTransformer::class,
+                ... etc.
+            ]
+        }
+        ...
+    }
+
+```
+
+Now you can use the extra HTTP HEADER `X-API-TRANSFORMER` in your request with the name of the transformer class.
+
+Here an example in guzzle:
+
+```php
+$client->request('GET', '/api/blogs', [
+    'headers' => [
+        'X-API-TRANSFORMER' => 'ModifiedBlogTransformer'
+    ]
+]);
+
+or
+
+$client->request('GET', '/api/blogs', [
+    'headers' => [
+        'X-API-TRANSFORMER' => 'ExtraBlogColumnsTransformer'
+    ]
+]);
+```
+
+This way the correct transformer will be used to give you the correct response json.
+
+### Multiple Transformers via URL Path or URL Query
+
+Alternative methods could also be used, like using as a prefix in the URL path or in the URL Query.
+
+You can set the method in the config `route.api_version_method` to 'path' or 'query'. You can also set the default Transformername via `route.default_transformer_name` (defaults to 'default').
+
+When you set `route.api_version_method` to 'path' then you can use the name of the transformer in the first segment of the API URL. the name of that fist segment is the key which you have defined in the `apiTransformers()` function.
+
+So for example if you want to use the `'mod-blog'` transformer in your api response. the url might look like this:
+'<https://myproject.com/api/`mod-blog`/blog/1>'
+
+It will always be in front of all other options like `tenant` or `panel` names in the url.
+
+With this method you could use API versioning like `/api/v1` where `v1` is an item in the `apiTransformers()` function.
+
+like so:
+
+```php
+
+public static function apiTransformers(): array
+        {
+            return
+            [
+                'v1' => VersionOneTransformer::class,
+                ... etc.
+            ]
+        }
+```
+
+Another method is using  `route.api_version_method` to 'query'. This way you can add an extra parameter in the URL with the name which you defined in your config under `route.api_version_parameter_name`
+by default this parameter is `version`. With this config the URL would look like this:
+'<https://myproject.com/api/blog/1?version=v1>'
+
+IMPORTANT: You can only use one method for this package for API versioning.
 
 ### Group Name & Prefix
 
@@ -268,6 +362,154 @@ Set API to public by overriding this property on your API Handler. Assume we hav
 class PaginationHandler extends Handlers {
     public static bool $public = true;
 }
+```
+
+## Swagger Api Docs Generation
+
+It is possible to generate Swagger API docs with this package. You have to make sure you have the following dependencies:
+
+```bash
+composer require darkaonline/l5-swagger
+```
+
+And make sure you install it correctly according to their [installation manual](https://github.com/DarkaOnLine/L5-Swagger/wiki/Installation-&-Configuration#installation).
+In development we recommend setting the config in `l5-swagger.php` `defaults.generate_always` to `true`.
+
+When generating Api Swagger Docs for an Filament Resource it is required to define a Transformer. Otherwise the generator does not know how your resource entity types are being handled. What the response format and types look like.
+
+Therefor you should always create a Transformer, which is explained above at the section [Transform API Response](#transform-api-response).
+
+Then you can use the following command to generate API docs for your resources:
+
+```bash
+php artisan make:filament-api-docs {resource?} {namespace?}
+```
+
+so for example:
+
+```bash
+php artisan make:filament-api-docs BlogResource
+```
+
+The CLI command accepts two optional parameters: `{resource?}` and `{namespace?}`.
+By default the Swagger API Docs will be placed in `app/Virtual/Filament/Resources` folder under their own resource name.
+
+For example the BlogResource Api Docs wil be in the following folder `app/Virtual/Filament/Resource/BlogResource`.
+
+First it will check if you have an existing the Swagger Docs Server config. This is a file `ApiDocsController.php` and resides in `app/Virtual/Filament/Resources`.
+It holds some general information about your swagger API Docs server. All generated files can be manual edited afterwards.
+Regenerating an API Docs Serverinfo or Resource will always ask you if you want to override the existing file.
+
+When done, you can go to the defined swagger documentation URL as defined in `l5-swagger.php` config as `documentations.routes.api`.
+
+If you want to generate the Api Docs manually because in your `l5-swagger.php` config you have set `defatuls.generate_always` to `false` you can do so by invoking:
+
+```bash
+php artisan l5-swagger:generate
+```
+
+After you have generated the Swagger API Docs, you can add your required Transformer properties as needed.
+
+by default as an example it will generate this when you use a BlogTransformer:
+
+```php
+class BlogTransformer {
+
+    #[OAT\Property(
+        property: "data",
+        type: "array",
+        items: new OAT\Items(
+            properties: [
+                new OAT\Property(property: "id", type: "integer", title: "ID", description: "id of the blog", example: ""),
+
+                // Add your own properties corresponding to the BlogTransformer
+            ]
+        ),
+    )]
+    public $data;
+
+    ...
+}
+
+```
+
+You can find more about all possible properties at <https://zircote.github.io/swagger-php/reference/attributes.html#property>
+
+### Laravel-Data package integration (optional)
+
+It is possible to use Spatie/Laravel-data package to autogenerate the correct data model fields for a transformer. But first you need to setup your laravel-data package see [more info package spatie/laravel-data](https://spatie.be/docs/laravel-data) for installation instructions.
+
+For the Generator to work your DTO needs some attributes where i can derives the properties from.
+Basic properties like the property name and type will be fetched using Reflection class methods.
+But some extra optional properties like: `description`, `example` are not available in the model or DTO.
+By default the following attributes can be added: `title`, `description` and `example`. all other fields you want to include have to be used as an array in the `extraProperties` parameter. See the last item in the example.
+So this is how you can implement those:
+
+```php
+
+namespace App\Data;
+
+use Rupadana\ApiService\Attributes\ApiPropertyInfo; // <-- add this Attribute to you DTO
+use Spatie\LaravelData\Data;
+
+class BlogData extends Data
+{
+    public function __construct(
+        #[ApiPropertyInfo(description: 'ID of the Blog DTO', example: '')]
+        public ?int $id,
+        #[ApiPropertyInfo(description: 'Name of the Blog', example: '')]
+        public string $name,
+        #[ApiPropertyInfo(description: 'Image Url of the Blog', example: '', ref: "ImageBlogSchema", oneOf: '[new OAT\Schema(type:"string"), new OAT\Schema(type:"integer")]']
+        )]
+        public string $image,
+    ) {
+    }
+}
+
+```
+
+As you can see you can add attributes above each property. this way when generating the transformer Api Docs it will add these information.
+
+The result of the Api Docs generation of the Transformer(s) will look like this:
+
+```php
+namespace App\Virtual\Filament\Resources\BlogResource\Transformers;
+
+
+use OpenApi\Attributes as OAT;
+
+#[OAT\Schema(
+    schema: "BlogTransformer",
+    title: "BlogTransformer",
+    description: "Brands API Transformer",
+    xml: new OAT\Xml(name: "BlogTransformer"),
+)]
+
+class BlogTransformer {
+
+    #[OAT\Property(
+        property: "data",
+        type: "array",
+        items: new OAT\Items(
+            properties: [
+                new OAT\Property(property: 'id', type: 'int', title: 'id', description: 'ID of the Blog DTO', example: ''),
+                new OAT\Property(property: 'name', type: 'string', title: 'name', description: 'Name of the Blog', example: ''),
+                new OAT\Property(
+                    property: 'image',
+                    type: 'string',
+                    title: 'image',
+                    description: 'Image Url of the Blog',
+                    example: '',
+                    ref: "MyBlogSchema",
+                    oneOf: [
+                        new OAT\Schema(type="string"),
+                        new OAT\Schema(type="integer")
+                    ]),
+            ]
+        ),
+    )],
+    public $data;
+    ...
 ```
 
 ## License

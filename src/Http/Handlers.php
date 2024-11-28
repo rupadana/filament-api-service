@@ -2,12 +2,17 @@
 
 namespace Rupadana\ApiService\Http;
 
+use ReflectionClass;
 use Filament\Facades\Filament;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Str;
 use Rupadana\ApiService\ApiService;
+use Rupadana\ApiService\Attributes\UsesDTO;
+use Rupadana\ApiService\Exceptions\TransformerNotFoundException;
+use Rupadana\ApiService\Traits\HasHandlerTenantScope;
 use Rupadana\ApiService\Contracts\HasAllowedFields;
 use Rupadana\ApiService\Contracts\HasAllowedFilters;
 use Rupadana\ApiService\Contracts\HasAllowedIncludes;
@@ -18,6 +23,7 @@ use Rupadana\ApiService\Transformers\DefaultTransformer;
 class Handlers
 {
     use HttpResponse;
+    use HasHandlerTenantScope;
     protected Panel $panel;
     public static ?string $uri = '/';
     public static string $method = 'get';
@@ -97,14 +103,109 @@ class Handlers
         return static::$resource::getModel();
     }
 
+    public static function getDto(): ?string
+    {
+        $transformerReflection = new ReflectionClass(static::getApiTransformer());
+        $transformerAttributes = $transformerReflection->getAttributes(UsesDTO::class);
+        if (!empty($transformerAttributes)) {
+            return $transformerAttributes[0]->newInstance()->dtoClass;
+        } else {
+            $modelReflection = new ReflectionClass(static::getModel());
+            if (property_exists(static::getModel(), 'dataClass')) {
+                return $modelReflection->getProperty('dataClass')->getDefaultValue();
+            }
+        }
+        return null;
+    }
+
     public static function getApiTransformer(): ?string
     {
-        if (! method_exists(static::$resource, 'getApiTransformer')) {
-            return DefaultTransformer::class;
+        return match (ApiService::getApiVersionMethod()) {
+            'path' => static::getTransformerFromUrlPath(),
+            'query' => static::getTransformerFromUrlQuery(),
+            'headers' => static::getTransformerFromRequestHeader(),
+        };
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public static function getApiTransformers(): array
+    {
+        return array_merge([
+            ApiService::getDefaultTransformerName() => DefaultTransformer::class,
+        ], method_exists(static::$resource, 'apiTransformers') ?
+        array_combine(
+            array_map(fn($class) => Str::kebab(class_basename($class)), $transformers = array_flip(static::$resource::apiTransformers())),
+            array_keys($transformers)
+        ) : []); // @phpstan-ignore-line
+    }
+
+    /**
+     * @throws TransformerNotFoundException
+     */
+    protected static function getTransformerFromUrlPath(): string
+    {
+        $routeApiVersion = request()->route(ApiService::getApiVersionParameterName());
+        $transformer = Str::kebab($routeApiVersion);
+
+        if ($transformer && !array_key_exists($transformer, self::getApiTransformers())) {
+            throw new TransformerNotFoundException($transformer);
         }
 
-        return static::$resource::getApiTransformer();
+        return self::getApiTransformers()[$transformer];
     }
+
+    /**
+     * @throws TransformerNotFoundException
+     */
+    protected static function getTransformerFromUrlQuery(): string
+    {
+        $queryName = strtolower(ApiService::getApiVersionParameterName());
+
+        if (!request()->filled($queryName)) {
+            if (!method_exists(static::$resource, 'getApiTransformer')) {
+                return self::getApiTransformers()[ApiService::getDefaultTransformerName()];
+            }
+            return static::$resource::getApiTransformer();
+        }
+
+        $transformer = request()->input($queryName);
+        $transformer = Str::kebab($transformer);
+
+        if ($transformer && !array_key_exists($transformer, self::getApiTransformers())) {
+            throw new TransformerNotFoundException($transformer);
+        }
+
+        return self::getApiTransformers()[$transformer];
+
+    }
+
+    /**
+     * @throws TransformerNotFoundException
+     */
+    protected static function getTransformerFromRequestHeader(): string
+    {
+        $headerName = strtolower(config('api-service.route.api_transformer_header'));
+        if (!request()->headers->has($headerName) ||
+            (request()->headers->has($headerName) && request()->headers->get($headerName) == '')
+        ) {
+            if (!method_exists(static::$resource, 'getApiTransformer')) {
+                return self::getApiTransformers()[ApiService::getDefaultTransformerName()];
+            }
+            return static::$resource::getApiTransformer();
+        }
+
+        $transformer = request()->headers->get($headerName);
+        $transformer = Str::kebab($transformer);
+
+        if ($transformer && !array_key_exists($transformer, self::getApiTransformers())) {
+            throw new TransformerNotFoundException($transformer);
+        }
+
+        return self::getApiTransformers()[$transformer];
+    }
+
 
     public static function getKeyName(): ?string
     {
@@ -199,7 +300,7 @@ class Handlers
 
     protected static function getEloquentQuery()
     {
-        $query = app(static::getModel())->query();
+        $query = app(static::getModel())->query()->withoutGlobalScopes();
 
         if (static::isScopedToTenant() && ApiService::tenancyAwareness() && Filament::getCurrentPanel()) {
             $query = static::modifyTenantQuery($query);

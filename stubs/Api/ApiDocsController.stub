@@ -1,0 +1,47 @@
+<?php
+
+namespace {{ namespace }};
+
+use OpenApi\Attributes as OAT;
+use Rupadana\ApiService\ApiService;
+
+$panel_enums = [];
+
+foreach (filament()->getPanels() as $panel) {
+    if ($panel->hasPlugin('api-service')) {
+        $panelId = $panel->getId();
+        $panelPath = $panel->getPath();
+        $tenantSlugAttribute = $panel->getTenantSlugAttribute();
+        $panelPrefix = app(ApiService::class)->isRoutePrefixedByPanel() ? $panelPath ?? $panelId : null;
+
+        $panel_enums[] = $panelPrefix;
+    }
+}
+$panel_enums = array_unique($panel_enums);
+
+(defined("PANEL_ENUMS")) ?: define("PANEL_ENUMS", $panel_enums);
+(defined("BASE_URL")) ?: define("BASE_URL", config('app.url'));
+
+#[OAT\Info(
+    title: "{{ title }}",
+    version: "{{ version }}",
+    contact: new OAT\Contact(name: "{{ contactName }}", email: "{{ contactEmail }}"),
+    termsOfService: "{{ terms }}",
+    license: new OAT\License(name: "{{ licenseName }}", url: "{{ licenseUrl }}",),
+)]
+
+#[OAT\Server(
+    description: "API Server",
+    url: BASE_URL . "/api/"
+)]
+
+#[OAT\SecurityScheme(
+    name: "bearerAuth",
+    securityScheme: "bearerAuth",
+    type: "http",
+    scheme: "bearer",
+    description: "Enter JWT Token",
+    in: "header"
+)]
+
+class ApiDocsController {}
