@@ -67,7 +67,7 @@ class TokenResource extends Resource
             $extractedAbilities = [];
             foreach ($handler as $handlerClass => $ability) {
                 foreach ($ability as $a) {
-                    $extractedAbilities[$a] = $a;
+                    $extractedAbilities[$a] = __($a);
                 }
             }
             $schema[] = Section::make(str($resource)->beforeLast('Resource')->explode('\\')->last())
