@@ -275,6 +275,10 @@ class PaginationHandler extends Handlers {
 }
 ```
 
+### Documentation
+
+For our documentation, we utilize [Scramble](https://scramble.dedoc.co), a powerful tool for generating and managing API documentation. All available routes and their detailed descriptions can be accessed at /docs/api. This ensures that developers have a centralized and well-organized resource to understand and integrate with the API effectively.
+
 ## License
 
 The MIT License (MIT).
