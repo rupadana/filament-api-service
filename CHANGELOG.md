@@ -2,6 +2,18 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.3.5 - 2025-01-18
+
+### What's Changed
+
+* make api abilities translateable by @iTzSofteis in https://github.com/rupadana/filament-api-service/pull/81
+
+### New Contributors
+
+* @iTzSofteis made their first contribution in https://github.com/rupadana/filament-api-service/pull/81
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.3.4...3.3.5
+
 ## 3.3.4 - 2024-11-28
 
 ### What's Changed
