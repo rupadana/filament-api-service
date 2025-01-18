@@ -2,6 +2,14 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.4.0 - 2025-01-18
+
+### What's Changed
+
+* adding scramble for documentation and built-in authentication by @rupadana in https://github.com/rupadana/filament-api-service/pull/82
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.3.5...3.4.0
+
 ## 3.3.5 - 2025-01-18
 
 ### What's Changed
