@@ -18,6 +18,12 @@ class DeleteHandler extends Handlers {
         return static::$resource::getModel();
     }
 
+    /**
+     * Delete {{ model }}
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function handler(Request $request)
     {
         $id = $request->route('id');

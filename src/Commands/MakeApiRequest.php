@@ -6,19 +6,34 @@ use Filament\Facades\Filament;
 use Filament\Panel;
 use Filament\Support\Commands\Concerns\CanManipulateFiles;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
-class MakeApiTransformerCommand extends Command
+class MakeApiRequest extends Command
 {
     use CanManipulateFiles;
-    protected $description = 'Create a Transformer for your API response';
-    protected $signature = 'make:filament-api-transformer {resource?} {--panel=}';
+    protected $description = 'Create a new API Request';
+    protected $signature = 'make:filament-api-request {name?} {resource?} {--panel=}';
 
     public function handle(): int
     {
+        $name = (string) str($this->argument('name') ?? text(
+            label: 'What is the Request name?',
+            placeholder: 'CreateRequest',
+            required: true,
+        ))
+            ->studly()
+            ->beforeLast('Request')
+            ->trim('/')
+            ->trim('\\')
+            ->trim(' ')
+            ->studly()
+            ->replace('/', '\\');
+
         $model = (string) str($this->argument('resource') ?? text(
             label: 'What is the Resource name?',
             placeholder: 'Blog',
@@ -74,9 +89,9 @@ class MakeApiTransformerCommand extends Command
         $path = (count($resourceDirectories) > 1) ?
             $resourceDirectories[array_search($namespace, $resourceNamespaces)] : (Arr::first($resourceDirectories) ?? app_path('Filament/Resources/'));
 
+        $nameClass = "{$name}{$model}Request";
         $resource = "{$model}Resource";
         $resourceClass = "{$modelClass}Resource";
-        $apiTransformerClass = "{$model}Transformer";
         $resourceNamespace = $modelNamespace;
         $namespace .= $resourceNamespace !== '' ? "\\{$resourceNamespace}" : '';
 
@@ -87,26 +102,51 @@ class MakeApiTransformerCommand extends Command
                 ->replace('\\', '/')
                 ->replace('//', '/');
 
-        $resourceApiTransformerDirectory = "{$baseResourcePath}/Api/Transformers/$apiTransformerClass.php";
+        $requestDirectory = "{$baseResourcePath}/Api/Requests/$nameClass.php";
 
-        $modelClass = app("{$namespace}\\{$resourceClass}")->getModel();
+        $modelNamespace = app("{$namespace}\\{$resourceClass}")->getModel();
 
-        $this->copyStubToApp('ApiTransformer', $resourceApiTransformerDirectory, [
-            'namespace' => "{$namespace}\\{$resourceClass}\\Api\\Transformers",
-            'resource' => "{$namespace}\\{$resourceClass}",
-            'resourceClass' => $resourceClass,
-            'resourcePageClass' => $resourceApiTransformerDirectory,
-            'apiTransformerClass' => $apiTransformerClass,
-            'model' => $model,
-            'modelClass' => $modelClass,
+        $this->copyStubToApp('Request', $requestDirectory, [
+            'namespace' => "{$namespace}\\{$resourceClass}\\Api\\Requests",
+            'nameClass' => $nameClass,
+            'validationRules' => $this->getValidationRules(new $modelNamespace),
         ]);
 
-        $this->components->info("Successfully created API Transformer for {$resource}!");
-        $this->components->info("Add this method to {$namespace}\\{$resourceClass}.php");
-        $this->components->info("public static function getApiTransformer() {
-            return $apiTransformerClass::class;
-        }");
+        $this->components->info("Successfully created API {$nameClass} for {$resource}!");
 
         return static::SUCCESS;
+    }
+
+    public function getValidationRules(Model $model)
+    {
+        $tableName = $model->getTable();
+
+        $columns = DB::select("SHOW COLUMNS FROM `{$tableName}`");
+
+        $validationRules = collect($columns)
+            ->filter(function ($column) {
+                // Mengabaikan kolom 'created_at' dan 'updated_at'
+                return ! in_array($column->Field, ['id', 'created_at', 'updated_at']);
+            })
+            ->map(function ($column) {
+                $field = $column->Field;
+                $type = $column->Type;
+
+                // Pemetaan tipe data ke validasi Laravel menggunakan match
+                $rule = 'required'; // Tambahkan aturan 'required' sebagai default
+
+                $rule .= match (true) {
+                    str_contains($type, 'int') => '|integer',
+                    str_contains($type, 'varchar'), str_contains($type, 'text') => '|string',
+                    str_contains($type, 'date') => '|date',
+                    str_contains($type, 'decimal'), str_contains($type, 'float'), str_contains($type, 'double') => '|numeric',
+                    default => '',
+                };
+
+                return "\t\t\t'{$field}' => '{$rule}'";
+            })
+            ->implode(",\n");
+
+        return "[\n" . $validationRules . "\n\t\t]";
     }
 }

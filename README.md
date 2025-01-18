@@ -251,11 +251,16 @@ Overriding tenancy ownership relationship name by adding this property to the Ha
 
 ### How to secure it?
 
-Since version 3.0, it will automatically detect routes and secure it using sanctum.
+Since version 3.4, this plugin includes built-in authentication routes:
 
-To Generate Token, you just need create it from admin panel. It will be Token Resource there.
+| Method | Endpoint             | Description                 |
+| ------ | -------------------- | --------------------------- |
+| POST   | /api/auth/login      | Login                       |
+| POST   | /api/auth/logout     | Logout                      |
 
-![Image](https://res.cloudinary.com/rupadana/image/upload/v1704958748/Screenshot_2024-01-11_at_15.37.55_ncpg8n.png)
+We also use the permission middleware from [spatie/laravel-permission](https://spatie.be/docs/laravel-permission/v6/basic-usage/middleware). making it easier to integrate with [filament-shield](https://github.com/bezhanSalleh/filament-shield)
+
+If you prefer to use the old version of the middleware, please set 'use-spatie-permission-middleware' => false.
 
 ### Public API
 

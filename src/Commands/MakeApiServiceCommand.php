@@ -7,6 +7,7 @@ use Filament\Panel;
 use Filament\Support\Commands\Concerns\CanManipulateFiles;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Artisan;
 
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
@@ -77,6 +78,7 @@ class MakeApiServiceCommand extends Command
         $resource = "{$model}Resource";
         $resourceClass = "{$modelClass}Resource";
         $apiServiceClass = "{$model}ApiService";
+        $transformer = "{$model}Transformer";
         $resourceNamespace = $modelNamespace;
         $namespace .= $resourceNamespace !== '' ? "\\{$resourceNamespace}" : '';
 
@@ -93,6 +95,7 @@ class MakeApiServiceCommand extends Command
                 ->replace('\\', '/')
                 ->replace('//', '/');
 
+        $transformerClass = "{$namespace}\\{$resourceClass}\\Api\\Transformers\\{$transformer}";
         $handlersNamespace = "{$namespace}\\{$resourceClass}\\Api\\Handlers";
 
         $resourceApiDirectory = "{$baseResourcePath}/Api/$apiServiceClass.php";
@@ -101,6 +104,19 @@ class MakeApiServiceCommand extends Command
         $detailHandlerDirectory = "{$baseResourcePath}/Api/Handlers/$detailHandlerClass.php";
         $paginationHandlerDirectory = "{$baseResourcePath}/Api/Handlers/$paginationHandlerClass.php";
         $deleteHandlerDirectory = "{$baseResourcePath}/Api/Handlers/$deleteHandlerClass.php";
+
+        Artisan::call('make:filament-api-transformer', [
+            'resource' => $model,
+            '--panel' => $panel->getId(),
+        ]);
+        collect(['Create', 'Update'])
+            ->each(function ($name) use ($model, $panel) {
+                Artisan::call('make:filament-api-request', [
+                    'name' => $name,
+                    'resource' => $model,
+                    '--panel' => $panel->getId(),
+                ]);
+            });
 
         $this->copyStubToApp('ResourceApiService', $resourceApiDirectory, [
             'namespace' => "{$namespace}\\{$resourceClass}\\Api",
@@ -114,30 +130,40 @@ class MakeApiServiceCommand extends Command
             'resource' => "{$namespace}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
             'handlersNamespace' => $handlersNamespace,
+            'model' => $model,
         ]);
 
         $this->copyStubToApp('DetailHandler', $detailHandlerDirectory, [
             'resource' => "{$namespace}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
             'handlersNamespace' => $handlersNamespace,
+            'transformer' => $transformer,
+            'transformerClass' => $transformerClass,
+            'model' => $model,
         ]);
 
         $this->copyStubToApp('CreateHandler', $createHandlerDirectory, [
             'resource' => "{$namespace}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
             'handlersNamespace' => $handlersNamespace,
+            'model' => $model,
         ]);
 
         $this->copyStubToApp('UpdateHandler', $updateHandlerDirectory, [
             'resource' => "{$namespace}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
             'handlersNamespace' => $handlersNamespace,
+            'model' => $model,
         ]);
 
         $this->copyStubToApp('PaginationHandler', $paginationHandlerDirectory, [
             'resource' => "{$namespace}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
             'handlersNamespace' => $handlersNamespace,
+            'transformer' => $transformer,
+            'transformerClass' => $transformerClass,
+            'model' => $model,
+
         ]);
 
         $this->components->info("Successfully created API for {$resource}!");

@@ -68,11 +68,23 @@ class Handlers
 
     protected static function getMiddlewareAliasName()
     {
+        if (config('api-service.use-spatie-permission-middleware', false)) {
+            return 'permission';
+        }
+
         return 'ability';
     }
 
     public static function getKebabClassName()
     {
+        if (config('api-service.use-spatie-permission-middleware', false)) {
+            return match ($operation = str(str(static::class)->beforeLast('Handler')->explode('\\')->last())->kebab()->value()) {
+                'detail' => 'view',
+                'pagination' => 'view_any',
+                default => $operation
+            };
+        }
+
         return str(str(static::class)->beforeLast('Handler')->explode('\\')->last())->kebab();
     }
 
@@ -83,6 +95,12 @@ class Handlers
 
     public static function getAbility(): array
     {
+        if (config('api-service.use-spatie-permission-middleware', false)) {
+            return [
+                static::getKebabClassName() . '_' . strtolower(preg_replace('/(?<!^)([A-Z])/', '::$1', str(static::getModel())->explode('\\')->last())),
+            ];
+        }
+
         return [
             str(str(static::getModel())->explode('\\')->last())->kebab() . ':' . static::getKebabClassName(),
         ];

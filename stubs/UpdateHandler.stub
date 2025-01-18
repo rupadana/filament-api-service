@@ -4,6 +4,7 @@ namespace {{ handlersNamespace }};
 use Illuminate\Http\Request;
 use Rupadana\ApiService\Http\Handlers;
 use {{ resource }};
+use {{ resource }}\Api\Requests\Update{{ model }}Request;
 
 class UpdateHandler extends Handlers {
     public static string | null $uri = '/{id}';
@@ -18,7 +19,14 @@ class UpdateHandler extends Handlers {
         return static::$resource::getModel();
     }
 
-    public function handler(Request $request)
+
+    /**
+     * Update {{ model }}
+     *
+     * @param Update{{ model }}Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function handler(Update{{ model }}Request $request)
     {
         $id = $request->route('id');
 

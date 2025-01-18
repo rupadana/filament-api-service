@@ -22,4 +22,9 @@ return [
         'enabled' => false,
         'awareness' => false,
     ],
+    'login-rules' => [
+        'email' => 'required|email',
+        'password' => 'required',
+    ],
+    'use-spatie-permission-middleware' => true,
 ];
