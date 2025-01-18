@@ -42,6 +42,10 @@ class TokenResource extends Resource
                             ->hidden(function () {
                                 $user = auth()->user();
 
+                                $policy = config('api-service.models.token.enable_policy', true);
+
+                                if ($policy === false) return false;
+
                                 return ! $user->hasRole('super_admin');
                             })
                             ->required(),
@@ -63,7 +67,7 @@ class TokenResource extends Resource
             $extractedAbilities = [];
             foreach ($handler as $handlerClass => $ability) {
                 foreach ($ability as $a) {
-                    $extractedAbilities[$a] = $a;
+                    $extractedAbilities[$a] = __($a);
                 }
             }
             $schema[] = Section::make(str($resource)->beforeLast('Resource')->explode('\\')->last())

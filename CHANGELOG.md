@@ -2,6 +2,71 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.3.5 - 2025-01-18
+
+### What's Changed
+
+* make api abilities translateable by @iTzSofteis in https://github.com/rupadana/filament-api-service/pull/81
+
+### New Contributors
+
+* @iTzSofteis made their first contribution in https://github.com/rupadana/filament-api-service/pull/81
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.3.4...3.3.5
+
+## 3.3.4 - 2024-11-28
+
+### What's Changed
+
+* refactor: change fields method from instance to static access by @mohammadisa2 in https://github.com/rupadana/filament-api-service/pull/70
+* Update README.md by @christmex in https://github.com/rupadana/filament-api-service/pull/80
+
+### New Contributors
+
+* @mohammadisa2 made their first contribution in https://github.com/rupadana/filament-api-service/pull/70
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.3.3...3.3.4
+
+## 3.3.3 - 2024-11-28
+
+### What's Changed
+
+* change instanceOf to is_subclass_of by @christmex in https://github.com/rupadana/filament-api-service/pull/79
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.3.2...3.3.3
+
+## 3.3.2 - 2024-10-23
+
+### What's Changed
+
+* Support spatie/laravel-query-builder to ^6.2 by @rupadana in https://github.com/rupadana/filament-api-service/pull/72
+* Refer to policy before checking user role by @Aniruddh-J in https://github.com/rupadana/filament-api-service/pull/75
+
+### New Contributors
+
+* @Aniruddh-J made their first contribution in https://github.com/rupadana/filament-api-service/pull/75
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.3.1...3.3.2
+
+## 3.3.1 - 2024-08-28
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.3.0...3.3.1
+
+## 3.3.0 - 2024-08-13
+
+### What's Changed
+
+* add notes to fix personal_access_token missing in laravel 11 by @christmex in https://github.com/rupadana/filament-api-service/pull/59
+* Bump dependabot/fetch-metadata from 2.1.0 to 2.2.0 by @dependabot in https://github.com/rupadana/filament-api-service/pull/64
+* Allow the usage of more complex filter methods by Spatie\QueryBuilder by @bfiessinger in https://github.com/rupadana/filament-api-service/pull/67
+
+### New Contributors
+
+* @christmex made their first contribution in https://github.com/rupadana/filament-api-service/pull/59
+* @bfiessinger made their first contribution in https://github.com/rupadana/filament-api-service/pull/67
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.2.4...3.3.0
+
 ## 3.2.4 - 2024-06-04
 
 ### What's Changed

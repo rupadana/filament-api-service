@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Routing\Router;
 use Rupadana\ApiService\ApiService;
+use Rupadana\ApiService\Contracts\HasAllowedFields;
+use Rupadana\ApiService\Contracts\HasAllowedFilters;
+use Rupadana\ApiService\Contracts\HasAllowedIncludes;
+use Rupadana\ApiService\Contracts\HasAllowedSorts;
 use Rupadana\ApiService\Traits\HttpResponse;
 use Rupadana\ApiService\Transformers\DefaultTransformer;
 
@@ -145,6 +149,65 @@ class Handlers
         $this->panel = $panel;
 
         return $this;
+    }
+
+    public function getAllowedFields(): array
+    {
+        $model = static::getModel();
+        if($model instanceof HasAllowedFields) {
+            return $model::getAllowedFields();
+        }
+
+        if(property_exists($model, 'allowedFields') && is_array($model::$allowedFields)) {
+            return $model::$allowedFields;
+        }
+
+        return [];
+    }
+
+    public function getAllowedIncludes(): array
+    {
+        $model = static::getModel();
+
+        if($model instanceof HasAllowedIncludes) {
+            return $model::getAllowedIncludes();
+        }
+
+        if(property_exists($model, 'allowedIncludes') && is_array($model::$allowedIncludes)) {
+            return $model::$allowedIncludes;
+        }
+
+        return [];
+    }
+
+    public function getAllowedSorts(): array
+    {
+        $model = static::getModel();
+
+        if($model instanceof HasAllowedSorts) {
+            return $model::getAllowedSorts();
+        }
+
+        if(property_exists($model, 'allowedFields') && is_array($model::$allowedFields)) {
+            return $model::$allowedFields;
+        }
+
+        return [];
+    }
+
+    public function getAllowedFilters() : array
+    {
+        $model = static::getModel();
+
+        if (is_subclass_of($model, HasAllowedFilters::class)) {
+            return $model::getAllowedFilters();
+        }
+
+        if(property_exists($model, 'allowedFilters') && is_array($model::$allowedFilters)) {
+            return $model::$allowedFilters;
+        }
+
+        return [];
     }
 
     public function getPanel(): Panel

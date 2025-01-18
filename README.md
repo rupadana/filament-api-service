@@ -98,31 +98,34 @@ Token Resource is protected by TokenPolicy. You can disable it by publishing the
 ### Filtering & Allowed Field
 
 We used `"spatie/laravel-query-builder": "^5.3"` to handle query selecting, sorting and filtering. Check out [the spatie/laravel-query-builder documentation](https://spatie.be/docs/laravel-query-builder/v5/introduction) for more information.
-You can specified `allowedFilters` and `allowedFields` in your model. For example:
+
+In order to allow modifying the query for your model you can implement the `HasAllowedFields`, `HasAllowedSorts` and `HasAllowedFilters` Contracts in your model.
 
 ```php
-class User extends Model {
+class User extends Model implements HasAllowedFields, HasAllowedSorts, HasAllowedFilters {
     // Which fields can be selected from the database through the query string
-    public static array $allowedFields = [
-        'name'
-    ];
+    public static function getAllowedFields(): array
+    {
+        // Your implementation here
+    }
 
     // Which fields can be used to sort the results through the query string
-    public static array $allowedSorts = [
-        'name',
-        'created_at'
-    ];
+    public static function getAllowedSorts(): array
+    {
+        // Your implementation here
+    }
 
     // Which fields can be used to filter the results through the query string
-    public static array $allowedFilters = [
-        'name'
-    ];
+    public static function getAllowedFilters(): array
+    {
+        // Your implementation here
+    }
 }
 ```
 
 ### Create a Handler
 
-To create a handler you can use this command. By default, i'm using CreateHandler
+To create a handler you can use this command. We have 5 Handler, CreateHandler, UpdateHandler, DeleteHandler, DetailHandler, PaginationHandler, If you want a custom handler then write what handler you want.
 
 ```bash
 php artisan make:filament-api-handler BlogResource
