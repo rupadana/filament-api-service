@@ -4,6 +4,4 @@ namespace Rupadana\ApiService\Exceptions;
 
 use Exception;
 
-class InvalidTenancyConfiguration extends Exception
-{
-}
+class InvalidTenancyConfiguration extends Exception {}

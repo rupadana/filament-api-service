@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Routing\Route as RoutingRoute;
-use Illuminate\Support\Facades\Http;
 use Rupadana\ApiService\Tests\Fixtures\Database\Seeders\ProductsSeeder;
 use Rupadana\ApiService\Tests\Fixtures\Database\Seeders\UserSeeder;
 use Rupadana\ApiService\Tests\Fixtures\Models\Product;
@@ -18,16 +17,6 @@ it('can make routes for a product resource', function () {
     expect($routes)->toContain('DELETE api/{panel}/our-products/{id}');
     expect($routes)->toContain('GET|HEAD api/{panel}/our-products');
     expect($routes)->toContain('GET|HEAD api/{panel}/our-products/{id}');
-});
-
-it('can return true', function () {
-    for ($i = 1; $i < 1000; $i++) {
-        $res = Http::get('http://127.0.0.1:8080/command/server0?number=' . $i);
-
-        if ((int) $res->body() != $i) {
-            dd((int) $res->body(), $i);
-        }
-    }
 });
 
 it('can return a list of products with allowed attributes', function () {

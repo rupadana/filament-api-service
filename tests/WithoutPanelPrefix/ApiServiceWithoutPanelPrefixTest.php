@@ -24,7 +24,7 @@ it('can return a list of products with allowed attributes', function () {
     $this->seed(UserSeeder::class);
 
     $user = User::find(1);
-    $token = $user->createToken('testing')->plainTextToken;
+    $token = $user->createToken('testing', ['*'])->plainTextToken;
 
     $response = $this->get('/api/our-products', [
         'Authorization' => 'Bearer ' . $token,
