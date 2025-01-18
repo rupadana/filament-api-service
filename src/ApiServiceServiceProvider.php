@@ -2,17 +2,24 @@
 
 namespace Rupadana\ApiService;
 
+use Dedoc\Scramble\Scramble;
+use Dedoc\Scramble\Support\Generator\OpenApi;
+use Dedoc\Scramble\Support\Generator\SecurityScheme;
 use Filament\Support\Assets\Asset;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
 use Laravel\Sanctum\Http\Middleware\CheckAbilities;
 use Laravel\Sanctum\Http\Middleware\CheckForAnyAbility;
 use Rupadana\ApiService\Commands\MakeApiHandlerCommand;
+use Rupadana\ApiService\Commands\MakeApiRequest;
 use Rupadana\ApiService\Commands\MakeApiServiceCommand;
 use Rupadana\ApiService\Commands\MakeApiTransformerCommand;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Spatie\Permission\Middleware\PermissionMiddleware;
+use Spatie\Permission\Middleware\RoleMiddleware;
+use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
 
 class ApiServiceServiceProvider extends PackageServiceProvider
 {
@@ -54,9 +61,7 @@ class ApiServiceServiceProvider extends PackageServiceProvider
         }
     }
 
-    public function packageRegistered(): void
-    {
-    }
+    public function packageRegistered(): void {}
 
     public function packageBooted(): void
     {
@@ -77,6 +82,16 @@ class ApiServiceServiceProvider extends PackageServiceProvider
         $router = app('router');
         $router->aliasMiddleware('abilities', CheckAbilities::class);
         $router->aliasMiddleware('ability', CheckForAnyAbility::class);
+        $router->aliasMiddleware('role', RoleMiddleware::class);
+        $router->aliasMiddleware('permission', PermissionMiddleware::class);
+        $router->aliasMiddleware('role_or_permission', RoleOrPermissionMiddleware::class);
+
+        // Configure Scramble Authentication
+        Scramble::afterOpenApiGenerated(function (OpenApi $openApi) {
+            $openApi->secure(
+                SecurityScheme::http('bearer')
+            );
+        });
     }
 
     protected function getAssetPackageName(): ?string
@@ -101,6 +116,7 @@ class ApiServiceServiceProvider extends PackageServiceProvider
             MakeApiHandlerCommand::class,
             MakeApiServiceCommand::class,
             MakeApiTransformerCommand::class,
+            MakeApiRequest::class,
         ];
     }
 

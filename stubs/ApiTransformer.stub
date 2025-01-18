@@ -2,7 +2,11 @@
 namespace {{ namespace }};
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use {{ modelClass }};
 
+/**
+ * @property {{ model }} $resource
+ */
 class {{ apiTransformerClass }} extends JsonResource
 {
 

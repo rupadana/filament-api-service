@@ -5,12 +5,19 @@ use Illuminate\Http\Request;
 use Rupadana\ApiService\Http\Handlers;
 use Spatie\QueryBuilder\QueryBuilder;
 use {{ resource }};
+use {{ transformerClass }};
 
 class PaginationHandler extends Handlers {
     public static string | null $uri = '/';
     public static string | null $resource = {{ resourceClass }}::class;
 
 
+    /**
+     * List of {{ model }}
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
     public function handler()
     {
         $query = static::getEloquentQuery();
@@ -24,6 +31,6 @@ class PaginationHandler extends Handlers {
         ->paginate(request()->query('per_page'))
         ->appends(request()->query());
 
-        return static::getApiTransformer()::collection($query);
+        return {{ transformer }}::collection($query);
     }
 }

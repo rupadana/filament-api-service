@@ -4,6 +4,7 @@ namespace Rupadana\ApiService\Tests\WithoutPanelPrefix;
 
 use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use BladeUI\Icons\BladeIconsServiceProvider;
+use DateInterval;
 use Filament\Actions\ActionsServiceProvider;
 use Filament\FilamentServiceProvider;
 use Filament\Forms\FormsServiceProvider;
@@ -19,6 +20,7 @@ use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Rupadana\ApiService\ApiServiceServiceProvider;
 use Rupadana\ApiService\Tests\Fixtures\Providers\AdminPanelProvider;
+use Rupadana\ApiService\Tests\Fixtures\Providers\AuthServiceProvider;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 use Spatie\QueryBuilder\QueryBuilderServiceProvider;
 
@@ -42,6 +44,7 @@ class TestCase extends Orchestra
             TablesServiceProvider::class,
             WidgetsServiceProvider::class,
             QueryBuilderServiceProvider::class,
+            AuthServiceProvider::class,
             AdminPanelProvider::class,
             SanctumServiceProvider::class,
             ApiServiceServiceProvider::class,
@@ -61,6 +64,38 @@ class TestCase extends Orchestra
             $config->set('app.debug', env('APP_DEBUG', true));
             $config->set('app.key', 'base64:Hupx3yAySikrM2/edkZQNQHslgDWYfiBfCuSThJ5SK8=');
             $config->set('api-service.route.panel_prefix', false);
+            $config->set('api-service.use-spatie-permission-middleware', false);
+            $config->set('permission', [
+                'models' => [
+                    'permission' => \Spatie\Permission\Models\Permission::class,
+                    'role' => \Spatie\Permission\Models\Role::class,
+                ],
+                'table_names' => [
+                    'roles' => 'roles',
+                    'permissions' => 'permissions',
+                    'model_has_permissions' => 'model_has_permissions',
+                    'model_has_roles' => 'model_has_roles',
+                    'role_has_permissions' => 'role_has_permissions',
+                ],
+                'column_names' => [
+                    'role_pivot_key' => null, // default 'role_id',
+                    'permission_pivot_key' => null, // default 'permission_id',
+                    'model_morph_key' => 'model_id',
+                    'team_foreign_key' => 'team_id',
+                ],
+                'register_permission_check_method' => true,
+                'register_octane_reset_listener' => false,
+                'teams' => false,
+                'use_passport_client_credentials' => false,
+                'display_permission_in_exception' => false,
+                'display_role_in_exception' => false,
+                'enable_wildcard_permission' => false,
+                'cache' => [
+                    'expiration_time' => DateInterval::createFromDateString('24 hours'),
+                    'key' => 'spatie.permission.cache',
+                    'store' => 'default',
+                ],
+            ]);
         });
     }
 
