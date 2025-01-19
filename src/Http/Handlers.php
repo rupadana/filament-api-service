@@ -21,7 +21,6 @@ class Handlers
 {
     use HasHandlerTenantScope;
     use HttpResponse;
-    use HasHandlerTenantScope;
     protected Panel $panel;
     public static ?string $uri = '/';
     public static string $method = 'get';
