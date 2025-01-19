@@ -55,7 +55,7 @@ trait HasHandlerTenantScope
                 ApiService::tenancyAwareness() &&
                 static::isScopedToTenant() &&
                 $tenantId &&
-                $tenant = $tenantModel::where(Filament::getCurrentPanel()->getTenantSlugAttribute() ?? $tenantModel->getKeyName(), $tenantId)->first()
+                $tenant = $tenantModel::where(Filament::getCurrentPanel()->getTenantSlugAttribute() ?? $tenantModel->getRouteKeyName(), $tenantId)->first()
             ) {
                 if (auth()->check()) {
 
