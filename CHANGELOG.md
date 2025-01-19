@@ -2,6 +2,14 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.4.1 - 2025-01-19
+
+### What's Changed
+
+* Fix Tenancy Bug by @rupadana in https://github.com/rupadana/filament-api-service/pull/83
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.4.0...3.4.1
+
 ## 3.4.0 - 2025-01-18
 
 ### What's Changed
