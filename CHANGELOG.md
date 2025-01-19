@@ -2,6 +2,14 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.4.2 - 2025-01-19
+
+### What's Changed
+
+* fix: Bug on allowed fields, filters, sorts and includes by @rupadana in https://github.com/rupadana/filament-api-service/pull/84
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.4.1...3.4.2
+
 ## 3.4.1 - 2025-01-19
 
 ### What's Changed
