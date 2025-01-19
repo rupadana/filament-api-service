@@ -15,7 +15,6 @@ use Rupadana\ApiService\Contracts\HasAllowedSorts;
 use Rupadana\ApiService\Traits\HasHandlerTenantScope;
 use Rupadana\ApiService\Traits\HttpResponse;
 use Rupadana\ApiService\Transformers\DefaultTransformer;
-use Rupadana\ApiService\Traits\HasHandlerTenantScope;
 
 class Handlers
 {
