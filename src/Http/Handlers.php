@@ -14,10 +14,12 @@ use Rupadana\ApiService\Contracts\HasAllowedIncludes;
 use Rupadana\ApiService\Contracts\HasAllowedSorts;
 use Rupadana\ApiService\Traits\HttpResponse;
 use Rupadana\ApiService\Transformers\DefaultTransformer;
+use Rupadana\ApiService\Traits\HasHandlerTenantScope;
 
 class Handlers
 {
     use HttpResponse;
+    use HasHandlerTenantScope;
     protected Panel $panel;
     public static ?string $uri = '/';
     public static string $method = 'get';
