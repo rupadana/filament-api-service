@@ -44,7 +44,9 @@ class TokenResource extends Resource
 
                                 $policy = config('api-service.models.token.enable_policy', true);
 
-                                if ($policy === false) return false;
+                                if ($policy === false) {
+                                    return false;
+                                }
 
                                 return ! $user->hasRole('super_admin');
                             })

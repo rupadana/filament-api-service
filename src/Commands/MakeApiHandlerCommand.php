@@ -7,11 +7,10 @@ use Filament\Panel;
 use Filament\Support\Commands\Concerns\CanManipulateFiles;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\File;
 
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
-
-use Illuminate\Support\Facades\File;
 
 class MakeApiHandlerCommand extends Command
 {
@@ -146,7 +145,7 @@ class MakeApiHandlerCommand extends Command
         $apiServicePath = "{$baseResourcePath}/Api/{$modelClass}ApiService.php";
         $apiServiceNamespace = "{$namespace}\\{$resourceClass}\\Api";
 
-        if (!File::exists($apiServicePath)) {
+        if (! File::exists($apiServicePath)) {
             $this->copyStubToApp('CustomApiService', $apiServicePath, [
                 'namespace' => $apiServiceNamespace,
                 'resource' => "{$namespace}\\{$resourceClass}",
@@ -169,7 +168,7 @@ class MakeApiHandlerCommand extends Command
             $handlersBlock = $matches[0];
             $handlersList = $this->extractHandlersList($handlersBlock);
 
-            if (!in_array("Handlers\\{$newHandler}::class", $handlersList)) {
+            if (! in_array("Handlers\\{$newHandler}::class", $handlersList)) {
                 $handlersList[] = "Handlers\\{$newHandler}::class";
             }
 
@@ -188,6 +187,7 @@ class MakeApiHandlerCommand extends Command
         preg_match('/return\s*\[(.*?)\]/s', $handlersBlock, $matches);
         $handlersListString = $matches[1] ?? '';
         $handlersList = array_map('trim', explode(',', $handlersListString));
+
         return array_filter($handlersList);
     }
 }

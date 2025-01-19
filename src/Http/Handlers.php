@@ -12,12 +12,14 @@ use Rupadana\ApiService\Contracts\HasAllowedFields;
 use Rupadana\ApiService\Contracts\HasAllowedFilters;
 use Rupadana\ApiService\Contracts\HasAllowedIncludes;
 use Rupadana\ApiService\Contracts\HasAllowedSorts;
+use Rupadana\ApiService\Traits\HasHandlerTenantScope;
 use Rupadana\ApiService\Traits\HttpResponse;
 use Rupadana\ApiService\Transformers\DefaultTransformer;
 use Rupadana\ApiService\Traits\HasHandlerTenantScope;
 
 class Handlers
 {
+    use HasHandlerTenantScope;
     use HttpResponse;
     use HasHandlerTenantScope;
     protected Panel $panel;
@@ -155,12 +157,14 @@ class Handlers
 
     public function getAllowedFields(): array
     {
+
         $model = static::getModel();
-        if($model instanceof HasAllowedFields) {
-            return $model::getAllowedFields();
+
+        if (in_array(HasAllowedFields::class, class_implements($model))) {
+            return static::getModel()::getAllowedFields();
         }
 
-        if(property_exists($model, 'allowedFields') && is_array($model::$allowedFields)) {
+        if (property_exists($model, 'allowedFields') && is_array($model::$allowedFields)) {
             return $model::$allowedFields;
         }
 
@@ -171,11 +175,11 @@ class Handlers
     {
         $model = static::getModel();
 
-        if($model instanceof HasAllowedIncludes) {
+        if (in_array(HasAllowedIncludes::class, class_implements($model))) {
             return $model::getAllowedIncludes();
         }
 
-        if(property_exists($model, 'allowedIncludes') && is_array($model::$allowedIncludes)) {
+        if (property_exists($model, 'allowedIncludes') && is_array($model::$allowedIncludes)) {
             return $model::$allowedIncludes;
         }
 
@@ -186,26 +190,26 @@ class Handlers
     {
         $model = static::getModel();
 
-        if($model instanceof HasAllowedSorts) {
+        if (in_array(HasAllowedSorts::class, class_implements($model))) {
             return $model::getAllowedSorts();
         }
 
-        if(property_exists($model, 'allowedFields') && is_array($model::$allowedFields)) {
+        if (property_exists($model, 'allowedFields') && is_array($model::$allowedFields)) {
             return $model::$allowedFields;
         }
 
         return [];
     }
 
-    public function getAllowedFilters() : array
+    public function getAllowedFilters(): array
     {
         $model = static::getModel();
 
-        if (is_subclass_of($model, HasAllowedFilters::class)) {
+        if (in_array(HasAllowedFilters::class, class_implements($model))) {
             return $model::getAllowedFilters();
         }
 
-        if(property_exists($model, 'allowedFilters') && is_array($model::$allowedFilters)) {
+        if (property_exists($model, 'allowedFilters') && is_array($model::$allowedFilters)) {
             return $model::$allowedFilters;
         }
 
