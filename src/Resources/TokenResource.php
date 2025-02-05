@@ -33,11 +33,15 @@ class TokenResource extends Resource
         return $form
             ->schema([
                 Section::make('General')
+                    ->columns()
                     ->schema([
                         TextInput::make('name')
                             ->required(),
                         Select::make('tokenable_id')
                             ->options(User::all()->pluck('name', 'id'))
+                            ->native(false)
+                            ->searchable()
+                            ->preload()
                             ->label('User')
                             ->hidden(function () {
                                 $user = auth()->user();
@@ -55,6 +59,7 @@ class TokenResource extends Resource
 
                 Section::make('Abilities')
                     ->description('Select abilities of the token')
+                    ->columns(3)
                     ->schema(static::getAbilitiesSchema()),
             ]);
     }
