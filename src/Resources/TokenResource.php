@@ -59,7 +59,6 @@ class TokenResource extends Resource
 
                 Section::make('Abilities')
                     ->description('Select abilities of the token')
-                    ->columns(3)
                     ->schema(static::getAbilitiesSchema()),
             ]);
     }
@@ -81,6 +80,7 @@ class TokenResource extends Resource
                 ->description($resource)
                 ->schema([
                     CheckboxList::make('ability')
+                        ->columns(3)
                         ->options($extractedAbilities)
                         ->selectAllAction(fn (Action $action) => $action->label('Select all'))
                         ->deselectAllAction(fn (Action $action) => $action->label('Unselect All'))
@@ -160,5 +160,10 @@ class TokenResource extends Resource
     public static function getNavigationIcon(): ?string
     {
         return config('api-service.navigation.token.icon', 'heroicon-o-key');
+    }
+
+    public static function canCreate(): bool
+    {
+        return config('api-service.navigation.token.create', true);
     }
 }
