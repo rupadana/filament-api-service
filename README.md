@@ -3,17 +3,28 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/rupadana/filament-api-service.svg?style=flat-square)](https://packagist.org/packages/rupadana/filament-api-service)
 ![Run Test](https://github.com/rupadana/filament-api-service/actions/workflows/run-tests.yml/badge.svg?branch=main)
 
-A simple API service for supporting FilamentPHP
+Filament API Service is a powerful yet simple package that enables automatic API generation for FilamentPHP resources. It eliminates the need for manual route registration and provides built-in support for authentication, authorization, filtering, sorting, and more.
+
+## Features
+- **Automatic API Generation** – Instantly create RESTful API endpoints for Filament resources.
+- **Authentication & Authorization** – Includes built-in authentication endpoints and integrates with Spatie Laravel Permission & Filament Shield.
+- **Role-Based Access Control** – Token-based authentication with customizable policies.
+- **Query Filters & Sorting** – Supports Spatie's laravel-query-builder for dynamic filtering, sorting, and field selection.
+- **Transformers** – Customize API responses using dedicated transformers.
+- **Multi-Tenancy Support** – Enable tenant-aware API responses with minimal configuration.
+- **Middleware Customization** – Add or override middlewares at the panel or resource level.
+- **Public & Secure APIs** – Define public or protected endpoints with a simple configuration.
+- **API Documentation** – Automatically generate API documentation with Scramble.
 
 ## Installation
 
-You can install the package via composer:
+Install the package via Composer:
 
 ```bash
 composer require rupadana/filament-api-service
 ```
 
-Register it to your filament Provider
+Register it in your Filament Provider:
 
 ```php
 use Rupadana\ApiService\ApiServicePlugin;
@@ -23,7 +34,7 @@ $panel->plugins([
 ])
 ```
 
-### Config
+For further configuration, run:
 
 ```bash
 php artisan vendor:publish --tag=api-service-config
@@ -58,15 +69,15 @@ return [
 
 ## Usage
 
+Create an API service for a Filament resource:
+
 ```bash
 php artisan make:filament-api-service BlogResource
 ```
 
 Since version 3.0, routes automatically registered. it will grouped as '/api/`admin`'. `admin` is panelId. to disable panelId prefix, please set `route.panel_prefix` to `false`
 
-So, You don't need to register the routes manually.
-
-The routes will be :
+Once generated, the following API endpoints are automatically available:
 
 | Method | Endpoint             | Description                 |
 | ------ | -------------------- | --------------------------- |
@@ -76,7 +87,13 @@ The routes will be :
 | POST   | /api/`admin`/blogs   | Create resource             |
 | DELETE | /api/`admin`/blogs/1 | Delete resource             |
 
-On CreateHandler, you need to be create your custom request validation.
+To disable the admin panel prefix, update the config:
+
+```php
+'route' => [
+    'panel_prefix' => false
+],
+```
 
 ### Token Resource
 
