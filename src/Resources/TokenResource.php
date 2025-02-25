@@ -32,13 +32,14 @@ class TokenResource extends Resource
     {
         return $form
             ->schema([
-                Section::make('General')
+                Section::make( __('api-service::api-service.section.general'))
                     ->schema([
                         TextInput::make('name')
+                            ->label(__('api-service::api-service.field.name'))
                             ->required(),
                         Select::make('tokenable_id')
                             ->options(User::all()->pluck('name', 'id'))
-                            ->label('User')
+                            ->label(__('api-service::api-service.field.user'))
                             ->hidden(function () {
                                 $user = auth()->user();
 
@@ -53,8 +54,8 @@ class TokenResource extends Resource
                             ->required(),
                     ]),
 
-                Section::make('Abilities')
-                    ->description('Select abilities of the token')
+                Section::make(__('api-service::api-service.section.abilities'))
+                    ->description(__('api-service::api-service.section.abilities.description'))
                     ->schema(static::getAbilitiesSchema()),
             ]);
     }
@@ -72,13 +73,15 @@ class TokenResource extends Resource
                     $extractedAbilities[$a] = __($a);
                 }
             }
+
             $schema[] = Section::make(str($resource)->beforeLast('Resource')->explode('\\')->last())
                 ->description($resource)
                 ->schema([
                     CheckboxList::make('ability')
+                        ->label(__('api-service::api-service.field.ability'))
                         ->options($extractedAbilities)
-                        ->selectAllAction(fn (Action $action) => $action->label('Select all'))
-                        ->deselectAllAction(fn (Action $action) => $action->label('Unselect All'))
+                        ->selectAllAction(fn (Action $action) => $action->label( __('api-service::api-service.action.select_all')))
+                        ->deselectAllAction(fn (Action $action) => $action->label( __('api-service::api-service.action.unselect_all')))
                         ->bulkToggleable(),
                 ])
                 ->collapsible();
@@ -91,13 +94,16 @@ class TokenResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('name')
+                    ->label(__('api-service::api-service.column.name')),
                 TextColumn::make('tokenable.name')
-                    ->label('User'),
+                    ->label(__('api-service::api-service.column.user')),
                 TextColumn::make('abilities')
+                    ->label(__('api-service::api-service.column.abilities'))
                     ->badge()
                     ->words(1),
                 TextColumn::make('created_at')
+                    ->label(__('api-service::api-service.column.created_at'))
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
@@ -155,5 +161,15 @@ class TokenResource extends Resource
     public static function getNavigationIcon(): ?string
     {
         return config('api-service.navigation.token.icon', 'heroicon-o-key');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('api-service::api-service.model');
+    }
+
+    public static function getPluralLabel(): string
+    {
+        return __('api-service::api-service.models');
     }
 }

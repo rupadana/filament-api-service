@@ -30,11 +30,12 @@ class CreateToken extends CreateRecord
     protected function getCreatedNotification(): ?Notification
     {
         return Notification::make()
-            ->title('Token created, save it!')
+            ->title(__('api-service::api-service.notification.token.created'))
             ->body($this->newToken->plainTextToken)
             ->persistent()
             ->actions([
                 Action::make('close')
+                    ->label(__('api-service::api-service.action.close'))
                     ->close(),
             ])
             ->success();

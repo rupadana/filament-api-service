@@ -19,9 +19,9 @@ return [
     */
 
     'column.name' => 'Name',
-    'column.user' => 'User',
-    'column.abilities' => 'Abilities',
-    'column.created_at' => 'Created at',
+    'column.user' => 'Benutzer',
+    'column.abilities' => 'Fähigkeiten',
+    'column.created_at' => 'Erstellt am',
 
     /*
     |--------------------------------------------------------------------------
@@ -30,8 +30,8 @@ return [
     */
 
     'field.name' => 'Name',
-    'field.user' => 'User',
-    'field.ability' => 'Ability',
+    'field.user' => 'Benutzer',
+    'field.ability' => 'Fähigkeit',
 
     /*
     |--------------------------------------------------------------------------
@@ -39,9 +39,9 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'action.select_all' => 'Select all',
-    'action.unselect_all' => 'Unselect all',
-    'action.close' => 'Close',
+    'action.select_all' => 'Alle auswählen',
+    'action.unselect_all' => 'Alle abwählen',
+    'action.close' => 'Schließen',
 
     /*
     |--------------------------------------------------------------------------
@@ -49,9 +49,9 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'section.general' => 'General:',
-    'section.abilities' => 'Abilities:',
-    'section.abilities.description' => 'Select abilities of the token',
+    'section.general' => 'Allgemein:',
+    'section.abilities' => 'Fähigkeiten:',
+    'section.abilities.description' => 'Wählen Sie die Fähigkeiten des Tokens aus',
 
     /*
     |--------------------------------------------------------------------------
@@ -59,6 +59,6 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'notification.token.created' => 'Token created, save it!',
+    'notification.token.created' => 'Token erstellt, speichern Sie ihn!',
 
 ];
