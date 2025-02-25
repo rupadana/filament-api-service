@@ -33,11 +33,15 @@ class TokenResource extends Resource
         return $form
             ->schema([
                 Section::make('General')
+                    ->columns()
                     ->schema([
                         TextInput::make('name')
                             ->required(),
                         Select::make('tokenable_id')
                             ->options(User::all()->pluck('name', 'id'))
+                            ->native(false)
+                            ->searchable()
+                            ->preload()
                             ->label('User')
                             ->hidden(function () {
                                 $user = auth()->user();
@@ -76,6 +80,7 @@ class TokenResource extends Resource
                 ->description($resource)
                 ->schema([
                     CheckboxList::make('ability')
+                        ->columns(3)
                         ->options($extractedAbilities)
                         ->selectAllAction(fn (Action $action) => $action->label('Select all'))
                         ->deselectAllAction(fn (Action $action) => $action->label('Unselect All'))
@@ -155,5 +160,10 @@ class TokenResource extends Resource
     public static function getNavigationIcon(): ?string
     {
         return config('api-service.navigation.token.icon', 'heroicon-o-key');
+    }
+
+    public static function canCreate(): bool
+    {
+        return config('api-service.navigation.token.create', true);
     }
 }
