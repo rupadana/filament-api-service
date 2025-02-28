@@ -2,6 +2,22 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.4.3 - 2025-02-28
+
+### What's Changed
+
+* Changed to getRouteKeyName() instead of ->getKeyName() by @rupadana in https://github.com/rupadana/filament-api-service/pull/85
+* Bump tsickert/discord-webhook from 5.5.0 to 6.0.0 by @dependabot in https://github.com/rupadana/filament-api-service/pull/52
+* Bump dependabot/fetch-metadata from 2.2.0 to 2.3.0 by @dependabot in https://github.com/rupadana/filament-api-service/pull/87
+* Localizing "labels" for Model / Columns/ Fields / Actions / Sections … by @GeWoHaGeChSc in https://github.com/rupadana/filament-api-service/pull/96
+* add support for laravel 12 by @atmonshi in https://github.com/rupadana/filament-api-service/pull/95
+
+### New Contributors
+
+* @GeWoHaGeChSc made their first contribution in https://github.com/rupadana/filament-api-service/pull/96
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.4.2...3.4.3
+
 ## 3.4.2 - 2025-01-19
 
 ### What's Changed
