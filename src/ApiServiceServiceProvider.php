@@ -14,6 +14,8 @@ use Rupadana\ApiService\Commands\MakeApiHandlerCommand;
 use Rupadana\ApiService\Commands\MakeApiRequest;
 use Rupadana\ApiService\Commands\MakeApiServiceCommand;
 use Rupadana\ApiService\Commands\MakeApiTransformerCommand;
+use Rupadana\ApiService\Scramble\Extensions\HandlerDescription;
+use Rupadana\ApiService\Scramble\Extensions\HeaderParameters;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -61,7 +63,12 @@ class ApiServiceServiceProvider extends PackageServiceProvider
         }
     }
 
-    public function packageRegistered(): void {}
+    public function packageRegistered(): void {
+        if (class_exists(Scramble::class)) {
+            Scramble::registerExtension(HeaderParameters::class);
+            Scramble::registerExtension(HandlerDescription::class);
+        }
+    }
 
     public function packageBooted(): void
     {

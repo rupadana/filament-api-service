@@ -26,6 +26,12 @@ class Handlers
     public static ?string $resource = null;
     protected static string $keyName = 'id';
     protected static bool $public = false;
+
+    public static ?string $description = null;
+
+    public static ?array $extraHeaders = [];
+
+
     const POST = 'post';
     const GET = 'get';
     const DELETE = 'delete';
@@ -40,6 +46,16 @@ class Handlers
         }
     }
 
+    public static function description(): ?string
+    {
+        return static::$description;
+    }
+
+    public static function extraHeaders(): ?array
+    {
+        return static::$extraHeaders;
+    }
+
     public static function getMethod()
     {
         return static::$method;
@@ -51,8 +67,8 @@ class Handlers
 
         $router
             ->{$method}(static::$uri, [static::class, 'handler'])
-            ->name(static::getKebabClassName())
-            ->middleware(static::getRouteMiddleware());
+                ->name(static::getKebabClassName())
+                ->middleware(static::getRouteMiddleware());
     }
 
     public static function isPublic(): bool
@@ -119,7 +135,7 @@ class Handlers
 
     public static function getApiTransformer(): ?string
     {
-        if (! method_exists(static::$resource, 'getApiTransformer')) {
+        if (!method_exists(static::$resource, 'getApiTransformer')) {
             return DefaultTransformer::class;
         }
 
