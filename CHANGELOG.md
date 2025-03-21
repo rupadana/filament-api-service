@@ -2,6 +2,18 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.4.5 - 2025-03-21
+
+### What's Changed
+
+* Small update to work on other SQL databases by @b7s in https://github.com/rupadana/filament-api-service/pull/100
+
+### New Contributors
+
+* @b7s made their first contribution in https://github.com/rupadana/filament-api-service/pull/100
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.4.4...3.4.5
+
 ## 3.4.4 - 2025-03-03
 
 ### What's Changed
