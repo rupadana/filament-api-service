@@ -121,29 +121,28 @@ class MakeApiRequest extends Command
     {
         $tableName = $model->getTable();
 
-        $columns = DB::select("SHOW COLUMNS FROM `{$tableName}`");
+        $columns = DB::getSchemaBuilder()->getColumnListing($tableName);
 
         $validationRules = collect($columns)
             ->filter(function ($column) {
-                // Mengabaikan kolom 'created_at' dan 'updated_at'
-                return ! in_array($column->Field, ['id', 'created_at', 'updated_at']);
+                // Ignore colunas 'created_at' and 'updated_at'
+                return ! in_array($column, ['id', 'created_at', 'updated_at']);
             })
-            ->map(function ($column) {
-                $field = $column->Field;
-                $type = $column->Type;
+            ->map(function ($column) use ($model) {
+                $type = DB::getSchemaBuilder()->getColumnType($model->getTable(), $column);
 
-                // Pemetaan tipe data ke validasi Laravel menggunakan match
-                $rule = 'required'; // Tambahkan aturan 'required' sebagai default
+                // Data type mapping for Laravel Validation
+                $rule = 'required'; // Add 'required' rule as default
 
-                $rule .= match (true) {
-                    str_contains($type, 'int') => '|integer',
-                    str_contains($type, 'varchar'), str_contains($type, 'text') => '|string',
-                    str_contains($type, 'date') => '|date',
-                    str_contains($type, 'decimal'), str_contains($type, 'float'), str_contains($type, 'double') => '|numeric',
+                $rule .= match ($type) {
+                    'integer' => '|integer',
+                    'string', 'text' => '|string',
+                    'date' => '|date',
+                    'decimal', 'float', 'double' => '|numeric',
                     default => '',
                 };
 
-                return "\t\t\t'{$field}' => '{$rule}'";
+                return "\t\t\t'{$column}' => '{$rule}'";
             })
             ->implode(",\n");
 
