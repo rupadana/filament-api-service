@@ -30,7 +30,7 @@ class AuthController extends Controller
 
         return response()->json(
             [
-                'sucess' => false,
+                'success' => false,
                 'message' => 'The provided credentials are incorrect.',
             ],
             401
