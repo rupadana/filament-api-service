@@ -2,6 +2,11 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.4.6 - 2025-05-07
+
+- Fix typo on AuthController #104
+  **Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.4.5...3.4.6
+
 ## 3.4.5 - 2025-03-21
 
 ### What's Changed
