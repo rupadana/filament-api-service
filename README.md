@@ -158,7 +158,7 @@ php artisan make:filament-api-handler Blog
 If you want to customize the generated handlers, you can export them using the following command.
 
 ```bash
-php artisan vendor:publish --tag=api-service-config
+php artisan vendor:publish --tag=api-service-stubs
 ```
 
 ### Transform API Response
