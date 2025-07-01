@@ -8,6 +8,7 @@ use Dedoc\Scramble\Support\Generator\SecurityScheme;
 use Filament\Support\Assets\Asset;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
+use Illuminate\Filesystem\Filesystem;
 use Laravel\Sanctum\Http\Middleware\CheckAbilities;
 use Laravel\Sanctum\Http\Middleware\CheckForAnyAbility;
 use Rupadana\ApiService\Commands\MakeApiHandlerCommand;
