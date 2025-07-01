@@ -92,6 +92,15 @@ class ApiServiceServiceProvider extends PackageServiceProvider
                 SecurityScheme::http('bearer')
             );
         });
+
+        // Publish Stubs
+        if ($this->app->runningInConsole()) {
+            foreach (app(Filesystem::class)->files(__DIR__ . '/../stubs/') as $file) {
+                $this->publishes([
+                    $file->getRealPath() => base_path("stubs/filament/{$file->getFilename()}"),
+                ], static::$name . '-stubs');
+            }
+        }
     }
 
     protected function getAssetPackageName(): ?string
