@@ -2,6 +2,18 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.4.8 - 2025-07-01
+
+### What's Changed
+
+* Fix issue #113 by @hamrak in https://github.com/rupadana/filament-api-service/pull/114
+
+### New Contributors
+
+* @hamrak made their first contribution in https://github.com/rupadana/filament-api-service/pull/114
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.4.7...3.4.8
+
 ## 3.4.7 - 2025-07-01
 
 ### What's Changed
