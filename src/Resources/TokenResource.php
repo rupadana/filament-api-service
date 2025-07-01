@@ -28,6 +28,11 @@ class TokenResource extends Resource
 
     protected static bool $isScopedToTenant = false;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return config('api-service.navigation.token.should_register_navigation', false);
+    }
+
     public static function form(Form $form): Form
     {
         return $form

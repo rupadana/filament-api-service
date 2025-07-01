@@ -48,7 +48,8 @@ return [
             'cluster' => null,
             'group' => 'User',
             'sort' => -1,
-            'icon' => 'heroicon-o-key'
+            'icon' => 'heroicon-o-key',
+            'should_register_navigation' => false,
         ]
     ],
     'models' => [
