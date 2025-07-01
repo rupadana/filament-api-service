@@ -2,6 +2,21 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.4.7 - 2025-07-01
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.3.0 to 2.4.0 by @dependabot in https://github.com/rupadana/filament-api-service/pull/106
+* [Feature] make the stubs publishable by @LizardEngineer in https://github.com/rupadana/filament-api-service/pull/109
+* feat: add the ability to show / hide token resource from config file by @aymanalhattami in https://github.com/rupadana/filament-api-service/pull/110
+
+### New Contributors
+
+* @LizardEngineer made their first contribution in https://github.com/rupadana/filament-api-service/pull/109
+* @aymanalhattami made their first contribution in https://github.com/rupadana/filament-api-service/pull/110
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.4.6...3.4.7
+
 ## 3.4.6 - 2025-05-07
 
 - Fix typo on AuthController #104
