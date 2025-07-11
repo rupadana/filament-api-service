@@ -10,10 +10,10 @@ use Rupadana\ApiService\Http\Controllers\AuthController;
 Route::prefix('api')
     ->name('api.')
     ->group(function (Router $router) {
-        $router->post('/auth/login', [AuthController::class, 'login']);
-        $router->post('/auth/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+        $router->post('/auth/login', [AuthController::class, 'login'])->middleware(config('api-service.login-middleware', []));
+        $router->post('/auth/logout', [AuthController::class, 'logout'])->middleware(config('api-service.logout-middleware', ['auth:sanctum']));
 
-        if (ApiService::tenancyAwareness() && (! ApiService::isRoutePrefixedByPanel() || ! ApiService::isTenancyEnabled())) {
+        if (ApiService::tenancyAwareness() && (!ApiService::isRoutePrefixedByPanel() || !ApiService::isTenancyEnabled())) {
             throw new InvalidTenancyConfiguration("Tenancy awareness is enabled!. Please set 'api-service.route.panel_prefix=true' and 'api-service.tenancy.enabled=true'");
         }
 
@@ -43,7 +43,7 @@ Route::prefix('api')
                         });
                 }
 
-                if (! ApiService::tenancyAwareness()) {
+                if (!ApiService::tenancyAwareness()) {
                     Route::prefix($panelRoutePrefix)
                         ->name($panelNamePrefix)
                         ->middleware($middlewares)
