@@ -2,6 +2,18 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 3.4.9 - 2025-07-17
+
+### What's Changed
+
+* Adding any additional middleware you want to apply to the logout and login route using config by @husam-tariq in https://github.com/rupadana/filament-api-service/pull/115
+
+### New Contributors
+
+* @husam-tariq made their first contribution in https://github.com/rupadana/filament-api-service/pull/115
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.4.8...3.4.9
+
 ## 3.4.8 - 2025-07-01
 
 ### What's Changed
