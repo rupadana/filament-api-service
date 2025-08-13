@@ -1,5 +1,8 @@
 <?php
 
+use Spatie\QueryBuilder\Exceptions\InvalidFieldQuery;
+use Spatie\QueryBuilder\Exceptions\InvalidSortQuery;
+use Spatie\QueryBuilder\Exceptions\InvalidFilterQuery;
 use Illuminate\Routing\Route as RoutingRoute;
 use Rupadana\ApiService\Tests\Fixtures\Database\Seeders\ProductsSeeder;
 use Rupadana\ApiService\Tests\Fixtures\Database\Seeders\UserSeeder;
@@ -81,7 +84,7 @@ it('throws when selecting a field that is not allowed', function () {
         ->assertJsonFragment([
             'message' => 'Requested field(s) `products.slug` are not allowed.',
         ]);
-})->throws(\Spatie\QueryBuilder\Exceptions\InvalidFieldQuery::class);
+})->throws(InvalidFieldQuery::class);
 
 it('can return a list of products with selected sorts', function () {
     $this->seed(ProductsSeeder::class);
@@ -125,7 +128,7 @@ it('throws when sorting by a field that is not allowed', function () {
         ->assertJsonFragment([
             'message' => 'Requested sort(s) `products.slug` are not allowed.',
         ]);
-})->throws(\Spatie\QueryBuilder\Exceptions\InvalidSortQuery::class);
+})->throws(InvalidSortQuery::class);
 
 it('can return a list of products with selected filters', function () {
     $this->seed(ProductsSeeder::class);
@@ -159,7 +162,7 @@ it('throws when filtering by a field that is not allowed', function () {
         ->assertJsonFragment([
             'message' => 'Requested filter(s) `products.slug` are not allowed.',
         ]);
-})->throws(\Spatie\QueryBuilder\Exceptions\InvalidFilterQuery::class);
+})->throws(InvalidFilterQuery::class);
 
 it('can return a list of products with a custom transformer', function () {
     $this->seed(ProductsSeeder::class);

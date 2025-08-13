@@ -2,6 +2,8 @@
 
 namespace Rupadana\ApiService\Tests\WithPanelPrefix;
 
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use BladeUI\Icons\BladeIconsServiceProvider;
 use DateInterval;
@@ -69,8 +71,8 @@ class TestCase extends Orchestra
             $config->set('api-service.use-spatie-permission-middleware', false);
             $config->set('permission', [
                 'models' => [
-                    'permission' => \Spatie\Permission\Models\Permission::class,
-                    'role' => \Spatie\Permission\Models\Role::class,
+                    'permission' => Permission::class,
+                    'role' => Role::class,
                 ],
                 'table_names' => [
                     'roles' => 'roles',

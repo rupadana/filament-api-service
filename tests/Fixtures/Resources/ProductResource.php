@@ -2,8 +2,9 @@
 
 namespace Rupadana\ApiService\Tests\Fixtures\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -14,7 +15,7 @@ class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
     protected static bool $isDiscovered = false;
-    protected static ?string $navigationIcon = 'heroicon-o-archive-box';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-archive-box';
     protected static ?string $navigationLabel = 'Product';
     protected static ?string $modelLabel = 'Product';
     protected static ?string $pluralModelLabel = 'Products';
@@ -24,10 +25,10 @@ class ProductResource extends Resource
         return ProductTransformer::class;
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 TextInput::make('name')
                     ->maxLength(255)
                     ->required(),
@@ -38,7 +39,7 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
             ]);

@@ -2,6 +2,7 @@
 
 namespace Rupadana\ApiService\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Rupadana\ApiService\Http\Requests\LoginRequest;
@@ -11,7 +12,7 @@ class AuthController extends Controller
     /**
      * Login
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function login(LoginRequest $request)
     {
@@ -40,7 +41,7 @@ class AuthController extends Controller
     /**
      * Logout
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function logout()
     {
