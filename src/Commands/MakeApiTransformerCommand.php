@@ -89,11 +89,11 @@ class MakeApiTransformerCommand extends Command
 
         $resourceApiTransformerDirectory = "{$baseResourcePath}/Api/Transformers/$apiTransformerClass.php";
 
-        $modelClass = app("{$namespace}\\{$resourceClass}")->getModel();
+        $modelClass = app("{$namespace}\\{$pluralModelClass}\\{$resourceClass}")->getModel();
 
         $this->copyStubToApp('ApiTransformer', $resourceApiTransformerDirectory, [
             'namespace' => "{$namespace}\\{$resourceClass}\\Api\\Transformers",
-            'resource' => "{$namespace}\\{$resourceClass}",
+            'resource' => "{$namespace}\\{$pluralModelClass}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
             'resourcePageClass' => $resourceApiTransformerDirectory,
             'apiTransformerClass' => $apiTransformerClass,

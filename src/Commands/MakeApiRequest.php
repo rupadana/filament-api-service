@@ -104,10 +104,10 @@ class MakeApiRequest extends Command
 
         $requestDirectory = "{$baseResourcePath}/Api/Requests/$nameClass.php";
 
-        $modelNamespace = app("{$namespace}\\{$resourceClass}")->getModel();
+        $modelNamespace = app("{$namespace}\\{$pluralModelClass}\\{$resourceClass}")->getModel();
 
         $this->copyStubToApp('Request', $requestDirectory, [
-            'namespace' => "{$namespace}\\{$resourceClass}\\Api\\Requests",
+            'namespace' => "{$namespace}\\{$pluralModelClass}\\{$resourceClass}\\Api\\Requests",
             'nameClass' => $nameClass,
             'validationRules' => $this->getValidationRules(new $modelNamespace),
         ]);
