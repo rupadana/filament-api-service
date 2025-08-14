@@ -2,6 +2,16 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 4.0.0 - 2025-08-14
+
+Special Thanks to [marcogermani87](https://github.com/marcogermani87) for migrate the plugin to support on Filament v4 🔥
+
+### What's Changed
+
+* Migration to Filament v4 by @marcogermani87 in https://github.com/rupadana/filament-api-service/pull/117
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.4.9...4.0.0
+
 ## 3.4.9 - 2025-07-17
 
 ### What's Changed
