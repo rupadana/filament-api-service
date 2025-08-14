@@ -62,13 +62,13 @@ class TokenResource extends Resource
                             })
                             ->required(),
                     ]),
-
                 Section::make(__('api-service::api-service.section.abilities'))
                     ->description(__('api-service::api-service.section.abilities.description'))
-                    ->schema(static::getAbilitiesSchema()),
-            ]);
+                    ->schema(static::getAbilitiesSchema())
+                    ->columns(2),
+            ])
+            ->columns(1);
     }
-
     public static function getAbilitiesSchema(): array
     {
         $schema = [];
