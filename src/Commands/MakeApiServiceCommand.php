@@ -89,14 +89,14 @@ class MakeApiServiceCommand extends Command
         $deleteHandlerClass = 'DeleteHandler';
 
         $baseResourcePath =
-            (string) str($resource)
+            (string) str("{$pluralModelClass}\\{$resource}")
                 ->prepend('/')
                 ->prepend($path)
                 ->replace('\\', '/')
                 ->replace('//', '/');
 
-        $transformerClass = "{$namespace}\\{$resourceClass}\\Api\\Transformers\\{$transformer}";
-        $handlersNamespace = "{$namespace}\\{$resourceClass}\\Api\\Handlers";
+        $transformerClass = "{$namespace}\\{$pluralModelClass}\\{$resourceClass}\\Api\\Transformers\\{$transformer}";
+        $handlersNamespace = "{$namespace}\\{$pluralModelClass}\\{$resourceClass}\\Api\\Handlers";
 
         $resourceApiDirectory = "{$baseResourcePath}/Api/$apiServiceClass.php";
         $createHandlerDirectory = "{$baseResourcePath}/Api/Handlers/$createHandlerClass.php";
@@ -119,22 +119,22 @@ class MakeApiServiceCommand extends Command
             });
 
         $this->copyStubToApp('ResourceApiService', $resourceApiDirectory, [
-            'namespace' => "{$namespace}\\{$resourceClass}\\Api",
-            'resource' => "{$namespace}\\{$resourceClass}",
+            'namespace' => "{$namespace}\\{$pluralModelClass}\\{$resourceClass}\\Api",
+            'resource' => "{$namespace}\\{$pluralModelClass}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
             'resourcePageClass' => $resourceApiDirectory,
             'apiServiceClass' => $apiServiceClass,
         ]);
 
         $this->copyStubToApp('DeleteHandler', $deleteHandlerDirectory, [
-            'resource' => "{$namespace}\\{$resourceClass}",
+            'resource' => "{$namespace}\\{$pluralModelClass}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
             'handlersNamespace' => $handlersNamespace,
             'model' => $model,
         ]);
 
         $this->copyStubToApp('DetailHandler', $detailHandlerDirectory, [
-            'resource' => "{$namespace}\\{$resourceClass}",
+            'resource' => "{$namespace}\\{$pluralModelClass}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
             'handlersNamespace' => $handlersNamespace,
             'transformer' => $transformer,
@@ -143,21 +143,21 @@ class MakeApiServiceCommand extends Command
         ]);
 
         $this->copyStubToApp('CreateHandler', $createHandlerDirectory, [
-            'resource' => "{$namespace}\\{$resourceClass}",
+            'resource' => "{$namespace}\\{$pluralModelClass}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
             'handlersNamespace' => $handlersNamespace,
             'model' => $model,
         ]);
 
         $this->copyStubToApp('UpdateHandler', $updateHandlerDirectory, [
-            'resource' => "{$namespace}\\{$resourceClass}",
+            'resource' => "{$namespace}\\{$pluralModelClass}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
             'handlersNamespace' => $handlersNamespace,
             'model' => $model,
         ]);
 
         $this->copyStubToApp('PaginationHandler', $paginationHandlerDirectory, [
-            'resource' => "{$namespace}\\{$resourceClass}",
+            'resource' => "{$namespace}\\{$pluralModelClass}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
             'handlersNamespace' => $handlersNamespace,
             'transformer' => $transformer,

@@ -2,6 +2,7 @@
 
 namespace Rupadana\ApiService\Resources\TokenResource\Pages;
 
+use Filament\Actions\CreateAction;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Rupadana\ApiService\Resources\TokenResource;
@@ -13,7 +14,7 @@ class ListTokens extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

@@ -223,7 +223,7 @@ class Handlers
     {
         $query = app(static::getModel())->query();
 
-        if (static::isScopedToTenant() && ApiService::tenancyAwareness() && Filament::getCurrentPanel()) {
+        if (static::isScopedToTenant() && ApiService::tenancyAwareness() && Filament::getCurrentOrDefaultPanel()) {
             $query = static::modifyTenantQuery($query);
         }
 

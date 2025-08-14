@@ -1,84 +1,85 @@
 {
-  "name": "rupadana/filament-api-service",
-  "description": "A simple api service for supporting filamentphp",
-  "keywords": [
-    "rupadana",
-    "laravel",
-    "api-service",
-    "api",
-    "filament",
-    "filament api"
-  ],
-  "homepage": "https://github.com/rupadana/api-service",
-  "support": {
-    "issues": "https://github.com/rupadana/api-service/issues",
-    "source": "https://github.com/rupadana/api-service"
-  },
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Rupadana",
-      "email": "rupadanawayan@gmail.com",
-      "role": "Developer"
-    }
-  ],
-  "require": {
-    "php": "^8.1",
-    "dedoc/scramble": "^0.12.10",
-    "filament/filament": "^3.2",
-    "illuminate/contracts": "^10.0|^11.0|^12.0",
-    "laravel/framework": "^10.10|^11.0|^12.0",
-    "laravel/sanctum": "^3.2|^4.0",
-    "spatie/laravel-package-tools": "^1.19",
-    "spatie/laravel-query-builder": "^5.3|^6.3",
-    "spatie/laravel-permission": "^6.0"
-  },
-  "require-dev": {
-    "nunomaduro/collision": "^7.9|^8.0",
-    "orchestra/testbench": "^8.0|^9.0",
-    "laravel/pint": "^1.0",
-    "pestphp/pest": "^2.0",
-    "pestphp/pest-plugin-arch": "^2.0",
-    "pestphp/pest-plugin-laravel": "^2.0",
-    "phpunit/phpunit": "^10.0.17|^10.5"
-  },
-  "autoload": {
-    "psr-4": {
-      "Rupadana\\ApiService\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Rupadana\\ApiService\\Tests\\": "tests/"
-    }
-  },
-  "scripts": {
-    "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
-    "post-install-cmd": [
-      "yarn install",
-      "npx husky init"
+    "name": "rupadana/filament-api-service",
+    "description": "A simple api service for supporting filamentphp",
+    "keywords": [
+        "rupadana",
+        "laravel",
+        "api-service",
+        "api",
+        "filament",
+        "filament api"
     ],
-    "test": "vendor/bin/pest",
-    "test-coverage": "vendor/bin/pest --coverage"
-  },
-  "config": {
-    "sort-packages": true,
-    "allow-plugins": {
-      "pestphp/pest-plugin": true,
-      "phpstan/extension-installer": true
-    }
-  },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "Rupadana\\ApiService\\ApiServiceServiceProvider",
-        "Rupadana\\ApiService\\AuthServiceProvider"
-      ],
-      "aliases": {
-        "ApiService": "Rupadana\\ApiService\\Facades\\ApiService"
-      }
-    }
-  },
-  "minimum-stability": "stable",
-  "prefer-stable": true
+    "homepage": "https://github.com/rupadana/api-service",
+    "support": {
+        "issues": "https://github.com/rupadana/api-service/issues",
+        "source": "https://github.com/rupadana/api-service"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rupadana",
+            "email": "rupadanawayan@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "dedoc/scramble": "^0.12.10",
+        "filament/filament": "^4.0",
+        "illuminate/contracts": "^11.0|^12.0",
+        "laravel/framework": "^11.0|^12.0",
+        "laravel/sanctum": "^3.2|^4.0",
+        "spatie/laravel-package-tools": "^1.19",
+        "spatie/laravel-permission": "^6.0",
+        "spatie/laravel-query-builder": "^5.3|^6.3"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.0",
+        "nunomaduro/collision": "^7.9|^8.0",
+        "orchestra/testbench": "^9.0|^10.0",
+        "pestphp/pest": "^2.0|^3.7",
+        "pestphp/pest-plugin-arch": "^2.0|^3.0",
+        "pestphp/pest-plugin-laravel": "^2.0|^3.1",
+        "pestphp/pest-plugin-livewire": "^2.1|^3.0",
+        "phpunit/phpunit": "^10.0.17|^10.5|^11.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rupadana\\ApiService\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rupadana\\ApiService\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
+        "post-install-cmd": [
+            "yarn install",
+            "npx husky init"
+        ],
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Rupadana\\ApiService\\ApiServiceServiceProvider",
+                "Rupadana\\ApiService\\AuthServiceProvider"
+            ],
+            "aliases": {
+                "ApiService": "Rupadana\\ApiService\\Facades\\ApiService"
+            }
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }

@@ -2,17 +2,21 @@
 
 namespace Rupadana\ApiService\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Actions\Action;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Rupadana\ApiService\Resources\TokenResource\Pages\ListTokens;
+use Rupadana\ApiService\Resources\TokenResource\Pages\CreateToken;
 use App\Models\User;
 use Filament\Facades\Filament;
-use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,10 +37,10 @@ class TokenResource extends Resource
         return config('api-service.navigation.token.should_register_navigation', false);
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Section::make( __('api-service::api-service.section.general'))
                     ->schema([
                         TextInput::make('name')
@@ -58,18 +62,18 @@ class TokenResource extends Resource
                             })
                             ->required(),
                     ]),
-
                 Section::make(__('api-service::api-service.section.abilities'))
                     ->description(__('api-service::api-service.section.abilities.description'))
-                    ->schema(static::getAbilitiesSchema()),
-            ]);
+                    ->schema(static::getAbilitiesSchema())
+                    ->columns(2),
+            ])
+            ->columns(1);
     }
-
     public static function getAbilitiesSchema(): array
     {
         $schema = [];
 
-        $abilities = ApiServicePlugin::getAbilities(Filament::getCurrentPanel());
+        $abilities = ApiServicePlugin::getAbilities(Filament::getCurrentOrDefaultPanel());
 
         foreach ($abilities as $resource => $handler) {
             $extractedAbilities = [];
@@ -114,12 +118,12 @@ class TokenResource extends Resource
             ->filters([
 
             ])
-            ->actions([
+            ->recordActions([
                 DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ])
             ->modifyQueryUsing(function (Builder $query) {
@@ -143,8 +147,8 @@ class TokenResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTokens::route('/'),
-            'create' => Pages\CreateToken::route('/create'),
+            'index' => ListTokens::route('/'),
+            'create' => CreateToken::route('/create'),
         ];
     }
 
