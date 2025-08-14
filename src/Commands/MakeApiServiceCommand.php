@@ -89,14 +89,14 @@ class MakeApiServiceCommand extends Command
         $deleteHandlerClass = 'DeleteHandler';
 
         $baseResourcePath =
-            (string) str($resource)
+            (string) str("{$pluralModelClass}\\{$resource}")
                 ->prepend('/')
                 ->prepend($path)
                 ->replace('\\', '/')
                 ->replace('//', '/');
 
-        $transformerClass = "{$namespace}\\{$resourceClass}\\Api\\Transformers\\{$transformer}";
-        $handlersNamespace = "{$namespace}\\{$resourceClass}\\Api\\Handlers";
+        $transformerClass = "{$namespace}\\{$pluralModelClass}\\{$resourceClass}\\Api\\Transformers\\{$transformer}";
+        $handlersNamespace = "{$namespace}\\{$pluralModelClass}\\{$resourceClass}\\Api\\Handlers";
 
         $resourceApiDirectory = "{$baseResourcePath}/Api/$apiServiceClass.php";
         $createHandlerDirectory = "{$baseResourcePath}/Api/Handlers/$createHandlerClass.php";

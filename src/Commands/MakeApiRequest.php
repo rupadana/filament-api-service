@@ -96,7 +96,7 @@ class MakeApiRequest extends Command
         $namespace .= $resourceNamespace !== '' ? "\\{$resourceNamespace}" : '';
 
         $baseResourcePath =
-            (string) str($resource)
+            (string) str("{$pluralModelClass}\\{$resource}")
                 ->prepend('/')
                 ->prepend($path)
                 ->replace('\\', '/')

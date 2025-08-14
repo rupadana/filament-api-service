@@ -101,19 +101,19 @@ class MakeApiHandlerCommand extends Command
         $namespace .= $resourceNamespace !== '' ? "\\{$resourceNamespace}" : '';
 
         $baseResourcePath =
-            (string) str($resource)
+            (string) str("{$pluralModelClass}\\{$resource}")
                 ->prepend('/')
                 ->prepend($path)
                 ->replace('\\', '/')
                 ->replace('//', '/');
 
-        $handlersNamespace = "{$namespace}\\{$resourceClass}\\Api\\Handlers";
+        $handlersNamespace = "{$namespace}\\{$pluralModelClass}\\{$resourceClass}\\Api\\Handlers";
 
         $handlerDirectory = "{$baseResourcePath}/Api/Handlers/$handlerClass.php";
 
         $stubName = $this->getStubForHandler($handlerClass);
         $this->copyStubToApp($stubName, $handlerDirectory, [
-            'resource' => "{$namespace}\\{$resourceClass}",
+            'resource' => "{$namespace}\\{$pluralModelClass}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
             'handlersNamespace' => $handlersNamespace,
             'handlerClass' => $handlerClass,
