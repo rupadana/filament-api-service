@@ -159,7 +159,7 @@ class TokenResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return config('api-service.navigation.token.group') ?? config('api-service.navigation.group.token');
+        return __(config('api-service.navigation.token.group') ?? config('api-service.navigation.group.token'));
     }
 
     public static function getNavigationSort(): ?int
