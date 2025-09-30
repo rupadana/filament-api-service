@@ -13,6 +13,7 @@ class DetailHandler extends Handlers
 {
     public static string | null $uri = '/{id}';
     public static string | null $resource = {{ resourceClass }}::class;
+    protected static string $permission = 'View:{{ model }}';
 
 
     /**

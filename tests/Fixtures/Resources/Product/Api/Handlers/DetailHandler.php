@@ -1,9 +1,9 @@
 <?php
 
-namespace Rupadana\ApiService\Tests\Fixtures\Resources\ProductResource\Api\Handlers;
+namespace Rupadana\ApiService\Tests\Fixtures\Resources\Product\Api\Handlers;
 
 use Rupadana\ApiService\Http\Handlers;
-use Rupadana\ApiService\Tests\Fixtures\Resources\ProductResource;
+use Rupadana\ApiService\Tests\Fixtures\Resources\Product\ProductResource;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class DetailHandler extends Handlers

@@ -96,7 +96,7 @@ class MakeApiRequest extends Command
         $namespace .= $resourceNamespace !== '' ? "\\{$resourceNamespace}" : '';
 
         $baseResourcePath =
-            (string) str("{$pluralModelClass}\\{$resource}")
+            (string) str("{$pluralModelClass}")
                 ->prepend('/')
                 ->prepend($path)
                 ->replace('\\', '/')
@@ -107,7 +107,7 @@ class MakeApiRequest extends Command
         $modelNamespace = app("{$namespace}\\{$pluralModelClass}\\{$resourceClass}")->getModel();
 
         $this->copyStubToApp('Request', $requestDirectory, [
-            'namespace' => "{$namespace}\\{$pluralModelClass}\\{$resourceClass}\\Api\\Requests",
+            'namespace' => "{$namespace}\\{$pluralModelClass}\\Api\\Requests",
             'nameClass' => $nameClass,
             'validationRules' => $this->getValidationRules(new $modelNamespace),
         ]);

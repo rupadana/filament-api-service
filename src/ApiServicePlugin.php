@@ -66,8 +66,8 @@ class ApiServicePlugin implements Plugin
             try {
                 $resourceName = str($resource)->beforeLast('Resource')->explode('\\')->last();
 
-                $apiServiceClass = $resource . '\\Api\\' . $resourceName . 'ApiService';
-
+                $apiServiceClass = str($resource)->remove($resourceName . 'Resource') . 'Api\\' . $resourceName . 'ApiService';
+                // dd($apiServiceClass);
                 app($apiServiceClass)->registerRoutes($panel);
             } catch (Exception $e) {
             }

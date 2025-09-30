@@ -1,10 +1,10 @@
 <?php
 
-namespace Rupadana\ApiService\Tests\Fixtures\Resources\ProductResource\Api\Handlers;
+namespace Rupadana\ApiService\Tests\Fixtures\Resources\Product\Api\Handlers;
 
 use Illuminate\Http\Request;
 use Rupadana\ApiService\Http\Handlers;
-use Rupadana\ApiService\Tests\Fixtures\Resources\ProductResource;
+use Rupadana\ApiService\Tests\Fixtures\Resources\Product\ProductResource;
 
 class CreateHandler extends Handlers
 {

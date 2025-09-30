@@ -8,6 +8,7 @@ use {{ resource }};
 class {{ handlerClass }} extends Handlers {
     public static string | null $uri = '/';
     public static string | null $resource = {{ resourceClass }}::class;
+    protected static string $permission = '{{ model }}';
 
     public static function getMethod()
     {

@@ -4,11 +4,12 @@ namespace {{ handlersNamespace }};
 use Illuminate\Http\Request;
 use Rupadana\ApiService\Http\Handlers;
 use {{ resource }};
-use {{ resource }}\Api\Requests\Create{{ model }}Request;
+use {{ resourcePath }}\Api\Requests\Create{{ model }}Request;
 
 class CreateHandler extends Handlers {
     public static string | null $uri = '/';
     public static string | null $resource = {{ resourceClass }}::class;
+    protected static string $permission = 'Create:{{ model }}';
 
     public static function getMethod()
     {

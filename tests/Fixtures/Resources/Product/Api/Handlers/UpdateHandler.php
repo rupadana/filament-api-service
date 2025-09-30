@@ -1,19 +1,19 @@
 <?php
 
-namespace Rupadana\ApiService\Tests\Fixtures\Resources\ProductResource\Api\Handlers;
+namespace Rupadana\ApiService\Tests\Fixtures\Resources\Product\Api\Handlers;
 
 use Illuminate\Http\Request;
 use Rupadana\ApiService\Http\Handlers;
-use Rupadana\ApiService\Tests\Fixtures\Resources\ProductResource;
+use Rupadana\ApiService\Tests\Fixtures\Resources\Product\ProductResource;
 
-class DeleteHandler extends Handlers
+class UpdateHandler extends Handlers
 {
     public static ?string $uri = '/{id}';
     public static ?string $resource = ProductResource::class;
 
     public static function getMethod()
     {
-        return Handlers::DELETE;
+        return Handlers::PUT;
     }
 
     public static function getModel()
@@ -29,8 +29,10 @@ class DeleteHandler extends Handlers
             return static::sendNotFoundResponse();
         }
 
-        $model->delete();
+        $model->fill($request->all());
 
-        return static::sendSuccessResponse($model, 'Successfully Delete Resource');
+        $model->save();
+
+        return static::sendSuccessResponse($model, 'Successfully Update Resource');
     }
 }

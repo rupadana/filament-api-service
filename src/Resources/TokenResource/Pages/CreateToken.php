@@ -2,8 +2,8 @@
 
 namespace Rupadana\ApiService\Resources\TokenResource\Pages;
 
-use Filament\Actions\Action;
 use App\Models\User;
+use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;

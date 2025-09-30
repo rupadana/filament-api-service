@@ -103,7 +103,7 @@ class Handlers
     {
         if (config('api-service.use-spatie-permission-middleware', false)) {
             return [
-                static::getKebabClassName() . '_' . strtolower(preg_replace('/(?<!^)([A-Z])/', '::$1', str(static::getModel())->explode('\\')->last())),
+                static::$permission,
             ];
         }
 

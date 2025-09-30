@@ -3,7 +3,6 @@ namespace {{ namespace }};
 
 use Rupadana\ApiService\ApiService;
 use {{ resource }};
-use Illuminate\Routing\Router;
 
 
 class {{ apiServiceClass }} extends ApiService
