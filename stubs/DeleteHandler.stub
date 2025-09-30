@@ -8,6 +8,7 @@ use {{ resource }};
 class DeleteHandler extends Handlers {
     public static string | null $uri = '/{id}';
     public static string | null $resource = {{ resourceClass }}::class;
+    protected static string $permission = 'Delete:{{ model }}';
 
     public static function getMethod()
     {

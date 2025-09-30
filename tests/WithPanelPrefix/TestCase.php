@@ -2,8 +2,6 @@
 
 namespace Rupadana\ApiService\Tests\WithPanelPrefix;
 
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use BladeUI\Icons\BladeIconsServiceProvider;
 use DateInterval;
@@ -27,6 +25,8 @@ use Rupadana\ApiService\Tests\Fixtures\Policies\ProductPolicy;
 use Rupadana\ApiService\Tests\Fixtures\Providers\AdminPanelProvider;
 use Rupadana\ApiService\Tests\Fixtures\Providers\AuthServiceProvider;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Spatie\QueryBuilder\QueryBuilderServiceProvider;
 
 class TestCase extends Orchestra

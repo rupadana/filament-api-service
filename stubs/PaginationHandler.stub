@@ -10,6 +10,7 @@ use {{ transformerClass }};
 class PaginationHandler extends Handlers {
     public static string | null $uri = '/';
     public static string | null $resource = {{ resourceClass }}::class;
+    protected static string $permission = 'ViewAny:{{ model }}';
 
 
     /**

@@ -1,13 +1,13 @@
 <?php
 
-use Spatie\QueryBuilder\Exceptions\InvalidFieldQuery;
-use Spatie\QueryBuilder\Exceptions\InvalidSortQuery;
-use Spatie\QueryBuilder\Exceptions\InvalidFilterQuery;
 use Illuminate\Routing\Route as RoutingRoute;
 use Rupadana\ApiService\Tests\Fixtures\Database\Seeders\ProductsSeeder;
 use Rupadana\ApiService\Tests\Fixtures\Database\Seeders\UserSeeder;
 use Rupadana\ApiService\Tests\Fixtures\Models\Product;
 use Rupadana\ApiService\Tests\Fixtures\Models\User;
+use Spatie\QueryBuilder\Exceptions\InvalidFieldQuery;
+use Spatie\QueryBuilder\Exceptions\InvalidFilterQuery;
+use Spatie\QueryBuilder\Exceptions\InvalidSortQuery;
 
 it('can make routes for a product resource', function () {
     $routes = collect(app('router')->getRoutes())->map(function (RoutingRoute $route) {

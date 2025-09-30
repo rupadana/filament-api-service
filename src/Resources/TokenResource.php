@@ -2,27 +2,25 @@
 
 namespace Rupadana\ApiService\Resources;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
-use Filament\Actions\Action;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Rupadana\ApiService\Resources\TokenResource\Pages\ListTokens;
-use Rupadana\ApiService\Resources\TokenResource\Pages\CreateToken;
 use App\Models\User;
+use Filament\Actions\Action;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Rupadana\ApiService\ApiServicePlugin;
 use Rupadana\ApiService\Models\Token;
-use Rupadana\ApiService\Resources\TokenResource\Pages;
+use Rupadana\ApiService\Resources\TokenResource\Pages\CreateToken;
+use Rupadana\ApiService\Resources\TokenResource\Pages\ListTokens;
 
 class TokenResource extends Resource
 {
@@ -41,7 +39,7 @@ class TokenResource extends Resource
     {
         return $schema
             ->components([
-                Section::make( __('api-service::api-service.section.general'))
+                Section::make(__('api-service::api-service.section.general'))
                     ->schema([
                         TextInput::make('name')
                             ->label(__('api-service::api-service.field.name'))
@@ -89,8 +87,8 @@ class TokenResource extends Resource
                     CheckboxList::make('ability')
                         ->label(__('api-service::api-service.field.ability'))
                         ->options($extractedAbilities)
-                        ->selectAllAction(fn (Action $action) => $action->label( __('api-service::api-service.action.select_all')))
-                        ->deselectAllAction(fn (Action $action) => $action->label( __('api-service::api-service.action.unselect_all')))
+                        ->selectAllAction(fn (Action $action) => $action->label(__('api-service::api-service.action.select_all')))
+                        ->deselectAllAction(fn (Action $action) => $action->label(__('api-service::api-service.action.unselect_all')))
                         ->bulkToggleable(),
                 ])
                 ->collapsible();

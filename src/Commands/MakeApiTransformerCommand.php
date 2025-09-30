@@ -81,7 +81,7 @@ class MakeApiTransformerCommand extends Command
         $namespace .= $resourceNamespace !== '' ? "\\{$resourceNamespace}" : '';
 
         $baseResourcePath =
-            (string) str("{$pluralModelClass}\\{$resource}")
+            (string) str("{$pluralModelClass}")
                 ->prepend('/')
                 ->prepend($path)
                 ->replace('\\', '/')
@@ -92,7 +92,7 @@ class MakeApiTransformerCommand extends Command
         $modelClass = app("{$namespace}\\{$pluralModelClass}\\{$resourceClass}")->getModel();
 
         $this->copyStubToApp('ApiTransformer', $resourceApiTransformerDirectory, [
-            'namespace' => "{$namespace}\\{$pluralModelClass}\\{$resourceClass}\\Api\\Transformers",
+            'namespace' => "{$namespace}\\{$pluralModelClass}\\Api\\Transformers",
             'resource' => "{$namespace}\\{$pluralModelClass}\\{$resourceClass}",
             'resourceClass' => $resourceClass,
             'resourcePageClass' => $resourceApiTransformerDirectory,
