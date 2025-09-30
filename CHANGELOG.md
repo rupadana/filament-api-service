@@ -2,6 +2,19 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 4.0.1 - 2025-09-30
+
+### What's Changed
+
+* Update TokenResource.php to allow NavigationGroup translation by @santihobby in https://github.com/rupadana/filament-api-service/pull/123
+* Change resource path location by @rupadana in https://github.com/rupadana/filament-api-service/pull/124
+
+### New Contributors
+
+* @santihobby made their first contribution in https://github.com/rupadana/filament-api-service/pull/123
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/4.0.0...4.0.1
+
 ## 4.0.0 - 2025-08-14
 
 Special Thanks to [marcogermani87](https://github.com/marcogermani87) for migrate the plugin to support on Filament v4 🔥
