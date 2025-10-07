@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Discord Webhook Action
-      uses: tsickert/discord-webhook@v6.0.0
+      uses: tsickert/discord-webhook@v7.0.0
       with:
         webhook-url: ${{ secrets.WEBHOOK_URL }}
         content: "# Released Version ${{ github.event.release.name }} \n\n\n${{ github.event.release.body }}"
