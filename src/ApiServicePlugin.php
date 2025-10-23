@@ -40,8 +40,15 @@ class ApiServicePlugin implements Plugin
             try {
 
                 $resourceName = str($resource)->beforeLast('Resource')->explode('\\')->last();
+                $pluralResourceName = str($resourceName)->pluralStudly();
 
-                $apiServiceClass = $resource . '\\Api\\' . $resourceName . 'ApiService';
+                // Try with plural form first (as created by make:filament-api-service command)
+                $apiServiceClass = str($resource)->remove($resourceName . 'Resource') . $pluralResourceName . '\\Api\\' . $resourceName . 'ApiService';
+                
+                // If the plural form doesn't exist, try without plural (legacy support)
+                if (!class_exists($apiServiceClass)) {
+                    $apiServiceClass = str($resource)->remove($resourceName . 'Resource') . 'Api\\' . $resourceName . 'ApiService';
+                }
 
                 $handlers = app($apiServiceClass)->handlers();
 
@@ -65,11 +72,25 @@ class ApiServicePlugin implements Plugin
         foreach ($resources as $key => $resource) {
             try {
                 $resourceName = str($resource)->beforeLast('Resource')->explode('\\')->last();
+                $pluralResourceName = str($resourceName)->pluralStudly();
 
-                $apiServiceClass = str($resource)->remove($resourceName . 'Resource') . 'Api\\' . $resourceName . 'ApiService';
-                // dd($apiServiceClass);
+                // Try with plural form first (as created by make:filament-api-service command)
+                $apiServiceClass = str($resource)->remove($resourceName . 'Resource') . $pluralResourceName . '\\Api\\' . $resourceName . 'ApiService';
+                
+                // If the plural form doesn't exist, try without plural (legacy support)
+                if (!class_exists($apiServiceClass)) {
+                    $apiServiceClass = str($resource)->remove($resourceName . 'Resource') . 'Api\\' . $resourceName . 'ApiService';
+                }
+                
                 app($apiServiceClass)->registerRoutes($panel);
             } catch (Exception $e) {
+                // Log error in debug mode
+                if (config('app.debug')) {
+                    logger()->error("Error registering API routes for resource '{$resource}': " . $e->getMessage(), [
+                        'exception' => $e,
+                        'resource' => $resource,
+                    ]);
+                }
             }
         }
     }
