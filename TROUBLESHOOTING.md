@@ -14,6 +14,69 @@ This document provides solutions to common issues and questions about Filament A
 
 ## Plugin Configuration
 
+### Error After Integration with Filament 4 / Laravel 12 (Issue #121)
+
+**Problem:** After installing the package with Filament 4 and Laravel 12, artisan commands fail with errors.
+
+**Investigation Steps:**
+
+1. **Verify Laravel and Filament versions:**
+```bash
+composer show | grep laravel/framework
+composer show | grep filament/filament
+```
+
+The package supports:
+- Laravel 11.0+ or 12.0+
+- Filament 4.0+
+- PHP 8.2+
+
+2. **Check for conflicting dependencies:**
+```bash
+composer why-not rupadana/filament-api-service
+```
+
+3. **Ensure all migrations are run:**
+```bash
+php artisan install:api  # For Laravel 11+
+php artisan migrate
+```
+
+4. **Clear all caches:**
+```bash
+php artisan config:clear
+php artisan cache:clear
+php artisan route:clear
+php artisan view:clear
+```
+
+5. **Check plugin registration:**
+Make sure the plugin is properly registered in your panel provider:
+
+```php
+use Rupadana\ApiService\ApiServicePlugin;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ... other configuration
+        ->plugins([
+            ApiServicePlugin::make(),
+        ]);
+}
+```
+
+6. **Enable debug mode to see detailed errors:**
+```env
+APP_DEBUG=true
+```
+
+If the issue persists, please provide:
+- The exact error message
+- Your `composer.json` dependencies
+- Your panel provider configuration
+- Output of `php artisan about`
+
 ### Plugin Load Order (Issue #108)
 
 **Problem:** When using FilamentShield or other plugins, you may encounter errors if ApiServicePlugin is registered before other required plugins.
