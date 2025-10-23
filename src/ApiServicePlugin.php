@@ -44,9 +44,9 @@ class ApiServicePlugin implements Plugin
 
                 // Try with plural form first (as created by make:filament-api-service command)
                 $apiServiceClass = str($resource)->remove($resourceName . 'Resource') . $pluralResourceName . '\\Api\\' . $resourceName . 'ApiService';
-                
+
                 // If the plural form doesn't exist, try without plural (legacy support)
-                if (!class_exists($apiServiceClass)) {
+                if (! class_exists($apiServiceClass)) {
                     $apiServiceClass = str($resource)->remove($resourceName . 'Resource') . 'Api\\' . $resourceName . 'ApiService';
                 }
 
@@ -76,12 +76,12 @@ class ApiServicePlugin implements Plugin
 
                 // Try with plural form first (as created by make:filament-api-service command)
                 $apiServiceClass = str($resource)->remove($resourceName . 'Resource') . $pluralResourceName . '\\Api\\' . $resourceName . 'ApiService';
-                
+
                 // If the plural form doesn't exist, try without plural (legacy support)
-                if (!class_exists($apiServiceClass)) {
+                if (! class_exists($apiServiceClass)) {
                     $apiServiceClass = str($resource)->remove($resourceName . 'Resource') . 'Api\\' . $resourceName . 'ApiService';
                 }
-                
+
                 app($apiServiceClass)->registerRoutes($panel);
             } catch (Exception $e) {
                 // Log error in debug mode
