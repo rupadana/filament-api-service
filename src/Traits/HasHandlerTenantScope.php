@@ -63,7 +63,7 @@ trait HasHandlerTenantScope
         $tenantModel = app(Filament::getTenantModel());
 
         if (ApiService::tenancyAwareness()) {
-            $tenantId ??= request()->route()->parameter('tenant');
+            $tenantId = $tenant?->getKey() ?? request()->route()->parameter('tenant');
 
             if (! $tenantId) {
                 return $query;
