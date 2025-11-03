@@ -91,7 +91,7 @@ trait HasHandlerTenantScope
             };
         } else {
             $userTenants = request()->user()->{Str::plural($tenantOwnershipRelationshipName)};
-            
+
             $query = match (true) {
                 $tenantOwnershipRelationship instanceof MorphTo => $query
                     ->where($tenantModel->getRelationWithoutConstraints($tenantOwnershipRelationshipName)->getMorphType(), $tenantModel->getMorphClass())

@@ -90,7 +90,7 @@ class Handlers
     public static function getKebabClassName()
     {
         $className = str(str(static::class)->beforeLast('Handler')->explode('\\')->last())->kebab()->value();
-        
+
         if (config('api-service.use-spatie-permission-middleware', false)) {
             return match ($className) {
                 'detail' => 'view',
@@ -116,7 +116,7 @@ class Handlers
         }
 
         $handlerClass = static::class;
-        
+
         if (! isset(static::$modelClassCache[$handlerClass])) {
             static::$modelClassCache[$handlerClass] = str(str(static::getModel())->explode('\\')->last())->kebab()->value();
         }
@@ -250,7 +250,7 @@ class Handlers
     protected static function modelImplements(string $interface): bool
     {
         $modelClass = static::getModel();
-        
+
         if (! isset(static::$modelImplementsCache[$modelClass])) {
             $implements = class_implements($modelClass) ?: [];
             // Flip array for O(1) lookup instead of O(n)

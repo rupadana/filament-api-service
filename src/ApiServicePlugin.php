@@ -141,10 +141,12 @@ class ApiServicePlugin implements Plugin
         // Only cache if the class exists
         if (class_exists($apiServiceClass)) {
             $cache[$resource] = $apiServiceClass;
+
             return $apiServiceClass;
         }
 
         $cache[$resource] = null;
+
         return null;
     }
 }
