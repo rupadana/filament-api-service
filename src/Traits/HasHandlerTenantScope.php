@@ -90,16 +90,16 @@ trait HasHandlerTenantScope
                 ),
             };
         } else {
+            $userTenants = request()->user()->{Str::plural($tenantOwnershipRelationshipName)};
+            
             $query = match (true) {
                 $tenantOwnershipRelationship instanceof MorphTo => $query
                     ->where($tenantModel->getRelationWithoutConstraints($tenantOwnershipRelationshipName)->getMorphType(), $tenantModel->getMorphClass())
-                    ->whereIn($tenantModel->getRelationWithoutConstraints($tenantOwnershipRelationshipName)->getForeignKeyName(), request()->user()->{Str::plural($tenantOwnershipRelationshipName)}->pluck($tenantModel->getKeyName())->toArray()),
-                $tenantOwnershipRelationship instanceof BelongsTo => $query->whereBelongsTo(
-                    request()->user()->{Str::plural($tenantOwnershipRelationshipName)}
-                ),
+                    ->whereIn($tenantModel->getRelationWithoutConstraints($tenantOwnershipRelationshipName)->getForeignKeyName(), $userTenants->pluck($tenantModel->getKeyName())->toArray()),
+                $tenantOwnershipRelationship instanceof BelongsTo => $query->whereBelongsTo($userTenants),
                 default => $query->whereHas(
                     $tenantOwnershipRelationshipName,
-                    fn (Builder $query) => $query->whereKey($tenant->getKey()),
+                    fn (Builder $query) => $query->whereIn($query->getModel()->getQualifiedKeyName(), $userTenants->pluck($tenantModel->getKeyName())),
                 ),
             };
         }

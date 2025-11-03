@@ -33,14 +33,14 @@ class Handlers
     const PUT = 'put';
 
     /**
-     * Cache for model class implementations
+     * Cache for model class implementations - keyed by model class name
      */
-    protected static ?array $modelImplementsCache = null;
+    protected static array $modelImplementsCache = [];
 
     /**
-     * Cache for model class name
+     * Cache for model class name - keyed by handler class
      */
-    protected static ?string $modelClassCache = null;
+    protected static array $modelClassCache = [];
 
     public function __construct()
     {
@@ -115,12 +115,14 @@ class Handlers
             ];
         }
 
-        if (static::$modelClassCache === null) {
-            static::$modelClassCache = str(str(static::getModel())->explode('\\')->last())->kebab()->value();
+        $handlerClass = static::class;
+        
+        if (! isset(static::$modelClassCache[$handlerClass])) {
+            static::$modelClassCache[$handlerClass] = str(str(static::getModel())->explode('\\')->last())->kebab()->value();
         }
 
         return [
-            static::$modelClassCache . ':' . static::getKebabClassName(),
+            static::$modelClassCache[$handlerClass] . ':' . static::getKebabClassName(),
         ];
     }
 
@@ -247,10 +249,14 @@ class Handlers
      */
     protected static function modelImplements(string $interface): bool
     {
-        if (static::$modelImplementsCache === null) {
-            static::$modelImplementsCache = class_implements(static::getModel()) ?: [];
+        $modelClass = static::getModel();
+        
+        if (! isset(static::$modelImplementsCache[$modelClass])) {
+            $implements = class_implements($modelClass) ?: [];
+            // Flip array for O(1) lookup instead of O(n)
+            static::$modelImplementsCache[$modelClass] = array_flip($implements);
         }
 
-        return in_array($interface, static::$modelImplementsCache, true);
+        return isset(static::$modelImplementsCache[$modelClass][$interface]);
     }
 }
