@@ -53,6 +53,13 @@ Route::prefix('api')
                         });
                 }
             } catch (Exception $e) {
+                // Log the exception for debugging purposes
+                if (config('app.debug')) {
+                    logger()->error("Error registering API routes for panel '{$panel->getId()}': " . $e->getMessage(), [
+                        'exception' => $e,
+                        'panel' => $panel->getId(),
+                    ]);
+                }
             }
         }
     });
