@@ -2,6 +2,14 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 4.0.3 - 2025-11-06
+
+### What's Changed
+
+* Optimize API request handling with caching and early returns by @Copilot in https://github.com/rupadana/filament-api-service/pull/127
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/4.0.2...4.0.3
+
 ## 4.0.2 - 2025-11-06
 
 ### What's Changed
