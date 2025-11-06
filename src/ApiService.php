@@ -35,7 +35,6 @@ class ApiService
 
     public static function registerRoutes(Panel $panel)
     {
-
         $slug = static::getResource()::getSlug();
 
         $name = (string) str(static::$groupRouteName ?? $slug)

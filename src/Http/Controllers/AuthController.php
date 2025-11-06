@@ -16,25 +16,25 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        if (Auth::validate($request->validated())) {
-            $user = Auth::getLastAttempted();
-
+        if (! Auth::validate($request->validated())) {
             return response()->json(
                 [
-                    'success' => true,
-                    'message' => 'Login success.',
-                    'token' => $user->createToken($request->header('User-Agent'), ['*'])->plainTextToken,
+                    'success' => false,
+                    'message' => 'The provided credentials are incorrect.',
                 ],
-                201
+                401
             );
         }
 
+        $user = Auth::getLastAttempted();
+
         return response()->json(
             [
-                'success' => false,
-                'message' => 'The provided credentials are incorrect.',
+                'success' => true,
+                'message' => 'Login success.',
+                'token' => $user->createToken($request->header('User-Agent'), ['*'])->plainTextToken,
             ],
-            401
+            201
         );
     }
 

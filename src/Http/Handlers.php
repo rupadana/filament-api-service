@@ -32,6 +32,16 @@ class Handlers
     const PATCH = 'patch';
     const PUT = 'put';
 
+    /**
+     * Cache for model class implementations - keyed by model class name
+     */
+    protected static array $modelImplementsCache = [];
+
+    /**
+     * Cache for model class name - keyed by handler class
+     */
+    protected static array $modelClassCache = [];
+
     public function __construct()
     {
         if (request()->routeIs('api.*') && ApiService::isRoutePrefixedByPanel()) {
@@ -74,24 +84,22 @@ class Handlers
 
     protected static function getMiddlewareAliasName()
     {
-        if (config('api-service.use-spatie-permission-middleware', false)) {
-            return 'permission';
-        }
-
-        return 'ability';
+        return config('api-service.use-spatie-permission-middleware', false) ? 'permission' : 'ability';
     }
 
     public static function getKebabClassName()
     {
+        $className = str(str(static::class)->beforeLast('Handler')->explode('\\')->last())->kebab()->value();
+
         if (config('api-service.use-spatie-permission-middleware', false)) {
-            return match ($operation = str(str(static::class)->beforeLast('Handler')->explode('\\')->last())->kebab()->value()) {
+            return match ($className) {
                 'detail' => 'view',
                 'pagination' => 'view_any',
-                default => $operation
+                default => $className
             };
         }
 
-        return str(str(static::class)->beforeLast('Handler')->explode('\\')->last())->kebab();
+        return $className;
     }
 
     public static function stringifyAbility()
@@ -107,8 +115,14 @@ class Handlers
             ];
         }
 
+        $handlerClass = static::class;
+
+        if (! isset(static::$modelClassCache[$handlerClass])) {
+            static::$modelClassCache[$handlerClass] = str(str(static::getModel())->explode('\\')->last())->kebab()->value();
+        }
+
         return [
-            str(str(static::getModel())->explode('\\')->last())->kebab() . ':' . static::getKebabClassName(),
+            static::$modelClassCache[$handlerClass] . ':' . static::getKebabClassName(),
         ];
     }
 
@@ -155,11 +169,10 @@ class Handlers
 
     public function getAllowedFields(): array
     {
-
         $model = static::getModel();
 
-        if (in_array(HasAllowedFields::class, class_implements($model))) {
-            return static::getModel()::getAllowedFields();
+        if (static::modelImplements(HasAllowedFields::class)) {
+            return $model::getAllowedFields();
         }
 
         if (property_exists($model, 'allowedFields') && is_array($model::$allowedFields)) {
@@ -173,7 +186,7 @@ class Handlers
     {
         $model = static::getModel();
 
-        if (in_array(HasAllowedIncludes::class, class_implements($model))) {
+        if (static::modelImplements(HasAllowedIncludes::class)) {
             return $model::getAllowedIncludes();
         }
 
@@ -188,7 +201,7 @@ class Handlers
     {
         $model = static::getModel();
 
-        if (in_array(HasAllowedSorts::class, class_implements($model))) {
+        if (static::modelImplements(HasAllowedSorts::class)) {
             return $model::getAllowedSorts();
         }
 
@@ -203,7 +216,7 @@ class Handlers
     {
         $model = static::getModel();
 
-        if (in_array(HasAllowedFilters::class, class_implements($model))) {
+        if (static::modelImplements(HasAllowedFilters::class)) {
             return $model::getAllowedFilters();
         }
 
@@ -228,5 +241,22 @@ class Handlers
         }
 
         return $query;
+    }
+
+    /**
+     * Check if the model implements a specific interface
+     * Caches the result for performance
+     */
+    protected static function modelImplements(string $interface): bool
+    {
+        $modelClass = static::getModel();
+
+        if (! isset(static::$modelImplementsCache[$modelClass])) {
+            $implements = class_implements($modelClass) ?: [];
+            // Flip array for O(1) lookup instead of O(n)
+            static::$modelImplementsCache[$modelClass] = array_flip($implements);
+        }
+
+        return isset(static::$modelImplementsCache[$modelClass][$interface]);
     }
 }
