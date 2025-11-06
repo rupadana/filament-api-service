@@ -2,6 +2,19 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 4.0.2 - 2025-11-06
+
+### What's Changed
+
+* Fix invisible prompts, improve cluster support, and add comprehensive troubleshooting guide by @Copilot in https://github.com/rupadana/filament-api-service/pull/126
+* Upgrade dedoc/scramble dependency to version 0.13 by @marcogermani87 in https://github.com/rupadana/filament-api-service/pull/128
+
+### New Contributors
+
+* @Copilot made their first contribution in https://github.com/rupadana/filament-api-service/pull/126
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/4.0.1...4.0.2
+
 ## 3.4.10 - 2025-10-07
 
 **Full Changelog**: https://github.com/rupadana/filament-api-service/compare/3.4.9...3.4.10
