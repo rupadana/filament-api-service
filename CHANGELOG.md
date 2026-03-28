@@ -2,6 +2,15 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 5.0.0 - 2026-03-28
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.4.0 to 2.5.0 by @dependabot[bot] in https://github.com/rupadana/filament-api-service/pull/132
+* Add Filament v5 compatibility by @Copilot in https://github.com/rupadana/filament-api-service/pull/134
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/4.0.3...5.0.0
+
 ## 4.0.3 - 2025-11-06
 
 ### What's Changed
