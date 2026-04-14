@@ -3,11 +3,10 @@
 namespace Rupadana\ApiService\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Rupadana\ApiService\Http\Requests\LoginRequest;
 
-class AuthController extends Controller
+class AuthController
 {
     /**
      * Login

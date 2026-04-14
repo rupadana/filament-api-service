@@ -3,13 +3,10 @@
 namespace Rupadana\ApiService\Policies;
 
 use App\Models\User;
-use Illuminate\Auth\Access\HandlesAuthorization;
 use Rupadana\ApiService\Models\Token;
 
 class TokenPolicy
 {
-    use HandlesAuthorization;
-
     public function isPolicyEnabled(): bool
     {
         return config('api-service.models.token.enable_policy', true);
