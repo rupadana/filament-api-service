@@ -2,18 +2,18 @@
 
 namespace Rupadana\ApiService;
 
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
 use Rupadana\ApiService\Models\Token;
 use Rupadana\ApiService\Policies\TokenPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
-    protected $policies = [
-        Token::class => TokenPolicy::class,
-    ];
-
     /**
      * Register any authentication / authorization services.
      */
-    public function boot(): void {}
+    public function boot(): void
+    {
+        Gate::policy(Token::class, TokenPolicy::class);
+    }
 }
