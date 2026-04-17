@@ -2,6 +2,18 @@
 
 All notable changes to `api-service` will be documented in this file.
 
+## 5.0.1 - 2026-04-17
+
+### What's Changed
+
+* Add Laravel 13 support by @arnautdev in https://github.com/rupadana/filament-api-service/pull/136
+
+### New Contributors
+
+* @arnautdev made their first contribution in https://github.com/rupadana/filament-api-service/pull/136
+
+**Full Changelog**: https://github.com/rupadana/filament-api-service/compare/5.0.0...5.0.1
+
 ## 5.0.0 - 2026-03-28
 
 ### What's Changed
